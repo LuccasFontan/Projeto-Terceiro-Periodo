@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAADI - Listar Alunos</title>
-    <link rel="stylesheet" href="../../css/menuSecretaria.css">
-    <link rel="stylesheet" href="../../css/menuSecretaria/listarAlunos.css">
+    <link rel="stylesheet" href="../../../css/menuSecretaria.css">
+    <link rel="stylesheet" href="../../../css/menuSecretaria/listarAlunos.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
-    <link rel="shortcut icon" href="../../img/favicon-duas-mãos-32px-branco.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../../../img/favicon-duas-mãos-32px-branco.png" type="image/x-icon">
 </head>
 
 <body>
@@ -45,31 +45,45 @@
 
             <hr>
 
-            <a class="botoesLaterais" href="/pages/menus/cadastroAlunos.html">
+            <a class="botoesLaterais" href="/pages/menus/secretaria/cadastroAlunos.html">
                 <div class="alinhamento">
                     <div class="fotos"><img src="/img/icon-cadastro.png" alt="Cadastrar aluno"></div>
                     <p>Cadastrar Aluno</p>
                 </div>
             </a>
 
-            <a class="botoesLaterais" href="/pages/menus/listarAlunos.html">
+            <a class="botoesLaterais" href="/pages/menus/secretaria/listarAlunos.html">
                 <div class="alinhamento ativoItem">
                     <div class="fotos"><img src="/img/icon-lista.png" alt="Lista de alunos"></div>
                     <p>Lista de Alunos</p>
                 </div>
             </a>
 
-            <a class="botoesLaterais" href="/pages/menus/atualizarAlunos.html">
+            <a class="botoesLaterais" href="/pages/menus/secretaria/atualizarAlunos.html">
                 <div class="alinhamento">
                     <div class="fotos"><img src="/img/icon-atualizar.png" alt="Atualizar alunos"></div>
                     <p>Atualizar Alunos</p>
                 </div>
             </a>
 
-            <a class="botoesLaterais" href="/pages/menus/deletarAlunos.html">
+            <a class="botoesLaterais" href="/pages/menus/secretaria/deletarAlunos.html">
                 <div class="alinhamento">
                     <div class="fotos"><img src="/img/icon-deletar.png" alt="Excluir alunos"></div>
                     <p>Excluir Alunos</p>
+                </div>
+            </a>
+
+            <a class="botoesLaterais" href="/pages/menus/secretaria/relatoriosSecretaria.html">
+                <div class="alinhamento">
+                    <div class="fotos"><img src="/img/icon-lista.png" alt="Relatórios"></div>
+                    <p>Relatórios</p>
+                </div>
+            </a>
+
+            <a class="botoesLaterais" href="/pages/menus/secretaria/encaminhamentosSecretaria.html">
+                <div class="alinhamento">
+                    <div class="fotos"><img src="/img/config.png" alt="Encaminhamentos"></div>
+                    <p>Encaminhamentos</p>
                 </div>
             </a>
 
@@ -314,6 +328,18 @@
                 fecharModalAluno();
             }
         });
+    </script>
+
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
     </script>
 </body>
 

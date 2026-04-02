@@ -14,51 +14,80 @@
 </head>
 
 <body>
-    <main class="container">
-        <section class="loginLeft">
-            <div class="logo">
-                <div class="logo2">
-                    <img src="../../img/icons8-two-hands-48 (1).png" alt="Logo SAADI - Duas mãos simbolizando inclusão"
-                        class="imgLogo">
+    <main class="loginPage">
+        <div class="loginShell">
+            <section class="loginHero" aria-label="Apresentação da plataforma">
+                <div class="brandBlock">
+                    <div class="brandIcon">
+                        <img src="../../img/icons8-two-hands-48 (1).png"
+                            alt="Logo SAADI - Duas mãos simbolizando inclusão">
+                    </div>
+                    <div class="brandText">
+                        <h1>SAADI</h1>
+                        <p>Secretaria Escolar</p>
+                    </div>
                 </div>
-                <h1 class="SAADI"><b>SAADI</b></h1>
-            </div>
-            <div class="textLeft">
-                <h2 class="tituloInicial"><b>Sistema de Acompanhamento <br> da Educação Inclusiva</b></h2>
-                <p class="textLeftSubtitulo">Gerencie e acompanhe o desenvolvimento dos alunos da rede <br> municipal de
-                    educação com eficiência e cuidado.</p>
-                <p class="footerText">Secretaria Municipal de Educação</p>
-            </div>
-        </section>
-        <section class="loginRight">
-            <div class="login">
-                <h2 class="bemVindo">Bem-vindo de volta</h2>
-                <p class="subtitle">Faça login para acessar o sistema</p>
-                <div class="formLogin">
-                    <form action="/index.html" method="get" aria-label="Formulário de login">
-                        <label for="email">Email</label>
-                        <div class="inputEmail">
+
+                <div class="heroContent">
+                    <p class="heroKicker">Acesso institucional</p>
+                    <h2>Sistema de acompanhamento da educação inclusiva</h2>
+                    <p>
+                        Entre para gerenciar dados acadêmicos, acompanhar alunos e manter o atendimento organizado
+                        em uma interface clara, acessível e padronizada com o restante do sistema.
+                    </p>
+
+                    <div class="heroHighlights" aria-label="Destaques do sistema">
+                        <article>
+                            <strong>Inclusão</strong>
+                            <span>Fluxo focado em acessibilidade</span>
+                        </article>
+                        <article>
+                            <strong>Gestão</strong>
+                            <span>Controle centralizado de alunos</span>
+                        </article>
+                        <article>
+                            <strong>Agilidade</strong>
+                            <span>Interface simples e responsiva</span>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="loginPanel" aria-label="Área de autenticação">
+                <div class="loginCard">
+                    <p class="cardEyebrow">Portal restrito</p>
+                    <h2 class="bemVindo">Bem-vindo de volta</h2>
+                    <p class="subtitle">Faça login para acessar o sistema</p>
+
+                    <form action="/index.html" method="get" class="authForm" aria-label="Formulário de login">
+                        <div class="fieldGroup">
+                            <label for="email">Email</label>
                             <input type="email" id="email" name="email" placeholder="Digite seu email aqui" required
                                 aria-required="true">
                         </div>
-                        <div class="labelContainer">
-                            <label for="senha">Senha</label>
-                            <a class="resetSenha" href="./redefinirSenha.html"
-                                aria-label="Recuperar senha esquecida">Esqueceu a senha?</a>
-                        </div>
-                        <div class="inputSenha">
+
+                        <div class="fieldGroup">
+                            <div class="labelContainer">
+                                <label for="senha">Senha</label>
+                                <a class="resetSenha" href="./redefinirSenha.html"
+                                    aria-label="Recuperar senha esquecida">Esqueceu a senha?</a>
+                            </div>
                             <input type="password" id="senha" name="senha" placeholder="••••••••" required
                                 aria-required="true">
                         </div>
+
                         <button type="submit" class="btnEntrar" aria-label="Entrar no sistema">Entrar</button>
                     </form>
+
+                    <div class="loginFooter">
+                        <p class="helpText">Precisa de ajuda? <a href="#" class="linkSupport"
+                                aria-label="Entrar em contato com o suporte técnico">Entre em contato com o suporte</a>
+                        </p>
+                        <p class="copyright">© 2025 Secretaria Municipal de Educação</p>
+                    </div>
                 </div>
-                <hr class="divider">
-                <p class="helpText">Precisa de ajuda? <a href="#" class="linkSupport"
-                        aria-label="Entrar em contato com o suporte técnico">Entre em contato com o suporte</a></p>
-                <p class="copyright">© 2025 Secretaria Municipal de Educação</p>
-            </div>
-        </section>
+            </section>
+        </div>
     </main>
 
     <div vw class="enabled">
