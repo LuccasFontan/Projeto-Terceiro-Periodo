@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login ó Sistema</title>
+    <title>Login do Sistema</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -32,7 +32,7 @@
                 </div>
                 <div>
                     <div class="brand-name">SAADI</div>
-                    <div class="brand-tagline">Plataforma de Gest„o</div>
+                    <div class="brand-tagline">Plataforma de Gest√£o</div>
                 </div>
             </div>
 
@@ -40,34 +40,34 @@
             <div class="hero-body">
                 <span class="kicker">
                     <i class="bi bi-stars"></i>
-                    Vers„o 2025
+                    Vers√£o 2025
                 </span>
 
                 <h2 class="hero-title">
-                    Gest„o inteligente<br>em suas m„os
+                    Gest√£o inteligente<br>em suas m√£os
                 </h2>
 
                 <p class="hero-desc">
-                    Acesse sua ·rea de trabalho com seguranÁa e controle total dos seus processos, equipes e relatÛrios
+                    Acesse sua √°rea de trabalho com seguran√ßa e controle total dos seus processos, equipes e relat√≥rios
                     em tempo real.
                 </p>
 
                 <!-- Feature cards -->
                 <div class="features">
                     <div class="feat">
-                        <div class="feat-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                        <div class="feat-icon"><i class="bi bi-graph-up-arrow" aria-label="Grafico apontando para cima, demonstrando evolu√ß√£o"></i></div>
                         <div class="feat-title">Dashboards</div>
-                        <div class="feat-desc">MÈtricas e KPIs em tempo real</div>
+                        <div class="feat-desc">M√©tricas e KPIs em tempo real</div>
                     </div>
                     <div class="feat">
-                        <div class="feat-icon"><i class="bi bi-people"></i></div>
+                        <div class="feat-icon"><i class="bi bi-people" aria-label="Pessoas simbolizando um grupo/equipe"></i></div>
                         <div class="feat-title">Equipes</div>
-                        <div class="feat-desc">Gest„o completa de usu·rios</div>
+                        <div class="feat-desc">Gest√£o completa de usu√°rios</div>
                     </div>
                     <div class="feat">
-                        <div class="feat-icon"><i class="bi bi-lock"></i></div>
-                        <div class="feat-title">SeguranÁa</div>
-                        <div class="feat-desc">Acesso com autenticaÁ„o MFA</div>
+                        <div class="feat-icon"><img src="/img/agilidade.png" alt="icone de agilidade, seta apontando para frente"></div>
+                        <div class="feat-title">Agilidade</div>
+                        <div class="feat-desc">Interface simples e responsiva</div>
                     </div>
                 </div>
             </div>
@@ -78,14 +78,14 @@
             <div class="login-card">
 
                 <span class="eyebrow">
-                    <i class="bi bi-door-open"></i>
+                    <i class="bi bi-door-open" aria-label="Porta aberta, simbolizando o acesso do sistema"></i>
                     Acesso ao sistema
                 </span>
 
                 <h1 class="card-title">Bem-vindo de volta</h1>
                 <p class="card-sub">Insira suas credenciais para continuar.</p>
 
-                <form action="./pages/menus/menuSecretariaEscolar.html" method="get" aria-label="Formul·rio de login">
+                <form action="./pages/menus/secretaria/menuSecretariaEscolar.html" method="get" aria-label="FormulÔøΩrio de login">
 
                     <!-- Email -->
                     <div class="mb-3">
@@ -104,7 +104,7 @@
                             <a href="#" class="forgot-link">Esqueceu a senha?</a>
                         </div>
                         <div class="input-icon-wrap position-relative">
-                            <input type="password" id="senha" class="form-control pe-5" placeholder="ïïïïïïïï"
+                            <input type="password" id="senha" class="form-control pe-5" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"
                                 autocomplete="current-password" required />
                             <i class="bi bi-lock"></i>
                         </div>
@@ -112,7 +112,7 @@
 
                     <!-- Submit -->
                     <button type="submit" class="btn-login" id="btnLogin">
-                        <a href="pages/menus/secretaria/menuSecretariaEscolar.html">Entrar</a>
+                        <span>Entrar</span>
                     </button>
 
                 </form>
@@ -159,7 +159,7 @@
             btnLogin.classList.add('loading');
             btnLogin.disabled = true;
 
-            // SimulaÁ„o: remover apÛs 2s (substitua pelo fetch real)
+            // SimulaÔøΩÔøΩo: remover apÔøΩs 2s (substitua pelo fetch real)
             setTimeout(() => {
                 btnLogin.classList.remove('loading');
                 btnLogin.disabled = false;
