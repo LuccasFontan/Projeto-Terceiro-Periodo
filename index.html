@@ -1,105 +1,172 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAADI - Login</title>
-    <link rel="stylesheet" href="../../css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
-    <link rel="shortcut icon" href="../../img/favicon-duas-mÃ£os-32px-branco.png" type="image/x-icon">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login — Sistema</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
-    <main class="loginPage">
-        <div class="loginShell">
-            <section class="loginHero" aria-label="ApresentaÃ§Ã£o da plataforma">
-                <div class="brandBlock">
-                    <div class="brandIcon">
-                        <img src="../../img/icons8-two-hands-48 (1).png"
-                            alt="Logo SAADI - Duas mÃ£os simbolizando inclusÃ£o">
+
+    <div class="shell">
+
+        <!-- -- Hero ---------------------------- -->
+        <div class="hero-side">
+            <div class="deco-ring"></div>
+
+            <!-- Brand -->
+            <div class="brand">
+                <div class="brand-icon">
+                    <img src="img/icons8-two-hands-48 (1).png">
+                </div>
+                <div>
+                    <div class="brand-name">SAADI</div>
+                    <div class="brand-tagline">Plataforma de Gestão</div>
+                </div>
+            </div>
+
+            <!-- Copy -->
+            <div class="hero-body">
+                <span class="kicker">
+                    <i class="bi bi-stars"></i>
+                    Versão 2025
+                </span>
+
+                <h2 class="hero-title">
+                    Gestão inteligente<br>em suas mãos
+                </h2>
+
+                <p class="hero-desc">
+                    Acesse sua área de trabalho com segurança e controle total dos seus processos, equipes e relatórios
+                    em tempo real.
+                </p>
+
+                <!-- Feature cards -->
+                <div class="features">
+                    <div class="feat">
+                        <div class="feat-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                        <div class="feat-title">Dashboards</div>
+                        <div class="feat-desc">Métricas e KPIs em tempo real</div>
                     </div>
-                    <div class="brandText">
-                        <h1>SAADI</h1>
-                        <p>Secretaria Escolar</p>
+                    <div class="feat">
+                        <div class="feat-icon"><i class="bi bi-people"></i></div>
+                        <div class="feat-title">Equipes</div>
+                        <div class="feat-desc">Gestão completa de usuários</div>
+                    </div>
+                    <div class="feat">
+                        <div class="feat-icon"><i class="bi bi-lock"></i></div>
+                        <div class="feat-title">Segurança</div>
+                        <div class="feat-desc">Acesso com autenticação MFA</div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="heroContent">
-                    <p class="heroKicker">Acesso institucional</p>
-                    <h2>Sistema de acompanhamento da educaÃ§Ã£o inclusiva</h2>
-                    <p>
-                        Entre para gerenciar dados acadÃªmicos, acompanhar alunos e manter o atendimento organizado
-                        em uma interface clara, acessÃ­vel e padronizada com o restante do sistema.
+        <!-- -- Login panel ---------------------- -->
+        <div class="login-side">
+            <div class="login-card">
+
+                <span class="eyebrow">
+                    <i class="bi bi-door-open"></i>
+                    Acesso ao sistema
+                </span>
+
+                <h1 class="card-title">Bem-vindo de volta</h1>
+                <p class="card-sub">Insira suas credenciais para continuar.</p>
+
+                <form action="./pages/menus/menuSecretariaEscolar.html" method="get" aria-label="Formulário de login">
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label" for="email">E-mail</label>
+                        <div class="input-icon-wrap">
+                            <input type="email" id="email" class="form-control" placeholder="voce@empresa.com.br"
+                                autocomplete="username" required />
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                    </div>
+
+                    <!-- Senha -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="form-label mb-0" for="senha">Senha</label>
+                            <a href="#" class="forgot-link">Esqueceu a senha?</a>
+                        </div>
+                        <div class="input-icon-wrap position-relative">
+                            <input type="password" id="senha" class="form-control pe-5" placeholder="••••••••"
+                                autocomplete="current-password" required />
+                            <i class="bi bi-lock"></i>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn-login" id="btnLogin">
+                        <a href="pages/menus/secretaria/menuSecretariaEscolar.html">Entrar</a>
+                    </button>
+
+                </form>
+
+                <!-- Footer -->
+                <div class="card-footer-area">
+                    <p class="help-text">
+                        Precisa de ajuda?
+                        <a href="#" class="support-link">Fale com o suporte</a>
                     </p>
-
-                    <div class="heroHighlights" aria-label="Destaques do sistema">
-                        <article>
-                            <strong>InclusÃ£o</strong>
-                            <span>Fluxo focado em acessibilidade</span>
-                        </article>
-                        <article>
-                            <strong>GestÃ£o</strong>
-                            <span>Controle centralizado de alunos</span>
-                        </article>
-                        <article>
-                            <strong>Agilidade</strong>
-                            <span>Interface simples e responsiva</span>
-                        </article>
-                    </div>
+                    <p class="copyright">&copy; 2025 SAADI. Todos os direitos reservados.</p>
                 </div>
-            </section>
 
-            <section class="loginPanel" aria-label="Ãrea de autenticaÃ§Ã£o">
-                <div class="loginCard">
-                    <p class="cardEyebrow">Portal restrito</p>
-                    <h2 class="bemVindo">Bem-vindo de volta</h2>
-                    <p class="subtitle">FaÃ§a login para acessar o sistema</p>
-
-                    <form action="/pages/menus/secretaria/menuSecretariaEscolar.html" method="get" class="authForm" aria-label="FormulÃ¡rio de login">
-                        <div class="fieldGroup">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="Digite seu email aqui" required
-                                aria-required="true">
-                        </div>
-
-                        <div class="fieldGroup">
-                            <div class="labelContainer">
-                                <label for="senha">Senha</label>
-                                <a class="resetSenha" href="./redefinirSenha.html"
-                                    aria-label="Recuperar senha esquecida">Esqueceu a senha?</a>
-                            </div>
-                            <input type="password" id="senha" name="senha" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required
-                                aria-required="true">
-                        </div>
-
-                        <button type="submit" class="btnEntrar" aria-label="Entrar no sistema">Entrar</button>
-                    </form>
-
-                    <div class="loginFooter">
-                        <p class="helpText">Precisa de ajuda? <a href="#" class="linkSupport"
-                                aria-label="Entrar em contato com o suporte tÃ©cnico">Entre em contato com o suporte</a>
-                        </p>
-                        <p class="copyright">Â© 2025 Secretaria Municipal de EducaÃ§Ã£o</p>
-                    </div>
-                </div>
-            </section>
+            </div>
         </div>
-    </main>
 
-    <div vw class="enabled">
-        <div vw-access-button class="active"></div>
-        <div vw-plugin-wrapper>
-            <div class="vw-plugin-top-wrapper"></div>
-        </div>
     </div>
-    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        new window.VLibras.Widget('https://vlibras.gov.br/app');
+        // Toggle senha
+        const togglePwd = document.getElementById('togglePwd');
+        const senhaInput = document.getElementById('senha');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        togglePwd.addEventListener('click', () => {
+            const show = senhaInput.type === 'password';
+            senhaInput.type = show ? 'text' : 'password';
+            eyeIcon.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+        });
+
+        // Simula loading no submit
+        const form = document.getElementById('loginForm');
+        const btnLogin = document.getElementById('btnLogin');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
+            }
+            btnLogin.classList.add('loading');
+            btnLogin.disabled = true;
+
+            // Simulação: remover após 2s (substitua pelo fetch real)
+            setTimeout(() => {
+                btnLogin.classList.remove('loading');
+                btnLogin.disabled = false;
+            }, 2000);
+        });
     </script>
+
 </body>
 
 </html>
