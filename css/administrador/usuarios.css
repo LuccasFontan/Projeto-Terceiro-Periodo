@@ -107,3 +107,66 @@
     font-size: 13px;
   }
 }
+
+/* Ajustes de tabela para evitar conteúdo saindo da caixa */
+#tabelaUsuarios {
+  table-layout: fixed;
+}
+
+#tabelaUsuarios th,
+#tabelaUsuarios td {
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+#tabelaUsuarios th:nth-child(1),
+#tabelaUsuarios td:nth-child(1) {
+  width: 17%;
+}
+
+#tabelaUsuarios th:nth-child(2),
+#tabelaUsuarios td:nth-child(2) {
+  width: 22%;
+}
+
+#tabelaUsuarios th:nth-child(3),
+#tabelaUsuarios td:nth-child(3) {
+  width: 12%;
+}
+
+#tabelaUsuarios th:nth-child(4),
+#tabelaUsuarios td:nth-child(4) {
+  width: 15%;
+}
+
+#tabelaUsuarios th:nth-child(5),
+#tabelaUsuarios td:nth-child(5) {
+  width: 10%;
+}
+
+#tabelaUsuarios th:nth-child(6),
+#tabelaUsuarios td:nth-child(6) {
+  width: 14%;
+}
+
+#tabelaUsuarios th:nth-child(7),
+#tabelaUsuarios td:nth-child(7) {
+  width: 10%;
+}
+
+#tabelaUsuarios .acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+#tabelaUsuarios .acoes .btn {
+  white-space: nowrap;
+}
+
+@media (max-width: 1200px) {
+  #tabelaUsuarios {
+    table-layout: auto;
+  }
+}

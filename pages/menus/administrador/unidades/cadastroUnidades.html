@@ -20,8 +20,8 @@
     </div>
 
     <div class="Perfil">
-      <div class="nomePerfil">Usuário Logado</div>
-      <div class="emailPerfil">usuario@escola.edu.br</div>
+      <div class="nomePerfil"></div>
+      <div class="emailPerfil"></div>
     </div>
 
                 <div class="botoesLaterais">
@@ -73,6 +73,7 @@
 
     <!-- FORMULÁRIO DE CADASTRO -->
     <section class="containerPrincipal">
+      <div id="mensagemCadastroUnidade" class="alert d-none" role="alert"></div>
       <form class="formulario" onsubmit="salvarUnidade(event)" aria-label="Formulário de cadastro de unidade">
         <!-- SEÇÃO 1: DADOS BÁSICOS -->
         <div style="grid-column: span 2; margin-bottom: 0;">
@@ -239,22 +240,81 @@
   <script>
     new window.VLibras.Widget('https://vlibras.gov.br/app');
   </script>
+  <script src="/scripts/apiClient.js"></script>
 
   <script>
     function navegarPara(pagina) {
       window.location.href = pagina;
     }
 
+    function mostrarMensagem(tipo, texto) {
+      const box = document.getElementById('mensagemCadastroUnidade');
+      box.className = `alert alert-${tipo}`;
+      box.textContent = texto;
+      box.classList.remove('d-none');
+    }
+
+    function limparMensagem() {
+      const box = document.getElementById('mensagemCadastroUnidade');
+      box.classList.add('d-none');
+      box.textContent = '';
+    }
+
     function logout() {
       if (confirm('Tem certeza que deseja sair do sistema?')) {
-        window.location.href = '../../../../pages/auth/login.html';
+        fetch('/api/auth/logout', { method: 'POST' }).finally(() => {
+          window.location.href = '/index.html';
+        });
       }
     }
 
-    function salvarUnidade(event) {
+    async function salvarUnidade(event) {
       event.preventDefault();
-      alert('Unidade cadastrada com sucesso!');
-      window.location.href = 'listarUnidades.html';
+
+      limparMensagem();
+
+      const payload = {
+        nome: document.getElementById('nomeUnidade').value.trim(),
+        sigla: document.getElementById('sigla').value.trim(),
+        cnpj: document.getElementById('cnpj').value.trim(),
+        diretor_nome: document.getElementById('nomeDiretor').value.trim(),
+        diretor_cpf: document.getElementById('cpfDiretor').value.trim(),
+        diretor_email: document.getElementById('emailDiretor').value.trim(),
+        diretor_telefone: document.getElementById('telefoneDiretor').value.trim(),
+        telefone: document.getElementById('telefone').value.trim(),
+        celular: document.getElementById('celular').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        rua: document.getElementById('rua').value.trim(),
+        numero: document.getElementById('numero').value.trim(),
+        complemento: document.getElementById('complemento').value.trim(),
+        cidade: document.getElementById('cidade').value.trim(),
+        estado: document.getElementById('estado').value.trim().toUpperCase(),
+        cep: document.getElementById('cep').value.trim(),
+        tipo_unidade: document.getElementById('tipoUnidade').value,
+        data_inicio_operacao: document.getElementById('dataInicio').value || null,
+        observacoes: document.getElementById('observacoes').value.trim() || null,
+        status: document.getElementById('status').value
+      };
+
+      try {
+        const response = await fetch('/api/admin/unidades', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || 'Erro ao cadastrar unidade.');
+        }
+
+        mostrarMensagem('success', 'Unidade cadastrada com sucesso.');
+        setTimeout(() => {
+          window.location.href = 'listarUnidades.html';
+        }, 900);
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro inesperado ao cadastrar unidade.');
+      }
     }
   </script>
 </body>

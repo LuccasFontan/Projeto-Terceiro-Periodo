@@ -20,8 +20,8 @@
     </div>
 
     <div class="Perfil">
-      <div class="nomePerfil">Usuário Logado</div>
-      <div class="emailPerfil">usuario@escola.edu.br</div>
+      <div class="nomePerfil"></div>
+      <div class="emailPerfil"></div>
     </div>
 
                 <div class="botoesLaterais">
@@ -79,16 +79,27 @@
           id="campoBusca" 
           placeholder="Buscar por nome, cidade ou CNPJ..." 
           aria-label="Campo de busca de unidades"
-          onkeyup="filtrarUnidades()"
+          onkeydown="if (event.key === 'Enter') buscarUnidades()"
         >
+        <button class="btn btnSecundario" onclick="buscarUnidades()" aria-label="Buscar unidades">Buscar</button>
         <a href="cadastroUnidades.html" class="btn btnPrimario" aria-label="Criar nova unidade escolar">
           + Nova Unidade
         </a>
+      </div>
+
+      <div class="filtrosUsuarios">
+        <select id="filtroStatus" onchange="buscarUnidades()" aria-label="Filtrar por status">
+          <option value="">Todos os Status</option>
+          <option value="ativa">Ativa</option>
+          <option value="inativa">Inativa</option>
+          <option value="manutencao">Em Manutenção</option>
+        </select>
       </div>
     </section>
 
     <!-- LISTA DE UNIDADES -->
     <section class="containerPrincipal">
+      <div id="mensagemUnidades" class="alert d-none" role="alert"></div>
       <table class="tabelaResponsiva" id="tabelaUnidades">
         <thead>
           <tr>
@@ -100,62 +111,9 @@
             <th>Ações</th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="unidade" data-nome="Escola Municipal Centro" data-estado="SP" data-status="ativa">
-            <td>Escola Municipal Centro</td>
-            <td>Centro</td>
-            <td>12.345.678/0001-90</td>
-            <td>Prof. Roberto</td>
-            <td><span class="badge badgeSucesso">Ativa</span></td>
-            <td>
-              <div class="acoes">
-                <a href="atualizarUnidades.html?id=1" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
-                <a href="atualizarUnidades.html?id=1" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-                <button onclick="confirmarDelecao(1)" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
-              </div>
-            </td>
-          </tr>
-          <tr class="unidade" data-nome="Escola Estadual Norte" data-estado="SP" data-status="ativa">
-            <td>Escola Estadual Norte</td>
-            <td>Vila Nova</td>
-            <td>87.654.321/0001-45</td>
-            <td>Dra. Fernanda</td>
-            <td><span class="badge badgeSucesso">Ativa</span></td>
-            <td>
-              <div class="acoes">
-                <a href="atualizarUnidades.html?id=2" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
-                <a href="atualizarUnidades.html?id=2" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-                <button onclick="confirmarDelecao(2)" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
-              </div>
-            </td>
-          </tr>
-          <tr class="unidade" data-nome="CEI Infantil Leste" data-estado="RJ" data-status="ativa">
-            <td>CEI Infantil Leste</td>
-            <td>Consolação</td>
-            <td>11.111.111/0001-11</td>
-            <td>Prof. Marcelo</td>
-            <td><span class="badge badgeSucesso">Ativa</span></td>
-            <td>
-              <div class="acoes">
-                <a href="atualizarUnidades.html?id=3" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
-                <a href="atualizarUnidades.html?id=3" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-                <button onclick="confirmarDelecao(3)" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
-              </div>
-            </td>
-          </tr>
-          <tr class="unidade" data-nome="EMEF Sul Integrada" data-estado="MG" data-status="manutencao">
-            <td>EMEF Sul Integrada</td>
-            <td>Brooklin</td>
-            <td>22.222.222/0001-22</td>
-            <td>Prof. Patricia</td>
-            <td><span class="badge badgeAviso">Em Manutenção</span></td>
-            <td>
-              <div class="acoes">
-                <a href="atualizarUnidades.html?id=4" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
-                <a href="atualizarUnidades.html?id=4" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-                <button onclick="confirmarDelecao(4)" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
-              </div>
-            </td>
+        <tbody id="unidadesTbody">
+          <tr>
+            <td colspan="6">Carregando unidades...</td>
           </tr>
         </tbody>
       </table>
@@ -185,9 +143,112 @@
   <script>
     new window.VLibras.Widget('https://vlibras.gov.br/app');
   </script>
+  <script src="/scripts/apiClient.js"></script>
 
   <script>
+    const TOKEN_KEY = 'saadi_access_token';
     let idDelecao = null;
+    let unidadesCache = [];
+
+    function obterToken() {
+      return localStorage.getItem(TOKEN_KEY) || '';
+    }
+
+    function criarHeadersJson() {
+      const headers = { 'Accept': 'application/json' };
+      const token = obterToken();
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+      return headers;
+    }
+
+    function redirecionarParaLogin() {
+      localStorage.removeItem(TOKEN_KEY);
+      window.location.href = '/index.html';
+    }
+
+    function mostrarMensagem(tipo, texto) {
+      const box = document.getElementById('mensagemUnidades');
+      box.className = `alert alert-${tipo}`;
+      box.textContent = texto;
+      box.classList.remove('d-none');
+    }
+
+    function limparMensagem() {
+      const box = document.getElementById('mensagemUnidades');
+      box.classList.add('d-none');
+      box.textContent = '';
+    }
+
+    function statusBadgeClass(status) {
+      const nome = (status || '').toLowerCase();
+      if (nome === 'ativa') return 'badgeSucesso';
+      if (nome === 'inativa') return 'badgePerigo';
+      return 'badgeAviso';
+    }
+
+    function renderUnidades() {
+      const tbody = document.getElementById('unidadesTbody');
+
+      if (unidadesCache.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6">Nenhuma unidade encontrada.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = unidadesCache.map((u) => `
+        <tr>
+          <td>${u.nome || '-'}</td>
+          <td>${u.cidade || '-'}</td>
+          <td>${u.cnpj || '-'}</td>
+          <td>${u.diretor_nome || '-'}</td>
+          <td><span class="badge ${statusBadgeClass(u.status)}">${u.status || '-'}</span></td>
+          <td>
+            <div class="acoes">
+              <a href="atualizarUnidades.html?id=${u.id}" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
+              <a href="atualizarUnidades.html?id=${u.id}" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
+              <button onclick="confirmarDelecao(${u.id})" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function carregarUnidades() {
+      limparMensagem();
+      const busca = document.getElementById('campoBusca').value.trim();
+      const status = document.getElementById('filtroStatus').value;
+      const params = new URLSearchParams();
+      if (busca) params.set('q', busca);
+      if (status) params.set('status', status);
+
+      const url = params.toString() ? `/api/admin/unidades?${params.toString()}` : '/api/admin/unidades';
+      const response = await fetch(url, {
+        headers: criarHeadersJson()
+      });
+      const data = await response.json();
+
+      if (response.status === 401) {
+        redirecionarParaLogin();
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao carregar unidades.');
+      }
+
+      const unidades = data.data && data.data.items ? data.data.items : (data.items || []);
+      unidadesCache = unidades;
+      renderUnidades();
+    }
+
+    async function buscarUnidades() {
+      try {
+        await carregarUnidades();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro ao buscar unidades.');
+      }
+    }
 
     function navegarPara(pagina) {
       window.location.href = pagina;
@@ -195,37 +256,17 @@
 
     function logout() {
       if (confirm('Tem certeza que deseja sair do sistema?')) {
-        window.location.href = '../../../../pages/auth/login.html';
+        fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: criarHeadersJson()
+        }).finally(() => {
+          localStorage.removeItem(TOKEN_KEY);
+          window.location.href = '/index.html';
+        });
       }
     }
 
-    function filtrarUnidades() {
-      const busca = document.getElementById('campoBusca').value.toLowerCase();
-      const estado = document.getElementById('filtroEstado').value;
-      const status = document.getElementById('filtroStatus').value;
-
-      document.querySelectorAll('.unidade').forEach(row => {
-        const nome = row.getAttribute('data-nome').toLowerCase();
-        const estadoRow = row.getAttribute('data-estado');
-        const statusRow = row.getAttribute('data-status');
-
-        let mostrar = true;
-
-        if (busca && !nome.includes(busca)) {
-          mostrar = false;
-        }
-
-        if (estado && estadoRow !== estado) {
-          mostrar = false;
-        }
-
-        if (status && statusRow !== status) {
-          mostrar = false;
-        }
-
-        row.style.display = mostrar ? '' : 'none';
-      });
-    }
+    function filtrarUnidades() { buscarUnidades(); }
 
     function confirmarDelecao(id) {
       idDelecao = id;
@@ -237,10 +278,30 @@
       idDelecao = null;
     }
 
-    function executarDelecao() {
-      alert('Unidade ' + idDelecao + ' deletada com sucesso!');
-      fecharModal();
-      location.reload();
+    async function executarDelecao() {
+      if (!idDelecao) return;
+
+      try {
+        const response = await fetch(`/api/admin/unidades/${idDelecao}`, {
+          method: 'DELETE',
+          headers: criarHeadersJson()
+        });
+        const data = await response.json();
+        if (response.status === 401) {
+          redirecionarParaLogin();
+          return;
+        }
+        if (!response.ok) {
+          throw new Error(data.message || 'Erro ao excluir unidade.');
+        }
+
+        await buscarUnidades();
+        mostrarMensagem('success', 'Unidade excluída com sucesso.');
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro inesperado ao excluir unidade.');
+      } finally {
+        fecharModal();
+      }
     }
 
     // Fechar modal ao clicar fora
@@ -250,6 +311,14 @@
         fecharModal();
       }
     }
+
+    (async function iniciarPagina() {
+      try {
+        await carregarUnidades();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro ao carregar dados da página.');
+      }
+    })();
   </script>
 </body>
 </html>

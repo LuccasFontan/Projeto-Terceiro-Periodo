@@ -19,8 +19,8 @@
     </div>
 
     <div class="Perfil">
-      <div class="nomePerfil">Usuário Logado</div>
-      <div class="emailPerfil">usuario@escola.edu.br</div>
+      <div class="nomePerfil"></div>
+      <div class="emailPerfil"></div>
     </div>
 
                 <div class="botoesLaterais">
@@ -107,19 +107,19 @@
     <section class="containerPrincipal">
       <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
         <div style="background: #eef3f8; padding: 15px; border-radius: 8px; text-align: center;">
-          <div style="font-size: 24px; font-weight: 700; color: #3498db;">1,247</div>
+          <div id="auditoriaTotalAcoes" style="font-size: 24px; font-weight: 700; color: #3498db;">-</div>
           <div style="font-size: 12px; color: #566575; margin-top: 5px;">TOTAL DE AÇÕES</div>
         </div>
         <div style="background: #eef3f8; padding: 15px; border-radius: 8px; text-align: center;">
-          <div style="font-size: 24px; font-weight: 700; color: #27ae60;">542</div>
+          <div id="auditoriaCriacoes" style="font-size: 24px; font-weight: 700; color: #27ae60;">-</div>
           <div style="font-size: 12px; color: #566575; margin-top: 5px;">CRIAÇÕES</div>
         </div>
         <div style="background: #eef3f8; padding: 15px; border-radius: 8px; text-align: center;">
-          <div style="font-size: 24px; font-weight: 700; color: #f39c12;">634</div>
+          <div id="auditoriaAtualizacoes" style="font-size: 24px; font-weight: 700; color: #f39c12;">-</div>
           <div style="font-size: 12px; color: #566575; margin-top: 5px;">ATUALIZAÇÕES</div>
         </div>
         <div style="background: #eef3f8; padding: 15px; border-radius: 8px; text-align: center;">
-          <div style="font-size: 24px; font-weight: 700; color: #e74c3c;">71</div>
+          <div id="auditoriaExclusoes" style="font-size: 24px; font-weight: 700; color: #e74c3c;">-</div>
           <div style="font-size: 12px; color: #566575; margin-top: 5px;">EXCLUSÕES</div>
         </div>
       </div>
@@ -127,6 +127,7 @@
 
     <!-- TABELA DE AUDITORIA -->
     <section class="containerPrincipal">
+      <div id="mensagemAuditoria" class="alert d-none" role="alert"></div>
       <table class="tabelaResponsiva">
         <thead>
           <tr>
@@ -138,84 +139,15 @@
             <th>Resultado</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>02/04/2026 - 14:35</td>
-            <td>Admin Master</td>
-            <td><span class="badge badgeSucesso">Criação</span></td>
-            <td>Usuário</td>
-            <td>Maria da Silva (maria@escola.edu.br)</td>
-            <td>✓ Sucesso</td>
-          </tr>
-          <tr>
-            <td>02/04/2026 - 13:20</td>
-            <td>Maria da Silva</td>
-            <td><span class="badge badgeInfo">Atualização</span></td>
-            <td>Aluno</td>
-            <td>João Silva (ID: 1245) - Dados atualizados</td>
-            <td>✓ Sucesso</td>
-          </tr>
-          <tr>
-            <td>02/04/2026 - 12:15</td>
-            <td>Dra. Ana Santos</td>
-            <td><span class="badge badgeInfo">Atualização</span></td>
-            <td>Relatório</td>
-            <td>Parecer de Sofia M. - Novos comentários adicionados</td>
-            <td>✓ Sucesso</td>
-          </tr>
-          <tr>
-            <td>01/04/2026 - 16:45</td>
-            <td>Admin Master</td>
-            <td><span class="badge badgeAviso">Exclusão</span></td>
-            <td>Usuário</td>
-            <td>Prof. Pedro (pedro@escola.edu.br) - Conta desativada</td>
-            <td>✓ Sucesso</td>
-          </tr>
-          <tr>
-            <td>01/04/2026 - 15:30</td>
-            <td>Maria da Silva</td>
-            <td><span class="badge badgeSucesso">Criação</span></td>
-            <td>Aluno</td>
-            <td>Lucas Santos - Novo registro</td>
-            <td>✓ Sucesso</td>
-          </tr>
-          <tr>
-            <td>01/04/2026 - 14:00</td>
-            <td>Admin Master</td>
-            <td><span class="badge badgeInfo">Atualização</span></td>
-            <td>Unidade</td>
-            <td>Escola Municipal Centro - Dados atualizados</td>
-            <td>✓ Sucesso</td>
-          </tr>
-          <tr>
-            <td>31/03/2026 - 18:00</td>
-            <td>Sistema</td>
-            <td><span class="badge badgeSucesso">Backup</span></td>
-            <td>Base de Dados</td>
-            <td>Backup automático realizado - 2.3 GB</td>
-            <td>✓ Sucesso</td>
-          </tr>
-          <tr>
-            <td>31/03/2026 - 09:20</td>
-            <td>Prof. Carlos Costa</td>
-            <td><span class="badge badgeSucesso">Criação</span></td>
-            <td>Observação</td>
-            <td>Observação sobre aluno - Maria Silva</td>
-            <td>✓ Sucesso</td>
-          </tr>
+        <tbody id="auditoriaTbody">
+
         </tbody>
       </table>
     </section>
 
     <!-- PAGINAÇÃO -->
     <section class="containerPrincipal">
-      <div style="display: flex; gap: 8px; justify-content: center; margin-top: 20px;">
-        <button class="btn btnSecundario" style="padding: 8px 12px;">← Anterior</button>
-        <button class="btn btnPrimario" style="padding: 8px 16px;">1</button>
-        <button class="btn btnSecundario" style="padding: 8px 12px;">2</button>
-        <button class="btn btnSecundario" style="padding: 8px 12px;">3</button>
-        <button class="btn btnSecundario" style="padding: 8px 12px;">Próxima →</button>
-      </div>
+      <div id="paginacaoAuditoria" style="display: flex; gap: 8px; justify-content: center; margin-top: 20px;"></div>
     </section>
 
     <!-- BOTÕES DE EXPORTAÇÃO -->
@@ -238,20 +170,167 @@
   <script>
     new window.VLibras.Widget('https://vlibras.gov.br/app');
   </script>
+  <script src="/scripts/apiClient.js"></script>
 
   <script>
+    const TOKEN_KEY = 'saadi_access_token';
+    const ENDPOINT = '/api/admin/auditoria';
+    let auditoriaCache = [];
+    let paginaAtual = 1;
+    let totalPaginas = 1;
+
+    function obterToken() {
+      return localStorage.getItem(TOKEN_KEY) || '';
+    }
+
+    function criarHeadersJson() {
+      const headers = { 'Accept': 'application/json' };
+      const token = obterToken();
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+      return headers;
+    }
+
+    function mostrarMensagem(tipo, texto) {
+      const box = document.getElementById('mensagemAuditoria');
+      box.className = `alert alert-${tipo}`;
+      box.textContent = texto;
+      box.classList.remove('d-none');
+    }
+
+    function limparMensagem() {
+      const box = document.getElementById('mensagemAuditoria');
+      box.classList.add('d-none');
+      box.textContent = '';
+    }
+
+    function formatarData(dataIso) {
+      if (!dataIso) return '-';
+      return new Date(dataIso).toLocaleString('pt-BR');
+    }
+
+    function normalizarAcao(valor) {
+      const texto = String(valor || '').toLowerCase();
+      if (texto.includes('cria')) return 'create';
+      if (texto.includes('atual')) return 'update';
+      if (texto.includes('excl') || texto.includes('remov')) return 'delete';
+      if (texto.includes('login')) return 'login';
+      if (texto.includes('logout')) return 'logout';
+      return texto;
+    }
+
+    function resumoRotulo(acao) {
+      const mapa = {
+        create: 'Criação',
+        update: 'Atualização',
+        delete: 'Exclusão',
+        login: 'Login',
+        logout: 'Logout',
+      };
+      return mapa[acao] || acao || '-';
+    }
+
+    function acaoBadgeClass(acao) {
+      if (acao === 'delete') return 'badgePerigo';
+      if (acao === 'update') return 'badgeAviso';
+      if (acao === 'login' || acao === 'logout') return 'badgeInfo';
+      return 'badgeSucesso';
+    }
+
+    function atualizarResumo(resumo) {
+      document.getElementById('auditoriaTotalAcoes').textContent = resumo?.totalAcoes ?? '-';
+      document.getElementById('auditoriaCriacoes').textContent = resumo?.criacoes ?? '-';
+      document.getElementById('auditoriaAtualizacoes').textContent = resumo?.atualizacoes ?? '-';
+      document.getElementById('auditoriaExclusoes').textContent = resumo?.exclusoes ?? '-';
+    }
+
+    function renderizarTabela() {
+      const tbody = document.getElementById('auditoriaTbody');
+      if (auditoriaCache.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6">Nenhum registro encontrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = auditoriaCache.map((item) => {
+        const acao = normalizarAcao(item.acao);
+        const detalhes = item.detalhes && Object.keys(item.detalhes).length > 0 ? JSON.stringify(item.detalhes) : '-';
+        return `
+          <tr>
+            <td>${formatarData(item.created_at)}</td>
+            <td>${item.usuario_nome || '-'}</td>
+            <td><span class="badge ${acaoBadgeClass(acao)}">${resumoRotulo(acao)}</span></td>
+            <td>${item.entidade || '-'}</td>
+            <td>${detalhes}</td>
+            <td>✓ Sucesso</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function carregarAuditoria() {
+      const params = new URLSearchParams();
+      params.set('page', String(paginaAtual));
+      params.set('limit', '10');
+
+      const usuario = document.getElementById('filtroUsuario').value.trim();
+      const acao = normalizarAcao(document.getElementById('filtroTipo').value);
+      const dataInicio = document.getElementById('filtroDataInicio').value;
+      const dataFim = document.getElementById('filtroDataFim').value;
+
+      if (usuario) params.set('usuario', usuario);
+      if (acao && acao !== 'todas') params.set('acao', acao);
+      if (dataInicio) params.set('data_inicio', dataInicio);
+      if (dataFim) params.set('data_fim', dataFim);
+
+      limparMensagem();
+      const response = await fetch(`${ENDPOINT}?${params.toString()}`, { headers: criarHeadersJson() });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao carregar auditoria.');
+      }
+
+      const items = data.data && data.data.items ? data.data.items : (data.items || []);
+      auditoriaCache = items;
+      paginaAtual = (data.data && data.data.page) || data.page || 1;
+      totalPaginas = Math.max(1, Math.ceil(((data.data && data.data.total) || data.total || 0) / ((data.data && data.data.limit) || data.limit || 10)));
+      atualizarResumo(data.resumo || {});
+      renderizarTabela();
+      atualizarPaginacao();
+    }
+
+    function atualizarPaginacao() {
+      const container = document.getElementById('paginacaoAuditoria');
+      if (!container) return;
+      container.innerHTML = `
+        <button class="btn btnSecundario" style="padding: 8px 12px;" onclick="irPagina(${Math.max(1, paginaAtual - 1)})">← Anterior</button>
+        <button class="btn btnPrimario" style="padding: 8px 16px;">${paginaAtual}</button>
+        <button class="btn btnSecundario" style="padding: 8px 12px;" onclick="irPagina(${Math.min(totalPaginas, paginaAtual + 1)})">Próxima →</button>
+      `;
+    }
+
+    async function irPagina(pagina) {
+      paginaAtual = pagina;
+      await carregarAuditoria().catch((error) => mostrarMensagem('danger', error.message || 'Erro ao mudar de página.'));
+    }
+
     function navegarPara(pagina) {
       window.location.href = pagina;
     }
 
     function logout() {
       if (confirm('Tem certeza que deseja sair do sistema?')) {
-        window.location.href = '../../../../pages/auth/login.html';
+        fetch('/api/auth/logout', { method: 'POST', headers: criarHeadersJson() }).finally(() => {
+          localStorage.removeItem(TOKEN_KEY);
+          window.location.href = '/index.html';
+        });
       }
     }
 
     function aplicarFiltros() {
-      alert('Filtros aplicados');
+      paginaAtual = 1;
+      carregarAuditoria().catch((error) => mostrarMensagem('danger', error.message || 'Erro ao aplicar filtros.'));
     }
 
     function limparFiltros() {
@@ -259,16 +338,44 @@
       document.getElementById('filtroTipo').value = 'Todas';
       document.getElementById('filtroDataInicio').value = '';
       document.getElementById('filtroDataFim').value = '';
-      alert('Filtros limpos');
+      paginaAtual = 1;
+      carregarAuditoria().catch((error) => mostrarMensagem('danger', error.message || 'Erro ao limpar filtros.'));
     }
 
     function exportarPDF() {
-      alert('Exportando auditoria em PDF...');
+      window.print();
     }
 
     function exportarCSV() {
-      alert('Exportando auditoria em CSV...');
+      const linhas = [
+        ['data_hora', 'usuario', 'acao', 'entidade', 'detalhes', 'resultado'],
+        ...auditoriaCache.map((item) => [
+          item.created_at || '',
+          item.usuario_nome || '',
+          item.acao || '',
+          item.entidade || '',
+          item.detalhes ? JSON.stringify(item.detalhes) : '',
+          'Sucesso',
+        ]),
+      ];
+
+      const csv = linhas.map((linha) => linha.map((valor) => `"${String(valor).replace(/"/g, '""')}"`).join(';')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'auditoria.csv';
+      link.click();
+      URL.revokeObjectURL(url);
     }
+
+    (async function iniciarPagina() {
+      try {
+        await carregarAuditoria();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro ao carregar auditoria.');
+      }
+    })();
   </script>
 </body>
 </html>

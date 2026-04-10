@@ -20,8 +20,8 @@
     </div>
 
     <div class="Perfil">
-      <div class="nomePerfil">Usuário Logado</div>
-      <div class="emailPerfil">usuario@escola.edu.br</div>
+      <div class="nomePerfil"></div>
+      <div class="emailPerfil"></div>
     </div>
 
                 <div class="botoesLaterais">
@@ -73,6 +73,7 @@
 
     <!-- FORMULÁRIO DE CADASTRO -->
     <section class="containerPrincipal">
+      <div id="mensagemCadastroUsuario" class="alert d-none" role="alert"></div>
       <form class="formulario" onsubmit="salvarUsuario(event)" aria-label="Formulário de cadastro de usuário">
         <!-- SEÇÃO 1: DADOS PESSOAIS -->
         <div style="grid-column: span 2; margin-bottom: 0;">
@@ -139,11 +140,7 @@
         <div class="grupoFormulario">
           <label for="unidade">Unidade Escolar *</label>
           <select id="unidade" name="unidade" required aria-label="Unidade escolar" onchange="carregarDiretor()">
-            <option value="">Selecione...</option>
-            <option value="1">Escola Municipal Centro</option>
-            <option value="2">Escola Estadual Norte</option>
-            <option value="3">CEI Infantil Leste</option>
-            <option value="4">EMEF Sul Integrada</option>
+            <option value="">Carregando unidades...</option>
           </select>
         </div>
 
@@ -191,26 +188,143 @@
     </section>
   </main>
 
-  <!-- VLIBRAS -->
-  <div vw class="enabled">
-    <div vw-access-button class="active"></div>
-    <div vw-plugin-wrapper>
-      <div class="vw-plugin-top-wrapper"></div>
-    </div>
-  </div>
-  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-  <script>
-    new window.VLibras.Widget('https://vlibras.gov.br/app');
-  </script>
+  <script src="/scripts/apiClient.js"></script>
 
   <script>
+    // Decodifica JWT payload
+    function decodificarTokenJWT(token) {
+      if (!token) return null;
+      try {
+        const payloadBase64 = token.split('.')[1];
+        if (!payloadBase64) return null;
+        const base64Url = payloadBase64.replace(/-/g, '+').replace(/_/g, '/');
+        const padding = '='.repeat((4 - (base64Url.length % 4)) % 4);
+        const base64 = base64Url + padding;
+        const json = atob(base64);
+        return JSON.parse(json);
+      } catch {
+        return null;
+      }
+    }
+
+    // Renderiza nome do perfil logado
+    function renderizarPerfil() {
+      const token = localStorage.getItem('saadi_access_token');
+      const payload = decodificarTokenJWT(token);
+      
+      if (!payload) return;
+
+      const nomePerfil = document.querySelector('.nomePerfil');
+      const emailPerfil = document.querySelector('.emailPerfil');
+
+      if (nomePerfil) {
+        const nome = payload.nome || payload.user_name || '';
+        const primeiroNome = nome.split(' ')[0];
+        nomePerfil.textContent = primeiroNome ? `Olá, ${primeiroNome}` : 'Olá';
+      }
+
+      if (emailPerfil) {
+        const email = payload.email || '';
+        const perfil = payload.perfil || payload.profile_name || '';
+        const texto = [email, perfil].filter(Boolean).join(' • ');
+        emailPerfil.textContent = texto || 'Sessão ativa';
+      }
+    }
+
+    // XMLHttpRequest wrapper (não sofre interferência do VLibras)
+    function fazerRequisicao(url, opcoes = {}) {
+      return new Promise((resolver, rejeitar) => {
+        const xhr = new XMLHttpRequest();
+        const metodo = opcoes.method || 'GET';
+        
+        xhr.open(metodo, url, true);
+        
+        if (opcoes.headers) {
+          Object.entries(opcoes.headers).forEach(([chave, valor]) => {
+            xhr.setRequestHeader(chave, valor);
+          });
+        }
+        
+        const token = localStorage.getItem('saadi_access_token');
+        if (token) {
+          xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        }
+
+        xhr.onload = function() {
+          try {
+            const dados = JSON.parse(xhr.responseText);
+            resolver({
+              ok: xhr.status >= 200 && xhr.status < 300,
+              status: xhr.status,
+              json: () => Promise.resolve(dados)
+            });
+          } catch(e) {
+            resolver({
+              ok: false,
+              status: xhr.status,
+              json: () => Promise.resolve({})
+            });
+          }
+        };
+
+        xhr.onerror = function() {
+          rejeitar(new Error('Erro na requisição'));
+        };
+
+        if (opcoes.body) {
+          xhr.send(opcoes.body);
+        } else {
+          xhr.send();
+        }
+      });
+    }
+
     function navegarPara(pagina) {
       window.location.href = pagina;
     }
 
     function logout() {
       if (confirm('Tem certeza que deseja sair do sistema?')) {
-        window.location.href = '../../../../pages/auth/login.html';
+        fazerRequisicao('/api/auth/logout', {
+          method: 'POST'
+        }).finally(() => {
+          window.location.href = '/index.html';
+        });
+      }
+    }
+
+    function mostrarMensagem(tipo, texto) {
+      const box = document.getElementById('mensagemCadastroUsuario');
+      box.className = `alert alert-${tipo}`;
+      box.textContent = texto;
+      box.classList.remove('d-none');
+    }
+
+    function limparMensagem() {
+      const box = document.getElementById('mensagemCadastroUsuario');
+      box.classList.add('d-none');
+      box.textContent = '';
+    }
+
+    async function carregarUnidades() {
+      const select = document.getElementById('unidade');
+      const response = await fazerRequisicao('/api/admin/unidades', {
+        headers: { 'Accept': 'application/json' }
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Não foi possível carregar unidades.');
+      }
+
+      select.innerHTML = '<option value="">Selecione...</option>';
+
+      const unidades = data.data && data.data.items ? data.data.items : (data.items || []);
+      for (const unidade of unidades) {
+        const option = document.createElement('option');
+        option.value = unidade.id;
+        option.textContent = unidade.nome;
+        select.appendChild(option);
       }
     }
 
@@ -219,24 +333,70 @@
       console.log('Carregando diretor da unidade selecionada');
     }
 
-    function salvarUsuario(event) {
+    async function salvarUsuario(event) {
       event.preventDefault();
+      limparMensagem();
+
       const senha = document.getElementById('senha').value;
       const confirmaSenha = document.getElementById('confirmaSenha').value;
 
       if (senha !== confirmaSenha) {
-        alert('As senhas não coincidem!');
+        mostrarMensagem('danger', 'As senhas não coincidem!');
         return;
       }
 
       if (senha.length < 8) {
-        alert('A senha deve ter no mínimo 8 caracteres!');
+        mostrarMensagem('danger', 'A senha deve ter no mínimo 8 caracteres!');
         return;
       }
 
-      alert('Usuário cadastrado com sucesso!');
-      window.location.href = 'listarUsuarios.html';
+      const payload = {
+        unidade_id: Number(document.getElementById('unidade').value),
+        perfil_nome: document.getElementById('perfil').value,
+        nome_completo: document.getElementById('nomeCompleto').value,
+        cpf: document.getElementById('cpf').value,
+        email: document.getElementById('email').value,
+        telefone: document.getElementById('telefone').value,
+        matricula: document.getElementById('usuario').value,
+        senha,
+        departamento: document.getElementById('departamento').value || null,
+        status: document.getElementById('status').value,
+        data_admissao: document.getElementById('dataAdmissao').value || null,
+        enviar_email_boas_vindas: document.getElementById('enviarEmail').checked,
+      };
+
+      try {
+        const response = await fazerRequisicao('/api/admin/usuarios', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || 'Erro ao cadastrar usuário.');
+        }
+
+        mostrarMensagem('success', 'Usuário cadastrado com sucesso. Redirecionando...');
+        setTimeout(() => {
+          window.location.href = 'listarUsuarios.html';
+        }, 700);
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro inesperado ao cadastrar usuário.');
+      }
     }
+
+    (async function iniciarPagina() {
+      renderizarPerfil();
+      try {
+        await carregarUnidades();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro ao carregar unidades.');
+      }
+    })();
   </script>
 </body>
 </html>

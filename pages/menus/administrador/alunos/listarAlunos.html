@@ -19,8 +19,8 @@
     </div>
 
     <div class="Perfil">
-      <div class="nomePerfil">Usuário Logado</div>
-      <div class="emailPerfil">usuario@escola.edu.br</div>
+      <div class="nomePerfil"></div>
+      <div class="emailPerfil"></div>
     </div>
 
                 <div class="botoesLaterais">
@@ -81,6 +81,9 @@
           style="flex: 1; padding: 12px; border: 1px solid #d0dce6; border-radius: 8px; font-size: 14px;"
           onkeyup="filtrarAlunos()"
         >
+        <button class="btn btnSecundario" onclick="filtrarAlunos()" aria-label="Executar busca de alunos">
+          Buscar
+        </button>
         <a href="../../secretaria/cadastroAlunos.html" class="btn btnPrimario" aria-label="Cadastrar novo aluno">
           + Novo Aluno
         </a>
@@ -88,11 +91,7 @@
 
       <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;">
         <select id="filtroUnidade" onchange="filtrarAlunos()" aria-label="Filtrar por unidade" style="padding: 10px; border: 1px solid #d0dce6; border-radius: 8px;">
-          <option value="">Todas as Unidades</option>
-          <option value="1">Escola Municipal Centro</option>
-          <option value="2">Escola Estadual Norte</option>
-          <option value="3">CEI Infantil Leste</option>
-          <option value="4">EMEF Sul Integrada</option>
+          <option value="">Carregando unidades...</option>
         </select>
 
         <select id="filtroSerie" onchange="filtrarAlunos()" aria-label="Filtrar por série" style="padding: 10px; border: 1px solid #d0dce6; border-radius: 8px;">
@@ -122,6 +121,7 @@
 
     <!-- LISTA DE ALUNOS -->
     <section class="containerPrincipal">
+      <div id="mensagemAlunos" class="alert d-none" role="alert"></div>
       <table class="tabelaResponsiva" id="tabelaAlunos">
         <thead>
           <tr>
@@ -134,63 +134,7 @@
             <th>Ações</th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="aluno" data-nome="João Silva" data-unidade="1" data-serie="1-3" data-diagnostico="autismo" data-status="ativo">
-            <td>João Silva</td>
-            <td>MAT20240001</td>
-            <td>Escola Municipal Centro</td>
-            <td>1º ano</td>
-            <td><span class="badge badgeInfo">Autismo</span></td>
-            <td><span class="badge badgeSucesso">Ativo</span></td>
-            <td>
-              <div class="acoes">
-                <button class="btn btnVer" style="padding: 6px 12px; font-size: 12px;" onclick="abrirDetalhes(1)">Ver</button>
-                <a href="../../secretaria/atualizarAlunos.html?id=1" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-              </div>
-            </td>
-          </tr>
-          <tr class="aluno" data-nome="Maria Santos" data-unidade="2" data-serie="4-5" data-diagnostico="tdah" data-status="acompanhamento">
-            <td>Maria Santos</td>
-            <td>MAT20240002</td>
-            <td>Escola Estadual Norte</td>
-            <td>4º ano</td>
-            <td><span class="badge badgeAviso">TDAH</span></td>
-            <td><span class="badge badgeInfo">Em Acompanhamento</span></td>
-            <td>
-              <div class="acoes">
-                <button class="btn btnVer" style="padding: 6px 12px; font-size: 12px;" onclick="abrirDetalhes(2)">Ver</button>
-                <a href="../../secretaria/atualizarAlunos.html?id=2" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-              </div>
-            </td>
-          </tr>
-          <tr class="aluno" data-nome="Pedro Oliveira" data-unidade="1" data-serie="6-9" data-diagnostico="altas" data-status="ativo">
-            <td>Pedro Oliveira</td>
-            <td>MAT20240003</td>
-            <td>Escola Municipal Centro</td>
-            <td>7º ano</td>
-            <td><span class="badge badgeSucesso">Altas Habilidades</span></td>
-            <td><span class="badge badgeSucesso">Ativo</span></td>
-            <td>
-              <div class="acoes">
-                <button class="btn btnVer" style="padding: 6px 12px; font-size: 12px;" onclick="abrirDetalhes(3)">Ver</button>
-                <a href="../../secretaria/atualizarAlunos.html?id=3" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-              </div>
-            </td>
-          </tr>
-          <tr class="aluno" data-nome="Sofia Costa" data-unidade="3" data-serie="EI" data-diagnostico="auditiva" data-status="ativo">
-            <td>Sofia Costa</td>
-            <td>MAT20240004</td>
-            <td>CEI Infantil Leste</td>
-            <td>Infantil II</td>
-            <td><span class="badge badgePerigo">Deficiência Auditiva</span></td>
-            <td><span class="badge badgeSucesso">Ativo</span></td>
-            <td>
-              <div class="acoes">
-                <button class="btn btnVer" style="padding: 6px 12px; font-size: 12px;" onclick="abrirDetalhes(4)">Ver</button>
-                <a href="../../secretaria/atualizarAlunos.html?id=4" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-              </div>
-            </td>
-          </tr>
+        <tbody id="alunosTbody">
         </tbody>
       </table>
     </section>
@@ -198,19 +142,19 @@
     <!-- ESTATÍSTICAS -->
     <section class="painelIndicadores" style="margin-top: 30px;">
       <div class="cardIndicador info">
-        <div class="numeroIndicador">1,247</div>
+        <div class="numeroIndicador" id="alunosTotal">-</div>
         <div class="labelIndicador">Total de Alunos</div>
       </div>
       <div class="cardIndicador sucesso">
-        <div class="numeroIndicador">342</div>
+        <div class="numeroIndicador" id="alunosComDiagnostico">-</div>
         <div class="labelIndicador">Com Diagnóstico</div>
       </div>
       <div class="cardIndicador aviso">
-        <div class="numeroIndicador">128</div>
+        <div class="numeroIndicador" id="alunosAcompanhamento">-</div>
         <div class="labelIndicador">Em Acompanhamento</div>
       </div>
       <div class="cardIndicador perigo">
-        <div class="numeroIndicador">6</div>
+        <div class="numeroIndicador" id="alunosInativos">-</div>
         <div class="labelIndicador">Inativos</div>
       </div>
     </section>
@@ -241,77 +185,183 @@
   <script>
     new window.VLibras.Widget('https://vlibras.gov.br/app');
   </script>
+  <script src="/scripts/apiClient.js"></script>
 
   <script>
+    const TOKEN_KEY = 'saadi_access_token';
+    let alunosCache = [];
+    let unidadesCache = [];
+
+    function obterToken() {
+      return localStorage.getItem(TOKEN_KEY) || '';
+    }
+
+    function criarHeadersJson() {
+      const headers = { 'Accept': 'application/json' };
+      const token = obterToken();
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+      return headers;
+    }
+
+    function mostrarMensagem(tipo, texto) {
+      const box = document.getElementById('mensagemAlunos');
+      box.className = `alert alert-${tipo}`;
+      box.textContent = texto;
+      box.classList.remove('d-none');
+    }
+
+    function limparMensagem() {
+      const box = document.getElementById('mensagemAlunos');
+      box.classList.add('d-none');
+      box.textContent = '';
+    }
+
+    function formatarData(dataIso) {
+      if (!dataIso) return '-';
+      return new Date(dataIso).toLocaleDateString('pt-BR');
+    }
+
+    function statusBadgeClass(status) {
+      const nome = (status || '').toLowerCase();
+      if (nome === 'ativo') return 'badgeSucesso';
+      if (nome === 'inativo') return 'badgePerigo';
+      return 'badgeAviso';
+    }
+
+    function diagnosticoBadgeClass(texto) {
+      const nome = (texto || '').toLowerCase();
+      if (nome.includes('autismo')) return 'badgeInfo';
+      if (nome.includes('tdah')) return 'badgeAviso';
+      if (nome.includes('audit')) return 'badgePerigo';
+      return 'badgeSucesso';
+    }
+
+    function atualizarIndicadores(resumo) {
+      document.getElementById('alunosTotal').textContent = resumo?.totalAlunos ?? 0;
+      document.getElementById('alunosComDiagnostico').textContent = resumo?.comDiagnostico ?? 0;
+      document.getElementById('alunosAcompanhamento').textContent = resumo?.emAcompanhamento ?? 0;
+      document.getElementById('alunosInativos').textContent = resumo?.inativos ?? 0;
+    }
+
+    function renderizarUnidadesFiltro() {
+      const select = document.getElementById('filtroUnidade');
+      select.innerHTML = '<option value="">Todas as Unidades</option>';
+
+      for (const unidade of unidadesCache) {
+        const option = document.createElement('option');
+        option.value = String(unidade.id);
+        option.textContent = unidade.nome;
+        select.appendChild(option);
+      }
+    }
+
+    function renderizarAlunos() {
+      const busca = document.getElementById('campoBusca').value.trim().toLowerCase();
+      const unidade = document.getElementById('filtroUnidade').value;
+      const serie = document.getElementById('filtroSerie').value;
+      const diagnostico = document.getElementById('filtroNeurodiversidade').value;
+      const status = document.getElementById('filtroStatus').value;
+      const tbody = document.getElementById('alunosTbody');
+
+      const filtrados = alunosCache.filter((aluno) => {
+        const nome = (aluno.nome || '').toLowerCase();
+        const matricula = (aluno.matricula || '').toLowerCase();
+        const cpf = (aluno.cpf || '').toLowerCase();
+        const diagnosticoTexto = (aluno.diagnostico || '').toLowerCase();
+
+        if (busca && !nome.includes(busca) && !matricula.includes(busca) && !cpf.includes(busca)) return false;
+        if (unidade && String(aluno.unidade_id || '') !== unidade) return false;
+        if (serie && String(aluno.serie || '').toLowerCase() !== serie.toLowerCase()) return false;
+        if (diagnostico && !diagnosticoTexto.includes(diagnostico.toLowerCase())) return false;
+        if (status && String(aluno.status || '').toLowerCase() !== status.toLowerCase()) return false;
+        return true;
+      });
+
+      if (filtrados.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7">Nenhum aluno encontrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtrados.map((aluno) => `
+        <tr>
+          <td>${aluno.nome || '-'}</td>
+          <td>${aluno.matricula || '-'}</td>
+          <td>${aluno.unidade || '-'}</td>
+          <td>${aluno.serie || '-'}</td>
+          <td><span class="badge ${diagnosticoBadgeClass(aluno.diagnostico)}">${aluno.diagnostico || '-'}</span></td>
+          <td><span class="badge ${statusBadgeClass(aluno.status)}">${aluno.status || '-'}</span></td>
+          <td>
+            <div class="acoes">
+              <button class="btn btnVer" style="padding: 6px 12px; font-size: 12px;" onclick="abrirDetalhes(${aluno.id})">Ver</button>
+              <a href="../../secretaria/atualizarAlunos.html?id=${aluno.id}" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function carregarUnidades() {
+      const response = await fetch('/api/admin/unidades', { headers: criarHeadersJson() });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao carregar unidades.');
+      }
+
+      const unidades = data.data && data.data.items ? data.data.items : (data.items || []);
+      unidadesCache = unidades;
+      renderizarUnidadesFiltro();
+    }
+
+    async function carregarAlunos() {
+      limparMensagem();
+      const response = await fetch('/api/admin/alunos', { headers: criarHeadersJson() });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao carregar alunos.');
+      }
+
+      const alunos = data.data && data.data.items ? data.data.items : (data.items || []);
+      alunosCache = alunos;
+      atualizarIndicadores(data.resumo || {});
+      renderizarAlunos();
+    }
+
     function navegarPara(pagina) {
       window.location.href = pagina;
     }
 
     function logout() {
       if (confirm('Tem certeza que deseja sair do sistema?')) {
-        window.location.href = '../../../../pages/auth/login.html';
+        fetch('/api/auth/logout', { method: 'POST', headers: criarHeadersJson() }).finally(() => {
+          localStorage.removeItem(TOKEN_KEY);
+          window.location.href = '/index.html';
+        });
       }
     }
 
     function filtrarAlunos() {
-      const busca = document.getElementById('campoBusca').value.toLowerCase();
-      const unidade = document.getElementById('filtroUnidade').value;
-      const serie = document.getElementById('filtroSerie').value;
-      const diagnostico = document.getElementById('filtroNeurodiversidade').value;
-      const status = document.getElementById('filtroStatus').value;
-
-      document.querySelectorAll('.aluno').forEach(row => {
-        const nome = row.getAttribute('data-nome').toLowerCase();
-        const unidadeRow = row.getAttribute('data-unidade');
-        const serieRow = row.getAttribute('data-serie');
-        const diagnosticoRow = row.getAttribute('data-diagnostico');
-        const statusRow = row.getAttribute('data-status');
-
-        let mostrar = true;
-
-        if (busca && !nome.includes(busca)) {
-          mostrar = false;
-        }
-
-        if (unidade && unidadeRow !== unidade) {
-          mostrar = false;
-        }
-
-        if (serie && serieRow !== serie) {
-          mostrar = false;
-        }
-
-        if (diagnostico && diagnosticoRow !== diagnostico) {
-          mostrar = false;
-        }
-
-        if (status && statusRow !== status) {
-          mostrar = false;
-        }
-
-        row.style.display = mostrar ? '' : 'none';
-      });
+      renderizarAlunos();
     }
 
     function abrirDetalhes(id) {
-      const alunos = [
-        { nome: 'João Silva', matricula: 'MAT20240001', cpf: '123.456.789-00', nascimento: '15/03/2018', unidade: 'Escola Municipal Centro', serie: '1º ano', diagnostico: 'Autismo', laudo: 'Sim' },
-        { nome: 'Maria Santos', matricula: 'MAT20240002', cpf: '234.567.890-11', nascimento: '22/07/2017', unidade: 'Escola Estadual Norte', serie: '4º ano', diagnostico: 'TDAH', laudo: 'Sim' },
-        { nome: 'Pedro Oliveira', matricula: 'MAT20240003', cpf: '345.678.901-22', nascimento: '10/11/2012', unidade: 'Escola Municipal Centro', serie: '7º ano', diagnostico: 'Altas Habilidades', laudo: 'Sim' },
-        { nome: 'Sofia Costa', matricula: 'MAT20240004', cpf: '456.789.012-33', nascimento: '05/09/2020', unidade: 'CEI Infantil Leste', serie: 'Infantil II', diagnostico: 'Deficiência Auditiva', laudo: 'Sim' }
-      ];
-
-      const aluno = alunos[id - 1];
+      const aluno = alunosCache.find((item) => item.id === id);
+      if (!aluno) return;
       const html = `
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
           <div><strong>Nome:</strong> ${aluno.nome}</div>
           <div><strong>Matrícula:</strong> ${aluno.matricula}</div>
           <div><strong>CPF:</strong> ${aluno.cpf}</div>
-          <div><strong>Data de Nascimento:</strong> ${aluno.nascimento}</div>
+          <div><strong>Data de Nascimento:</strong> ${formatarData(aluno.data_nascimento)}</div>
           <div><strong>Unidade:</strong> ${aluno.unidade}</div>
           <div><strong>Série:</strong> ${aluno.serie}</div>
           <div><strong>Diagnóstico:</strong> ${aluno.diagnostico}</div>
-          <div><strong>Possui Laudo:</strong> ${aluno.laudo}</div>
+          <div><strong>Possui Laudo:</strong> ${aluno.tem_laudo ? 'Sim' : 'Não'}</div>
+          <div><strong>Responsável:</strong> ${aluno.responsavel_nome || '-'}</div>
+          <div><strong>Telefone do Responsável:</strong> ${aluno.responsavel_telefone || '-'}</div>
         </div>
       `;
 
@@ -329,6 +379,15 @@
         fecharModal();
       }
     }
+
+    (async function iniciarPagina() {
+      try {
+        await carregarUnidades();
+        await carregarAlunos();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro ao carregar alunos.');
+      }
+    })();
   </script>
 </body>
 </html>
