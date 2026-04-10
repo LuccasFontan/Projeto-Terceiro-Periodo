@@ -236,9 +236,10 @@ class Relatorio(BaseModel):
     autor = db.relationship('Usuario', foreign_keys=[autor_id], backref=db.backref('relatorios', lazy=True))
 
 
-class Auditoria(BaseModel):
+class Auditoria(db.Model):
     __tablename__ = 'auditoria'
 
+    id = db.Column(db.BigInteger, primary_key=True)
     usuario_id = db.Column(db.BigInteger, db.ForeignKey('usuarios.id', ondelete='SET NULL'))
     acao = db.Column(db.String(40), nullable=False)
     entidade = db.Column(db.String(80), nullable=False)
@@ -247,12 +248,24 @@ class Auditoria(BaseModel):
     ip_origem = db.Column(db.String(45))
     user_agent = db.Column(db.Text)
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
+    usuario = db.relationship('Usuario', backref=db.backref('auditorias', lazy=True))
 
 
-class ParametroSistema(BaseModel):
+class ParametroSistema(db.Model):
     __tablename__ = 'parametros_sistema'
 
+    id = db.Column(db.BigInteger, primary_key=True)
     chave = db.Column(db.String(120), nullable=False, unique=True)
     valor_json = db.Column(JSONB, nullable=False)
     descricao = db.Column(db.Text)
     updated_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now(), onupdate=db.func.now())
+
+
+class TokenBlocklist(db.Model):
+    __tablename__ = 'token_blocklist'
+
+    jti = db.Column(db.String(36), primary_key=True)
+    usuario_id = db.Column(db.BigInteger, db.ForeignKey('usuarios.id', ondelete='SET NULL'))
+    revoked_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
+
+    usuario = db.relationship('Usuario', backref=db.backref('revoked_tokens', lazy=True))

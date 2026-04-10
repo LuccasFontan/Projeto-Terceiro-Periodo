@@ -49,6 +49,64 @@ O SAADI reduz essa fragmentação por meio de uma interface simples, padronizada
 
 Como o projeto é composto por páginas HTML, CSS e JavaScript, ele pode ser aberto em qualquer servidor estático local. A forma mais simples é usar uma extensão como Live Server no VS Code ou servir a pasta com qualquer servidor web local.
 
+## Backend Flask
+
+O projeto agora inclui um backend em Flask com PostgreSQL, SQLAlchemy, Flask-Migrate, JWT e CORS.
+
+### Dependências
+
+Instale os pacotes do backend:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Variáveis de ambiente
+
+Copie `.env.example` para `.env` e configure:
+
+- `PGHOST`
+- `PGPORT`
+- `PGDATABASE`
+- `PGUSER`
+- `PGPASSWORD`
+- `SECRET_KEY`
+- `JWT_SECRET_KEY`
+
+### Inicialização do banco com migrações
+
+```bash
+flask --app run db init
+flask --app run db migrate -m "initial"
+flask --app run db upgrade
+```
+
+### Execução
+
+```bash
+python run.py
+```
+
+### Contrato de autenticação
+
+- `POST /api/auth/login` retorna `access_token`, `refresh_token` e `redirect_url`.
+- O frontend salva o `access_token` em `localStorage` e envia `Authorization: Bearer <token>` nos requests protegidos.
+
+### Exemplo de fetch no frontend
+
+```javascript
+const token = localStorage.getItem('saadi_access_token');
+
+const response = await fetch('/api/admin/dashboard', {
+	headers: {
+		Accept: 'application/json',
+		Authorization: `Bearer ${token}`
+	}
+});
+
+const data = await response.json();
+```
+
 ## Banco de dados (PostgreSQL)
 
 O projeto inclui um bootstrap de banco para facilitar o setup em qualquer PC.

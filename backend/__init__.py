@@ -3,10 +3,18 @@ from __future__ import annotations
 from pathlib import Path
 
 from flask import Flask, jsonify, send_from_directory
-from sqlalchemy import text
+from werkzeug.exceptions import HTTPException
+from flask_cors import CORS
+from sqlalchemy import inspect, text
 
+from backend.extensions import db, jwt, migrate
+from backend.models import TokenBlocklist  # noqa: F401 - garante registro no migrate.
+from backend.responses import error
+from backend.routes.admin_unidades import admin_unidades_bp
+from backend.routes.admin_usuarios import admin_usuarios_bp
+from backend.routes.admin_dashboard import admin_dashboard_bp
+from backend.routes.admin_extra import admin_extra_bp
 from backend.config import Config
-from backend.extensions import db
 from backend.routes.auth import auth_bp
 
 
@@ -14,11 +22,58 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 
 
 def create_app(config_object: type[Config] = Config) -> Flask:
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder=None)
     app.config.from_object(config_object)
 
     db.init_app(app)
+    migrate.init_app(app, db)
+    jwt.init_app(app)
+    CORS(app, resources={r'/api/*': {'origins': app.config['CORS_ORIGINS']}})
+
     app.register_blueprint(auth_bp)
+    app.register_blueprint(admin_unidades_bp)
+    app.register_blueprint(admin_usuarios_bp)
+    app.register_blueprint(admin_dashboard_bp)
+    app.register_blueprint(admin_extra_bp)
+
+    with app.app_context():
+        db.create_all()
+
+    @jwt.token_in_blocklist_loader
+    def verificar_token_revogado(_jwt_header: dict, jwt_payload: dict) -> bool:
+        jti = jwt_payload.get('jti')
+        if 'token_blocklist' not in inspect(db.engine).get_table_names():
+            return False
+        return TokenBlocklist.query.filter_by(jti=jti).first() is not None
+
+    @jwt.revoked_token_loader
+    def token_revogado_callback(_jwt_header: dict, _jwt_payload: dict):
+        return jsonify(message='Token revogado.'), 401
+
+    @jwt.unauthorized_loader
+    def jwt_ausente_callback(message: str):
+        return jsonify(message=message), 401
+
+    @jwt.invalid_token_loader
+    def jwt_invalido_callback(message: str):
+        return error(message=message, status_code=422, code='INVALID_TOKEN')
+
+    @jwt.expired_token_loader
+    def jwt_expirado_callback(_jwt_header: dict, _jwt_payload: dict):
+        return error(message='Token expirado.', status_code=401, code='TOKEN_EXPIRED')
+
+    @app.errorhandler(HTTPException)
+    def tratar_http_exception(erro: HTTPException):
+        return error(
+            message=erro.description or 'Erro na requisicao.',
+            status_code=erro.code or 500,
+            code=erro.name.upper().replace(' ', '_'),
+        )
+
+    @app.errorhandler(Exception)
+    def tratar_excecao_generica(erro: Exception):
+        app.logger.exception('Erro nao tratado: %s', erro)
+        return error(message='Erro interno do servidor.', status_code=500, code='INTERNAL_SERVER_ERROR')
 
     @app.get('/')
     def home():
@@ -35,6 +90,10 @@ def create_app(config_object: type[Config] = Config) -> Flask:
     @app.get('/img/<path:filename>')
     def image_assets(filename: str):
         return send_from_directory(ROOT_DIR / 'img', filename)
+
+    @app.get('/scripts/<path:filename>')
+    def script_assets(filename: str):
+        return send_from_directory(ROOT_DIR / 'scripts', filename)
 
     @app.get('/pages/<path:filename>')
     def page_assets(filename: str):

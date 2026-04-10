@@ -20,8 +20,8 @@
     </div>
 
     <div class="Perfil">
-      <div class="nomePerfil">Usuário Logado</div>
-      <div class="emailPerfil">usuario@escola.edu.br</div>
+      <div class="nomePerfil"></div>
+      <div class="emailPerfil"></div>
     </div>
 
                 <div class="botoesLaterais">
@@ -120,19 +120,19 @@
     <!-- INDICADORES PRINCIPAIS -->
     <section class="painelIndicadores" style="margin-bottom: 30px;">
       <div class="cardIndicador info">
-        <div class="numeroIndicador">1,247</div>
+        <div class="numeroIndicador" id="indicadorTotalAlunos">-</div>
         <div class="labelIndicador">Total de Alunos</div>
       </div>
       <div class="cardIndicador sucesso">
-        <div class="numeroIndicador">342</div>
+        <div class="numeroIndicador" id="indicadorComLaudos">-</div>
         <div class="labelIndicador">Com Laudos</div>
       </div>
       <div class="cardIndicador aviso">
-        <div class="numeroIndicador">128</div>
+        <div class="numeroIndicador" id="indicadorEmAcompanhamento">-</div>
         <div class="labelIndicador">Em Acompanhamento</div>
       </div>
       <div class="cardIndicador perigo">
-        <div class="numeroIndicador">45</div>
+        <div class="numeroIndicador" id="indicadorPendentes">-</div>
         <div class="labelIndicador">Encaminhamentos Pendentes</div>
       </div>
     </section>
@@ -167,35 +167,7 @@
             <th>Taxa de Abrangência</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Escola Municipal Centro</td>
-            <td>325</td>
-            <td>92</td>
-            <td>28</td>
-            <td><span class="badge badgeSucesso">28,3%</span></td>
-          </tr>
-          <tr>
-            <td>Escola Estadual Norte</td>
-            <td>418</td>
-            <td>108</td>
-            <td>35</td>
-            <td><span class="badge badgeSucesso">25,8%</span></td>
-          </tr>
-          <tr>
-            <td>CEI Infantil Leste</td>
-            <td>256</td>
-            <td>64</td>
-            <td>22</td>
-            <td><span class="badge badgeSucesso">25%</span></td>
-          </tr>
-          <tr>
-            <td>EMEF Sul Integrada</td>
-            <td>248</td>
-            <td>78</td>
-            <td>43</td>
-            <td><span class="badge badgeAviso">31,5%</span></td>
-          </tr>
+        <tbody id="resumoUnidadesTbody">
         </tbody>
       </table>
     </section>
@@ -206,6 +178,7 @@
         <button class="btn btnPrimario" onclick="exportarPDF()">📥 Exportar em PDF</button>
         <button class="btn btnPrimario" onclick="exportarExcel()">📊 Exportar em Excel</button>
       </div>
+      <div id="mensagemRelatorios" class="alert d-none" role="alert" style="margin-top: 12px;"></div>
     </section>
   </main>
 
@@ -220,92 +193,238 @@
   <script>
     new window.VLibras.Widget('https://vlibras.gov.br/app');
   </script>
+  <script src="/scripts/apiClient.js"></script>
 
   <script>
+    const TOKEN_KEY = 'saadi_access_token';
+    const ENDPOINT = '/api/admin/relatorios/dashboard';
+    let relatorioAtual = null;
+    let graficoNeurodiversidade = null;
+    let graficoSeries = null;
+
+    function obterToken() {
+      return localStorage.getItem(TOKEN_KEY) || '';
+    }
+
+    function criarHeadersJson() {
+      const headers = { 'Accept': 'application/json' };
+      const token = obterToken();
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+      return headers;
+    }
+
+    function mostrarMensagem(tipo, texto) {
+      const box = document.getElementById('mensagemRelatorios');
+      box.className = `alert alert-${tipo}`;
+      box.textContent = texto;
+      box.classList.remove('d-none');
+    }
+
+    function limparMensagem() {
+      const box = document.getElementById('mensagemRelatorios');
+      box.classList.add('d-none');
+      box.textContent = '';
+    }
+
+    function redirecionarParaLogin() {
+      localStorage.removeItem(TOKEN_KEY);
+      window.location.href = '/index.html';
+    }
+
+    function normalizarNumero(valor) {
+      return Number.isFinite(Number(valor)) ? Number(valor) : 0;
+    }
+
+    function atualizarIndicadores(dados) {
+      document.getElementById('indicadorTotalAlunos').textContent = dados.totalAlunos ?? '-';
+      document.getElementById('indicadorComLaudos').textContent = dados.comLaudos ?? '-';
+      document.getElementById('indicadorEmAcompanhamento').textContent = dados.emAcompanhamento ?? '-';
+      document.getElementById('indicadorPendentes').textContent = dados.encaminhamentosPendentes ?? '-';
+    }
+
+    function atualizarTabelaResumo(resumoPorUnidade) {
+      const tbody = document.getElementById('resumoUnidadesTbody');
+      if (!resumoPorUnidade || resumoPorUnidade.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Nenhum resumo encontrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = resumoPorUnidade.map((item) => `
+        <tr>
+          <td>${item.nomeUnidade || '-'}</td>
+          <td>${item.totalAlunos ?? 0}</td>
+          <td>${item.comLaudos ?? 0}</td>
+          <td>${item.emAcompanhamento ?? 0}</td>
+          <td>${Number(item.taxaAbrangencia || 0).toFixed(1)}%</td>
+        </tr>
+      `).join('');
+    }
+
+    function atualizarGraficos(dados) {
+      const distribuicao = dados.distribuicaoNeurodiversidade || {};
+      const serie = dados.alunosPorSerie || {};
+
+      const labelsNeuro = Object.keys(distribuicao);
+      const valoresNeuro = Object.values(distribuicao);
+
+      const labelsSerie = ['educacaoInfantil', '1ao3ano', '4ao5ano', '6ao9ano'];
+      const valoresSerie = labelsSerie.map((chave) => normalizarNumero(serie[chave]));
+
+      const ctxNeuro = document.getElementById('graficoNeurodiversidade').getContext('2d');
+      if (graficoNeurodiversidade) graficoNeurodiversidade.destroy();
+      graficoNeurodiversidade = new Chart(ctxNeuro, {
+        type: 'doughnut',
+        data: {
+          labels: labelsNeuro.length ? labelsNeuro : ['Sem dados'],
+          datasets: [{
+            data: valoresNeuro.length ? valoresNeuro : [0],
+            backgroundColor: ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#95a5a6', '#8e44ad'],
+            borderColor: '#fff',
+            borderWidth: 2,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 15 } } },
+        },
+      });
+
+      const ctxSerie = document.getElementById('graficoSeries').getContext('2d');
+      if (graficoSeries) graficoSeries.destroy();
+      graficoSeries = new Chart(ctxSerie, {
+        type: 'bar',
+        data: {
+          labels: ['Educação Infantil', '1º ao 3º ano', '4º ao 5º ano', '6º ao 9º ano'],
+          datasets: [{
+            label: 'Alunos',
+            data: valoresSerie,
+            backgroundColor: '#3498db',
+            borderColor: '#2980b9',
+            borderWidth: 1,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: true, labels: { font: { size: 12 }, padding: 15 } } },
+          scales: { y: { beginAtZero: true, ticks: { font: { size: 11 } } } },
+        },
+      });
+    }
+
+    function montarQueryFiltros() {
+      const periodoMap = {
+        'Últimos 30 dias': '30dias',
+        'Último trimestre': 'trimestre',
+        '2026': 'ano',
+        '2025': 'ano',
+      };
+
+      const params = new URLSearchParams();
+      const periodoTexto = document.getElementById('filtroPeriodo')?.value || 'Últimos 30 dias';
+      const periodo = periodoMap[periodoTexto] || '30dias';
+
+      params.set('periodo', periodo);
+
+      const unidade = document.getElementById('filtroUnidade')?.value || 'Todas as unidades';
+      if (unidade && unidade !== 'Todas as unidades') params.set('unidade', unidade);
+
+      const serie = document.getElementById('filtroSerie')?.value || 'Todas as séries';
+      if (serie && serie !== 'Todas as séries') params.set('serie', serie);
+
+      const tipo = document.getElementById('filtroNeurodiversidade')?.value || 'Todos os tipos';
+      if (tipo && tipo !== 'Todos os tipos') params.set('tipo_neurodiversidade', tipo);
+
+      return params.toString();
+    }
+
+    async function carregarRelatorios() {
+      limparMensagem();
+      const query = montarQueryFiltros();
+      const response = await fetch(`${ENDPOINT}?${query}`, { headers: criarHeadersJson() });
+      const data = await response.json();
+
+      if (response.status === 401) {
+        redirecionarParaLogin();
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao carregar relatórios.');
+      }
+
+      relatorioAtual = data.data || data;
+      atualizarIndicadores(relatorioAtual);
+      atualizarTabelaResumo(relatorioAtual.resumoPorUnidade || []);
+      atualizarGraficos(relatorioAtual);
+    }
+
+    function aplicarFiltrosRelatorios() {
+      carregarRelatorios().catch((error) => {
+        mostrarMensagem('danger', error.message || 'Erro ao aplicar filtros.');
+      });
+    }
+
     function navegarPara(pagina) {
       window.location.href = pagina;
     }
 
     function logout() {
       if (confirm('Tem certeza que deseja sair do sistema?')) {
-        window.location.href = '../../../../pages/auth/login.html';
+        fetch('/api/auth/logout', { method: 'POST', headers: criarHeadersJson() }).finally(() => {
+          localStorage.removeItem(TOKEN_KEY);
+          window.location.href = '/index.html';
+        });
       }
     }
 
-    // Gráfico - Distribuição por Neurodiversidade
-    const ctxNeurodiversidade = document.getElementById('graficoNeurodiversidade').getContext('2d');
-    new Chart(ctxNeurodiversidade, {
-      type: 'doughnut',
-      data: {
-        labels: ['Autismo', 'TDAH', 'Altas Habilidades', 'Deficiência Auditiva', 'Outros'],
-        datasets: [{
-          data: [120, 95, 68, 42, 17],
-          backgroundColor: [
-            '#3498db',
-            '#e74c3c',
-            '#2ecc71',
-            '#f39c12',
-            '#95a5a6'
-          ],
-          borderColor: '@fff',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              font: { size: 12 },
-              padding: 15
-            }
-          }
-        }
-      }
-    });
-
-    // Gráfico - Alunos por Série
-    const ctxSeries = document.getElementById('graficoSeries').getContext('2d');
-    new Chart(ctxSeries, {
-      type: 'bar',
-      data: {
-        labels: ['Educação Infantil', '1º ao 3º ano', '4º ao 5º ano', '6º ao 9º ano'],
-        datasets: [{
-          label: 'Alunos',
-          data: [320, 285, 340, 302],
-          backgroundColor: '#3498db',
-          borderColor: '#2980b9',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        indexAxis: 'x',
-        plugins: {
-          legend: {
-            display: true,
-            labels: { font: { size: 12 }, padding: 15 }
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: { font: { size: 11 } }
-          }
-        }
-      }
-    });
-
     function exportarPDF() {
-      alert('Exportando relatório em PDF...');
+      window.print();
     }
 
     function exportarExcel() {
-      alert('Exportando relatório em Excel...');
+      const linhas = [
+        ['unidade', 'total_alunos', 'com_laudos', 'em_acompanhamento', 'taxa_abrangencia'],
+        ...(relatorioAtual?.resumoPorUnidade || []).map((item) => [
+          item.nomeUnidade || '',
+          item.totalAlunos ?? 0,
+          item.comLaudos ?? 0,
+          item.emAcompanhamento ?? 0,
+          item.taxaAbrangencia ?? 0,
+        ]),
+      ];
+
+      const csv = linhas.map((linha) => linha.map((valor) => `"${String(valor).replace(/"/g, '""')}"`).join(';')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'relatorio-consolidado.csv';
+      link.click();
+      URL.revokeObjectURL(url);
     }
+
+    (async function iniciarPagina() {
+      if (!obterToken()) {
+        redirecionarParaLogin();
+        return;
+      }
+
+      const idsFiltros = ['filtroPeriodo', 'filtroUnidade', 'filtroSerie', 'filtroNeurodiversidade'];
+      idsFiltros.forEach((id) => {
+        const elemento = document.getElementById(id);
+        if (elemento) elemento.addEventListener('change', aplicarFiltrosRelatorios);
+      });
+
+      try {
+        await carregarRelatorios();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Falha ao carregar relatórios.');
+      }
+    })();
   </script>
 </body>
 </html>

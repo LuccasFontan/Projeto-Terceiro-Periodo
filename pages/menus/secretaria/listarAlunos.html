@@ -109,8 +109,13 @@
             <section class="listaContainer" aria-label="Lista de alunos cadastrados">
                 <div class="buscaBarra">
                     <label for="searchInput">Buscar aluno</label>
-                    <input type="text" id="searchInput" placeholder="Digite nome, escola ou neurodivergência"
-                        oninput="filterCards()">
+                    <div style="display: flex; gap: 12px;">
+                        <input type="text" id="searchInput" placeholder="Digite nome, escola ou neurodivergência"
+                            oninput="filterCards()" style="flex: 1;">
+                        <button type="button" class="btn btnSecundario" onclick="filterCards()" aria-label="Executar busca de alunos">
+                            Buscar
+                        </button>
+                    </div>
                 </div>
 
                 <div class="blocos" id="listaBlocos">

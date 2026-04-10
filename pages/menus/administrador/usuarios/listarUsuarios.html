@@ -79,15 +79,16 @@
           id="campoBusca" 
           placeholder="Buscar por nome, email ou matrícula..." 
           aria-label="Campo de busca de usuários"
-          onkeyup="filtrarUsuarios()"
-        >
-        <a href="cadastroUsuarios.html" class="btn btnPrimario" aria-label="Criar novo usuário">
+          onkeyup="filtrarUsuarios('busca')"
+        >        <button class="btn btnSecundario" onclick="filtrarUsuarios('busca')" aria-label="Executar busca">
+          Buscar
+        </button>        <a href="cadastroUsuarios.html" class="btn btnPrimario" aria-label="Criar novo usuário">
           + Novo Usuário
         </a>
       </div>
 
       <div class="filtrosUsuarios">
-        <select id="filtroPerfil" onchange="filtrarUsuarios()" aria-label="Filtrar por perfil">
+        <select id="filtroPerfil" onchange="filtrarUsuarios('perfil')" aria-label="Filtrar por perfil">
           <option value="">Todos os Perfis</option>
           <option value="administrador">Administrador</option>
           <option value="secretaria">Secretaria</option>
@@ -96,14 +97,14 @@
           <option value="diretor">Diretor</option>
         </select>
 
-        <select id="filtroStatus" onchange="filtrarUsuarios()" aria-label="Filtrar por status">
+        <select id="filtroStatus" onchange="filtrarUsuarios('status')" aria-label="Filtrar por status">
           <option value="">Todos os Status</option>
           <option value="ativo">Ativo</option>
           <option value="inativo">Inativo</option>
           <option value="bloqueado">Bloqueado</option>
         </select>
 
-        <select id="filtroUnidade" onchange="filtrarUsuarios()" aria-label="Filtrar por unidade">
+        <select id="filtroUnidade" onchange="filtrarUsuarios('unidade')" aria-label="Filtrar por unidade">
           <option value="">Todas as Unidades</option>
           <option value="1">Escola Municipal Centro</option>
           <option value="2">Escola Estadual Norte</option>
@@ -114,6 +115,8 @@
 
     <!-- LISTA DE USUÁRIOS -->
     <section class="containerPrincipal">
+      <div id="mensagemUsuarios" class="alert d-none" role="alert"></div>
+      <div id="resumoUsuarios" class="alert alert-info" role="status" aria-live="polite">Carregando dados...</div>
       <table class="tabelaResponsiva" id="tabelaUsuarios">
         <thead>
           <tr>
@@ -126,81 +129,9 @@
             <th>Ações</th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="usuario" data-nome="Admin Master" data-perfil="administrador" data-status="ativo" data-unidade="1">
-            <td>Admin Master</td>
-            <td>admin@escola.edu.br</td>
-            <td><span class="badge badgeInfo">Administrador</span></td>
-            <td>Todos as Unidades</td>
-            <td><span class="badge badgeSucesso">Ativo</span></td>
-            <td>02/04/2026 - 14:35</td>
-            <td>
-              <div class="acoes">
-                <a href="atualizarUsuarios.html?id=1" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
-                <a href="atualizarUsuarios.html?id=1" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-                <button onclick="confirmarDelecao(1)" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
-              </div>
-            </td>
-          </tr>
-          <tr class="usuario" data-nome="Maria da Silva" data-perfil="secretaria" data-status="ativo" data-unidade="1">
-            <td>Maria da Silva</td>
-            <td>maria@escola.edu.br</td>
-            <td><span class="badge badgeSucesso">Secretaria</span></td>
-            <td>Escola Municipal Centro</td>
-            <td><span class="badge badgeSucesso">Ativo</span></td>
-            <td>02/04/2026 - 13:20</td>
-            <td>
-              <div class="acoes">
-                <a href="atualizarUsuarios.html?id=2" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
-                <a href="atualizarUsuarios.html?id=2" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-                <button onclick="confirmarDelecao(2)" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
-              </div>
-            </td>
-          </tr>
-          <tr class="usuario" data-nome="Dra. Ana Santos" data-perfil="psicopedagogo" data-status="ativo" data-unidade="1">
-            <td>Dra. Ana Santos</td>
-            <td>ana@escola.edu.br</td>
-            <td><span class="badge badgeAviso">Psicopedagogo</span></td>
-            <td>Escola Municipal Centro</td>
-            <td><span class="badge badgeSucesso">Ativo</span></td>
-            <td>01/04/2026 - 10:15</td>
-            <td>
-              <div class="acoes">
-                <a href="atualizarUsuarios.html?id=3" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
-                <a href="atualizarUsuarios.html?id=3" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-                <button onclick="confirmarDelecao(3)" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
-              </div>
-            </td>
-          </tr>
-          <tr class="usuario" data-nome="Prof. Carlos Costa" data-perfil="professor" data-status="ativo" data-unidade="2">
-            <td>Prof. Carlos Costa</td>
-            <td>carlos@escola.edu.br</td>
-            <td><span class="badge badgeInfo">Professor</span></td>
-            <td>Escola Estadual Norte</td>
-            <td><span class="badge badgeSucesso">Ativo</span></td>
-            <td>31/03/2026 - 16:45</td>
-            <td>
-              <div class="acoes">
-                <a href="atualizarUsuarios.html?id=4" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
-                <a href="atualizarUsuarios.html?id=4" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-                <button onclick="confirmarDelecao(4)" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
-              </div>
-            </td>
-          </tr>
-          <tr class="usuario" data-nome="Roberto Inativo" data-perfil="professor" data-status="inativo" data-unidade="3">
-            <td>Roberto Inativo</td>
-            <td>roberto@escola.edu.br</td>
-            <td><span class="badge badgeInfo">Professor</span></td>
-            <td>CEI Infantil Leste</td>
-            <td><span class="badge badgePerigo">Inativo</span></td>
-            <td>15/03/2026 - 09:30</td>
-            <td>
-              <div class="acoes">
-                <a href="atualizarUsuarios.html?id=5" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
-                <a href="atualizarUsuarios.html?id=5" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
-                <button onclick="confirmarDelecao(5)" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
-              </div>
-            </td>
+        <tbody id="usuariosTbody">
+          <tr>
+            <td colspan="7">Carregando usuários...</td>
           </tr>
         </tbody>
       </table>
@@ -219,20 +150,312 @@
     </div>
   </div>
 
-  <!-- VLIBRAS -->
-  <div vw class="enabled">
-    <div vw-access-button class="active"></div>
-    <div vw-plugin-wrapper>
-      <div class="vw-plugin-top-wrapper"></div>
-    </div>
-  </div>
-  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-  <script>
-    new window.VLibras.Widget('https://vlibras.gov.br/app');
-  </script>
+  <script src="/scripts/apiClient.js"></script>
 
   <script>
+    const TOKEN_KEY = 'saadi_access_token';
     let idDelecao = null;
+    let usuariosCache = [];
+    let unidadesMap = {};
+
+    // Decodifica JWT payload
+    function decodificarTokenJWT(token) {
+      if (!token) return null;
+      try {
+        const payloadBase64 = token.split('.')[1];
+        if (!payloadBase64) return null;
+        const base64Url = payloadBase64.replace(/-/g, '+').replace(/_/g, '/');
+        const padding = '='.repeat((4 - (base64Url.length % 4)) % 4);
+        const base64 = base64Url + padding;
+        const json = atob(base64);
+        return JSON.parse(json);
+      } catch {
+        return null;
+      }
+    }
+
+    // Renderiza nome do perfil logado
+    function renderizarPerfil() {
+      const token = localStorage.getItem(TOKEN_KEY);
+      const payload = decodificarTokenJWT(token);
+      
+      if (!payload) return;
+
+      const nomePerfil = document.querySelector('.nomePerfil');
+      const emailPerfil = document.querySelector('.emailPerfil');
+
+      if (nomePerfil) {
+        const nome = payload.nome || payload.user_name || '';
+        const primeiroNome = nome.split(' ')[0];
+        nomePerfil.textContent = primeiroNome ? `Olá, ${primeiroNome}` : 'Olá';
+      }
+
+      if (emailPerfil) {
+        const email = payload.email || '';
+        const perfil = payload.perfil || payload.profile_name || '';
+        const texto = [email, perfil].filter(Boolean).join(' • ');
+        emailPerfil.textContent = texto || 'Sessão ativa';
+      }
+    }
+
+    // XMLHttpRequest wrapper (não sofre interferência do VLibras)
+    function fazerRequisicao(url, opcoes = {}) {
+      return new Promise((resolver, rejeitar) => {
+        const xhr = new XMLHttpRequest();
+        const metodo = opcoes.method || 'GET';
+        
+        xhr.open(metodo, url, true);
+        
+        if (opcoes.headers) {
+          Object.entries(opcoes.headers).forEach(([chave, valor]) => {
+            xhr.setRequestHeader(chave, valor);
+          });
+        }
+        
+        let token = '';
+        if (window.saadiAuth && window.saadiAuth.getAccessToken) {
+          token = window.saadiAuth.getAccessToken() || '';
+        }
+        if (!token) {
+          token = localStorage.getItem(TOKEN_KEY) || '';
+        }
+        if (token) {
+          xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        }
+
+        xhr.onload = function() {
+          try {
+            const dados = JSON.parse(xhr.responseText);
+            resolver({
+              ok: xhr.status >= 200 && xhr.status < 300,
+              status: xhr.status,
+              json: () => Promise.resolve(dados)
+            });
+          } catch(e) {
+            resolver({
+              ok: false,
+              status: xhr.status,
+              json: () => Promise.resolve({})
+            });
+          }
+        };
+
+        xhr.onerror = function() {
+          rejeitar(new Error('Erro na requisição'));
+        };
+
+        if (opcoes.body) {
+          xhr.send(opcoes.body);
+        } else {
+          xhr.send();
+        }
+      });
+    }
+
+    function normalizarTexto(valor) {
+      return String(valor || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+    }
+
+    function normalizarBusca(valor) {
+      return normalizarTexto(valor)
+        .replace(/[,;]+$/g, '')
+        .replace(/^['"]+|['"]+$/g, '')
+        .trim();
+    }
+
+    function formatarData(dataIso) {
+      if (!dataIso) return 'Nunca acessou';
+      return new Date(dataIso).toLocaleString('pt-BR');
+    }
+
+    function mostrarMensagem(tipo, texto) {
+      const box = document.getElementById('mensagemUsuarios');
+      box.className = `alert alert-${tipo}`;
+      box.textContent = texto;
+      box.classList.remove('d-none');
+    }
+
+    function limparMensagem() {
+      const box = document.getElementById('mensagemUsuarios');
+      box.classList.add('d-none');
+      box.textContent = '';
+    }
+
+    function atualizarResumo(total, exibidos) {
+      const box = document.getElementById('resumoUsuarios');
+      box.textContent = `Usuários carregados: ${total} | Usuários exibidos: ${exibidos}`;
+    }
+
+    function perfilBadgeClass(perfil) {
+      const nome = (perfil || '').toLowerCase();
+      if (nome === 'secretaria') return 'badgeSucesso';
+      if (nome === 'psicopedagogo') return 'badgeAviso';
+      if (nome === 'administrador') return 'badgeInfo';
+      return 'badgeInfo';
+    }
+
+    function statusBadgeClass(status) {
+      const nome = (status || '').toLowerCase();
+      if (nome === 'ativo') return 'badgeSucesso';
+      if (nome === 'inativo') return 'badgePerigo';
+      return 'badgeAviso';
+    }
+
+    function resetarFiltros() {
+      document.getElementById('campoBusca').value = '';
+      document.getElementById('filtroPerfil').value = '';
+      document.getElementById('filtroStatus').value = '';
+      document.getElementById('filtroUnidade').value = '';
+    }
+
+    function renderUsuarios() {
+      const busca = normalizarBusca(document.getElementById('campoBusca').value);
+      const tokensBusca = busca ? busca.split(/[\s,;]+/).filter(Boolean) : [];
+      const perfil = document.getElementById('filtroPerfil').value;
+      const status = document.getElementById('filtroStatus').value;
+      const unidade = document.getElementById('filtroUnidade').value;
+      const tbody = document.getElementById('usuariosTbody');
+      const semFiltros = !busca && !perfil && !status && !unidade;
+
+      const filtrados = usuariosCache.filter((u) => {
+        const nome = normalizarTexto(u.nome_completo || '');
+        const email = normalizarTexto(u.email || '');
+        const matricula = normalizarTexto(u.matricula || '');
+        const emailToken = tokensBusca.find((token) => token.includes('@'));
+
+        if (emailToken) {
+          if (!email.includes(emailToken)) return false;
+        } else if (tokensBusca.length > 0) {
+          const algumTokenConfere = tokensBusca.some((token) =>
+            nome.includes(token) || email.includes(token) || matricula.includes(token)
+          );
+          if (!algumTokenConfere) return false;
+        }
+
+        if (perfil && (u.perfil_nome || '').toLowerCase() !== perfil) return false;
+        if (status && (u.status || '').toLowerCase() !== status) return false;
+        if (unidade && String(u.unidade_id || '') !== unidade) return false;
+        return true;
+      });
+
+      const listaFinal = semFiltros ? usuariosCache : filtrados;
+
+      if (listaFinal.length === 0) {
+        atualizarResumo(usuariosCache.length, 0);
+        tbody.innerHTML = '<tr><td colspan="7">Nenhum usuário encontrado.</td></tr>';
+        return;
+      }
+
+      atualizarResumo(usuariosCache.length, listaFinal.length);
+
+      tbody.innerHTML = listaFinal.map((u) => {
+        const perfilNome = u.perfil_nome || '-';
+        const unidadeNome = unidadesMap[u.unidade_id] || (u.unidade_id ? `Unidade ${u.unidade_id}` : 'Sem unidade');
+        return `
+          <tr>
+            <td>${u.nome_completo || '-'}</td>
+            <td>${u.email || '-'}</td>
+            <td><span class="badge ${perfilBadgeClass(perfilNome)}">${perfilNome}</span></td>
+            <td>${unidadeNome}</td>
+            <td><span class="badge ${statusBadgeClass(u.status)}">${u.status || '-'}</span></td>
+            <td>${formatarData(u.ultimo_login_em)}</td>
+            <td>
+              <div class="acoes">
+                <a href="atualizarUsuarios.html?id=${u.id}" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
+                <a href="atualizarUsuarios.html?id=${u.id}" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
+                <button onclick="confirmarDelecao(${u.id})" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function carregarUnidades() {
+      const response = await fazerRequisicao('/api/admin/unidades', {
+        headers: { 'Accept': 'application/json' }
+      });
+      const data = await response.json();
+
+      if (response.status === 401) {
+        window.location.href = '/index.html';
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao carregar unidades.');
+      }
+
+      const select = document.getElementById('filtroUnidade');
+      select.innerHTML = '<option value="">Todas as Unidades</option>';
+      unidadesMap = {};
+
+      const unidades = data.data && data.data.items ? data.data.items : (data.items || []);
+      for (const unidade of unidades) {
+        unidadesMap[unidade.id] = unidade.nome;
+        const option = document.createElement('option');
+        option.value = String(unidade.id);
+        option.textContent = unidade.nome;
+        select.appendChild(option);
+      }
+    }
+
+    async function carregarUsuarios() {
+      limparMensagem();
+      try {
+        await buscarUsuariosServidor();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro ao carregar usuários.');
+      }
+    }
+
+    async function buscarUsuariosServidor() {
+      const busca = normalizarBusca(document.getElementById('campoBusca').value);
+      const perfil = document.getElementById('filtroPerfil').value;
+      const status = document.getElementById('filtroStatus').value;
+      const unidade = document.getElementById('filtroUnidade').value;
+
+      const params = new URLSearchParams();
+      if (busca) params.set('q', busca);
+      if (perfil) params.set('perfil', perfil);
+      if (status) params.set('status', status);
+      if (unidade) params.set('unidade_id', unidade);
+
+      const sufixo = params.toString() ? `?${params.toString()}` : '';
+      const response = await fazerRequisicao(`/api/admin/usuarios${sufixo}`, {
+        headers: { 'Accept': 'application/json' }
+      });
+      const data = await response.json();
+
+      if (response.status === 401) {
+        window.location.href = '/index.html';
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao carregar usuários.');
+      }
+
+      const candidatos = [
+        data.items,
+        data.usuarios,
+        data.data && data.data.items,
+        data.data,
+        data.results
+      ];
+      const lista = candidatos.find((item) => Array.isArray(item));
+
+      if (!Array.isArray(lista)) {
+        throw new Error('Resposta inesperada da API de usuários.');
+      }
+
+      usuariosCache = lista;
+      renderUsuarios();
+    }
 
     function navegarPara(pagina) {
       window.location.href = pagina;
@@ -240,42 +463,22 @@
 
     function logout() {
       if (confirm('Tem certeza que deseja sair do sistema?')) {
-        window.location.href = '../../../../pages/auth/login.html';
+        fazerRequisicao('/api/auth/logout', {
+          method: 'POST'
+        }).finally(() => {
+          window.location.href = '/index.html';
+        });
       }
     }
 
-    function filtrarUsuarios() {
-      const busca = document.getElementById('campoBusca').value.toLowerCase();
-      const perfil = document.getElementById('filtroPerfil').value;
-      const status = document.getElementById('filtroStatus').value;
-      const unidade = document.getElementById('filtroUnidade').value;
-
-      document.querySelectorAll('.usuario').forEach(row => {
-        const nome = row.getAttribute('data-nome').toLowerCase();
-        const perfilRow = row.getAttribute('data-perfil');
-        const statusRow = row.getAttribute('data-status');
-        const unidadeRow = row.getAttribute('data-unidade');
-
-        let mostrar = true;
-
-        if (busca && !nome.includes(busca)) {
-          mostrar = false;
-        }
-
-        if (perfil && perfilRow !== perfil) {
-          mostrar = false;
-        }
-
-        if (status && statusRow !== status) {
-          mostrar = false;
-        }
-
-        if (unidade && unidadeRow !== unidade) {
-          mostrar = false;
-        }
-
-        row.style.display = mostrar ? '' : 'none';
-      });
+    function filtrarUsuarios(origem) {
+      if (origem === 'busca' || origem === 'perfil' || origem === 'status' || origem === 'unidade') {
+        buscarUsuariosServidor().catch((error) => {
+          mostrarMensagem('danger', error.message || 'Erro ao buscar usuários.');
+        });
+        return;
+      }
+      renderUsuarios();
     }
 
     function confirmarDelecao(id) {
@@ -288,10 +491,27 @@
       idDelecao = null;
     }
 
-    function executarDelecao() {
-      alert('Usuário ' + idDelecao + ' deletado com sucesso!');
-      fecharModal();
-      location.reload();
+    async function executarDelecao() {
+      if (!idDelecao) return;
+
+      try {
+        const response = await fazerRequisicao(`/api/admin/usuarios/${idDelecao}`, {
+          method: 'DELETE'
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Erro ao excluir usuário.');
+        }
+
+        usuariosCache = usuariosCache.filter((u) => u.id !== idDelecao);
+        renderUsuarios();
+        mostrarMensagem('success', 'Usuário excluído com sucesso.');
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro inesperado ao excluir usuário.');
+      } finally {
+        fecharModal();
+      }
     }
 
     window.onclick = function(event) {
@@ -300,6 +520,18 @@
         fecharModal();
       }
     }
+
+    (async function iniciarPagina() {
+      renderizarPerfil();
+      resetarFiltros();
+
+      try {
+        await carregarUnidades();
+        await carregarUsuarios();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro ao carregar dados.');
+      }
+    })();
   </script>
 </body>
 </html>

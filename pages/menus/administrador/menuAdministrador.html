@@ -19,8 +19,8 @@
     </div>
 
     <div class="Perfil">
-      <div class="nomePerfil">Usuário Logado</div>
-      <div class="emailPerfil">usuario@escola.edu.br</div>
+      <div class="nomePerfil"></div>
+      <div class="emailPerfil"></div>
     </div>
 
                 <div class="botoesLaterais">
@@ -73,19 +73,19 @@
     <!-- INDICADORES PRINCIPAIS -->
     <section class="painelIndicadores">
       <div class="cardIndicador info">
-        <div class="numeroIndicador">12</div>
+        <div class="numeroIndicador" id="indicadorUnidades">-</div>
         <div class="labelIndicador">Unidades Escolares</div>
       </div>
       <div class="cardIndicador sucesso">
-        <div class="numeroIndicador">47</div>
+        <div class="numeroIndicador" id="indicadorUsuarios">-</div>
         <div class="labelIndicador">Usuários Ativos</div>
       </div>
       <div class="cardIndicador aviso">
-        <div class="numeroIndicador">8</div>
+        <div class="numeroIndicador" id="indicadorConfiguracoes">-</div>
         <div class="labelIndicador">Configurações Pendentes</div>
       </div>
       <div class="cardIndicador perigo">
-        <div class="numeroIndicador">3</div>
+        <div class="numeroIndicador" id="indicadorAlertas">-</div>
         <div class="labelIndicador">Alertas de Segurança</div>
       </div>
     </section>
@@ -144,11 +144,9 @@
 
     <!-- RESUMO DE ATIVIDADES -->
     <section class="containerPrincipal">
-      <h2>
-        Atividades Recentes
-      </h2>
-      
-      <table class="tabelaResponsiva">
+      <h2>Atividades Recentes</h2>
+      <div id="mensagemAtividades" class="alert d-none" role="alert"></div>
+      <table class="tabelaResponsiva" id="tabelaAtividades">
         <thead>
           <tr>
             <th>Data/Hora</th>
@@ -158,41 +156,9 @@
             <th>Status</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="atividadesTbody">
           <tr>
-            <td>02/04/2026 - 14:32</td>
-            <td>Secretária Maria</td>
-            <td>Cadastro de Aluno</td>
-            <td>João Silva</td>
-            <td><span class="badge badgeSucesso">Sucesso</span></td>
-          </tr>
-          <tr>
-            <td>02/04/2026 - 13:15</td>
-            <td>Admin Master</td>
-            <td>Criação de Usuário</td>
-            <td>Prof. Carlos</td>
-            <td><span class="badge badgeSucesso">Sucesso</span></td>
-          </tr>
-          <tr>
-            <td>01/04/2026 - 16:45</td>
-            <td>Psicopedagoga Ana</td>
-            <td>Atualização de Relatório</td>
-            <td>Aluna Sofia</td>
-            <td><span class="badge badgeSucesso">Sucesso</span></td>
-          </tr>
-          <tr>
-            <td>01/04/2026 - 09:20</td>
-            <td>Admin Master</td>
-            <td>Alteração de Permissões</td>
-            <td>Papel Secretaria</td>
-            <td><span class="badge badgeAviso">Alteração</span></td>
-          </tr>
-          <tr>
-            <td>31/03/2026 - 18:00</td>
-            <td>Sistema</td>
-            <td>Backup Automático</td>
-            <td>Base de Dados</td>
-            <td><span class="badge badgeSucesso">Sucesso</span></td>
+            <td colspan="5">Carregando atividades...</td>
           </tr>
         </tbody>
       </table>
@@ -200,27 +166,24 @@
 
     <!-- MONITORAMENTO DO SISTEMA -->
     <section class="containerPrincipal">
-      <h2>
-        Status do Sistema
-      </h2>
-      
+      <h2>Status do Sistema</h2>
       <div class="statusSistemaGrid">
         <div class="statusSistemaCard sucesso">
           <h3>Banco de Dados</h3>
-          <div class="statusSistemaValor">OK</div>
-          <div class="statusSistemaMeta">Online - Funcionando</div>
+          <div class="statusSistemaValor" id="statusBancoDados">-</div>
+          <div class="statusSistemaMeta" id="textoBancoDados">-</div>
         </div>
         
         <div class="statusSistemaCard aviso">
           <h3>Armazenamento</h3>
-          <div class="statusSistemaValor">73%</div>
-          <div class="statusSistemaMeta">Limite de Alerta: 80%</div>
+          <div class="statusSistemaValor" id="statusArmazenamento">-</div>
+          <div class="statusSistemaMeta" id="textoArmazenamento">-</div>
         </div>
         
         <div class="statusSistemaCard info">
-          <h3>Ultima Sincronizacao</h3>
-          <div class="statusSistemaMeta">02/04/2026 - 12:35</div>
-          <div class="statusSistemaTempo">Ha 2 horas</div>
+          <h3>Última Sincronização</h3>
+          <div class="statusSistemaMeta" id="textoSincronizacao">-</div>
+          <div class="statusSistemaTempo" id="tempoSincronizacao">-</div>
         </div>
       </div>
     </section>
@@ -237,19 +200,271 @@
   <script>
     new window.VLibras.Widget('https://vlibras.gov.br/app');
   </script>
-
-  <!-- SCRIPT -->
+  <script src="/scripts/apiClient.js"></script>
   <script>
+    // ===== CONFIGURAÇÃO =====
+    const API_BASE = '/api';
+    const TOKEN_KEY = 'saadi_access_token';
+    const ENDPOINTS = {
+      dashboard: `${API_BASE}/admin/dashboard`,
+      atividades: `${API_BASE}/admin/atividades-recentes`,
+      status: `${API_BASE}/admin/status-sistema`
+    };
+
+    function obterToken() {
+      return localStorage.getItem(TOKEN_KEY) || '';
+    }
+
+    function criarHeadersJson() {
+      const headers = {
+        'Accept': 'application/json'
+      };
+
+      const token = obterToken();
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
+      return headers;
+    }
+
+    function redirecionarParaLogin() {
+      window.location.href = '/index.html';
+    }
+
+    function extrairPayloadToken(token) {
+      if (!token) return null;
+      try {
+        const payloadBase64 = token.split('.')[1];
+        if (!payloadBase64) return null;
+        const payloadJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
+        return JSON.parse(payloadJson);
+      } catch {
+        return null;
+      }
+    }
+
+    function primeiroNome(nomeCompleto) {
+      const texto = String(nomeCompleto || '').trim();
+      if (!texto) return '';
+      return texto.split(' ')[0];
+    }
+
+    function atualizarPerfil(nome, email, perfil) {
+      const nomeEl = document.querySelector('.nomePerfil');
+      const emailEl = document.querySelector('.emailPerfil');
+      if (!nomeEl || !emailEl) return;
+
+      const primeiro = primeiroNome(nome);
+      nomeEl.textContent = primeiro ? `Olá, ${primeiro}` : 'Olá';
+
+      const partes = [email, perfil].filter(Boolean);
+      emailEl.textContent = partes.length ? partes.join(' • ') : 'Sessão ativa';
+    }
+
+    async function carregarPerfilLogado() {
+      const token = obterToken();
+      const claims = extrairPayloadToken(token) || {};
+      atualizarPerfil(claims.nome, claims.email, claims.perfil);
+
+      try {
+        const response = await fetch(`${API_BASE}/auth/me`, {
+          headers: criarHeadersJson()
+        });
+
+        if (response.status === 401) {
+          redirecionarParaLogin();
+          return;
+        }
+
+        const dados = await lerJsonSeguro(response);
+        const fonte = dados.data || dados;
+        const nome = fonte.user_name || claims.nome;
+        const email = claims.email || '';
+        const perfil = fonte.profile_name || claims.perfil;
+        atualizarPerfil(nome, email, perfil);
+      } catch {
+        atualizarPerfil(claims.nome, claims.email, claims.perfil);
+      }
+    }
+
+    // ===== FUNÇÕES UTILITÁRIAS =====
+    function mostrarMensagem(id, tipo, texto) {
+      const box = document.getElementById(id);
+      if (box) {
+        box.className = `alert alert-${tipo}`;
+        box.textContent = texto;
+        box.classList.remove('d-none');
+      }
+    }
+
+    function limparMensagem(id) {
+      const box = document.getElementById(id);
+      if (box) {
+        box.classList.add('d-none');
+        box.textContent = '';
+      }
+    }
+
+    function formatarData(dataIso) {
+      if (!dataIso) return '-';
+      try {
+        return new Date(dataIso).toLocaleString('pt-BR');
+      } catch {
+        return '-';
+      }
+    }
+
+    async function lerJsonSeguro(response) {
+      try {
+        return await response.json();
+      } catch {
+        return {};
+      }
+    }
+
+    // ===== CARREGAMENTO DE INDICADORES =====
+    async function carregarIndicadores() {
+      try {
+        const response = await fetch(ENDPOINTS.dashboard, {
+          headers: criarHeadersJson()
+        });
+
+        if (response.status === 401) {
+          redirecionarParaLogin();
+          return;
+        }
+        
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const dados = await lerJsonSeguro(response);
+        
+        // Atualizar indicadores
+        document.getElementById('indicadorUnidades').textContent = dados.totalUnidades || 0;
+        document.getElementById('indicadorUsuarios').textContent = dados.usuariosAtivos || 0;
+        document.getElementById('indicadorConfiguracoes').textContent = dados.configuracoesPendentes || 0;
+        document.getElementById('indicadorAlertas').textContent = dados.alertaSeguranca || 0;
+
+      } catch (erro) {
+        console.error('Erro ao carregar indicadores:', erro);
+        mostrarMensagem('mensagemAtividades', 'danger', 'Erro ao carregar dados do painel.');
+      }
+    }
+
+    // ===== CARREGAMENTO DE ATIVIDADES RECENTES =====
+    async function carregarAtividades() {
+      try {
+        const response = await fetch(ENDPOINTS.atividades, {
+          headers: criarHeadersJson()
+        });
+
+        if (response.status === 401) {
+          redirecionarParaLogin();
+          return;
+        }
+        
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const dados = await lerJsonSeguro(response);
+        const atividades = dados.items || [];
+
+        const tbody = document.getElementById('atividadesTbody');
+
+        if (atividades.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5">Nenhuma atividade registrada.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = atividades.map(atividade => `
+          <tr>
+            <td>${formatarData(atividade.created_at)}</td>
+            <td>${atividade.usuario_nome || '-'}</td>
+            <td>${atividade.acao || '-'}</td>
+            <td>${atividade.entidade || '-'}</td>
+            <td><span class="badge badgeSucesso">${atividade.detalhes?.resultado || 'Sucesso'}</span></td>
+          </tr>
+        `).join('');
+
+      } catch (erro) {
+        console.error('Erro ao carregar atividades:', erro);
+        document.getElementById('atividadesTbody').innerHTML = 
+          '<tr><td colspan="5">Erro ao carregar atividades.</td></tr>';
+      }
+    }
+
+    // ===== CARREGAMENTO DE STATUS DO SISTEMA =====
+    async function carregarStatusSistema() {
+      try {
+        const response = await fetch(ENDPOINTS.status, {
+          headers: criarHeadersJson()
+        });
+
+        if (response.status === 401) {
+          redirecionarParaLogin();
+          return;
+        }
+        
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const dados = await lerJsonSeguro(response);
+
+        // Banco de Dados
+        document.getElementById('statusBancoDados').textContent = dados.statusBancoDados || 'OK';
+        document.getElementById('textoBancoDados').textContent = dados.textoBancoDados || 'Online - Funcionando';
+
+        // Armazenamento
+        document.getElementById('statusArmazenamento').textContent = dados.statusArmazenamento || '-';
+        document.getElementById('textoArmazenamento').textContent = dados.textoArmazenamento || '-';
+
+        // Sincronização
+        document.getElementById('textoSincronizacao').textContent = dados.textoSincronizacao || '-';
+        document.getElementById('tempoSincronizacao').textContent = formatarData(dados.tempoSincronizacao) || '-';
+
+      } catch (erro) {
+        console.error('Erro ao carregar status do sistema:', erro);
+      }
+    }
+
+    // ===== FUNÇÕES DE PÁGINA =====
     function navegarPara(pagina) {
       window.location.href = pagina;
     }
 
     function logout() {
       if (confirm('Tem certeza que deseja sair do sistema?')) {
-        window.location.href = '../../../pages/auth/login.html';
+        fetch(`${API_BASE}/auth/logout`, {
+          method: 'POST',
+          headers: criarHeadersJson()
+        }).finally(() => {
+          localStorage.removeItem(TOKEN_KEY);
+          window.location.href = '/pages/auth/login.html';
+        });
       }
     }
 
+    if (!obterToken()) {
+      redirecionarParaLogin();
+    }
+
+    // ===== INICIALIZAÇÃO =====
+    (async function iniciatizarPainel() {
+      try {
+        await Promise.all([
+          carregarPerfilLogado(),
+          carregarIndicadores(),
+          carregarAtividades(),
+          carregarStatusSistema()
+        ]);
+      } catch (erro) {
+        console.error('Erro ao inicializar painel:', erro);
+      }
+    })();
   </script>
 </body>
 </html>
