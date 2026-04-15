@@ -24,13 +24,8 @@ backend/
 │   ├── admin_auditoria.py
 │   ├── auth.py
 │   └── ...
-├── models/
-│   ├── __init__.py
-│   ├── usuario.py
-│   ├── unidade.py
-│   ├── aluno.py
-│   └── ...
-└── decorators.py
+├── models.py
+└── security.py
 ```
 
 ## Exemplo de Rota: Dashboard do Administrador
@@ -39,14 +34,14 @@ backend/
 
 ```python
 from flask import Blueprint, jsonify, request
-from decorators import autenticado, requer_admin
-from models import db, Usuario, Unidade, Aluno
+from backend.extensions import db
+from backend.models import Usuario, Unidade, Aluno
+from backend.security import jwt_required_admin
 
 dashboard_bp = Blueprint('admin_dashboard', __name__, url_prefix='/api/admin')
 
 @dashboard_bp.route('/dashboard', methods=['GET'])
-@autenticado
-@requer_admin
+@jwt_required_admin
 def obter_dashboard():
     """Retorna as estatísticas principais do painel."""
     try:
@@ -71,8 +66,7 @@ def obter_dashboard():
 
 
 @dashboard_bp.route('/atividades-recentes', methods=['GET'])
-@autenticado
-@requer_admin
+@jwt_required_admin
 def obter_atividades_recentes():
     """Retorna as últimas atividades do sistema."""
     limite = request.args.get('limite', 5, type=int)
@@ -99,8 +93,7 @@ def obter_atividades_recentes():
 
 
 @dashboard_bp.route('/status-sistema', methods=['GET'])
-@autenticado
-@requer_admin
+@jwt_required_admin
 def obter_status_sistema():
     """Retorna informações sobre o status do sistema."""
     try:
@@ -129,15 +122,15 @@ def obter_status_sistema():
 
 ```python
 from flask import Blueprint, jsonify, request
-from decorators import autenticado, requer_admin
-from models import db, Usuario, Unidade
+from backend.extensions import db
+from backend.models import Usuario, Unidade
+from backend.security import jwt_required_admin
 from sqlalchemy import or_
 
 usuarios_bp = Blueprint('admin_usuarios', __name__, url_prefix='/api/admin')
 
 @usuarios_bp.route('/usuarios', methods=['GET'])
-@autenticado
-@requer_admin
+@jwt_required_admin
 def listar_usuarios():
     """Retorna lista de usuários com filtros."""
     try:
@@ -200,8 +193,7 @@ def listar_usuarios():
 
 
 @usuarios_bp.route('/usuarios/<int:usuario_id>', methods=['DELETE'])
-@autenticado
-@requer_admin
+@jwt_required_admin
 def deletar_usuario(usuario_id):
     """Deleta um usuário do sistema."""
     try:
@@ -224,68 +216,44 @@ def deletar_usuario(usuario_id):
         return jsonify({'message': 'Erro ao deletar usuário'}), 500
 ```
 
-## Exemplo de Decorador: Autenticação
+## Exemplo de Segurança: Autorização JWT
 
-**Arquivo: backend/decorators.py**
+**Arquivo: backend/security.py**
 
 ```python
 from functools import wraps
-from flask import request, jsonify
-from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
-from models import Usuario
 
-def autenticado(f):
-    """Verifica se o usuário está autenticado."""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        try:
-            verify_jwt_in_request()
-            return f(*args, **kwargs)
-        except Exception as e:
-            return jsonify({'message': 'Token inválido ou expirado'}), 401
-    return decorated_function
+from backend.responses import error
+from flask_jwt_extended import get_jwt, verify_jwt_in_request
 
-def requer_admin(f):
-    """Verifica se o usuário é administrador."""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        try:
-            user_id = get_jwt_identity()
-            usuario = Usuario.query.get(user_id)
-            
-            if not usuario or usuario.perfil != 'administrador':
-                return jsonify({'message': 'Acesso negado: apenas administradores'}), 403
-            
-            return f(*args, **kwargs)
-        except Exception as e:
-            return jsonify({'message': 'Erro na verificação de permissões'}), 500
-    
-    return decorated_function
 
-def requer_secretaria(f):
-    """Verifica se o usuário é secretário ou admin."""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        try:
-            user_id = get_jwt_identity()
-            usuario = Usuario.query.get(user_id)
-            
-            if not usuario or usuario.perfil not in ['administrador', 'secretaria']:
-                return jsonify({'message': 'Acesso negado'}), 403
-            
-            return f(*args, **kwargs)
-        except Exception as e:
-            return jsonify({'message': 'Erro na verificação de permissões'}), 500
-    
-    return decorated_function
+def jwt_required_admin(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        verify_jwt_in_request()
+        claims = get_jwt()
+        if claims.get('perfil') != 'administrador':
+            return error('Acesso restrito ao administrador.', 403, 'FORBIDDEN')
+        return fn(*args, **kwargs)
+
+    return wrapper
+
+
+def jwt_required_any(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        verify_jwt_in_request()
+        return fn(*args, **kwargs)
+
+    return wrapper
 ```
 
 ## Exemplo de Modelo: Usuário
 
-**Arquivo: backend/models/usuario.py**
+**Arquivo: backend/models.py**
 
 ```python
-from extensions import db
+from backend.extensions import db
 from datetime import datetime
 
 class Usuario(db.Model):
@@ -312,37 +280,14 @@ class Usuario(db.Model):
 **Arquivo: run.py**
 
 ```python
-from flask import Flask
-from flask_cors import CORS
-from config import Config
-from extensions import db, jwt
-from backend.routes.admin_dashboard import dashboard_bp
-from backend.routes.admin_usuarios import usuarios_bp
+from backend import create_app
 
-def create_app():
-    app = Flask(__name__)
-    
-    # Carregar configuração
-    app.config.from_object(Config)
-    
-    # Inicializar extensões
-    db.init_app(app)
-    jwt.init_app(app)
-    CORS(app)
-    
-    # Registrar blueprints
-    app.register_blueprint(dashboard_bp)
-    app.register_blueprint(usuarios_bp)
-    
-    # Criar tabelas
-    with app.app_context():
-        db.create_all()
-    
-    return app
+
+app = create_app()
+
 
 if __name__ == '__main__':
-    app = create_app()
-    app.run(debug=True, port=5000)
+    app.run(debug=True)
 ```
 
 ## Checklist de Implementação

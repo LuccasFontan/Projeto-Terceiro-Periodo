@@ -19,6 +19,7 @@ from backend.routes.auth import auth_bp
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
+FRONTEND_DIR = ROOT_DIR / 'frontend'
 
 
 def create_app(config_object: type[Config] = Config) -> Flask:
@@ -77,27 +78,27 @@ def create_app(config_object: type[Config] = Config) -> Flask:
 
     @app.get('/')
     def home():
-        return send_from_directory(ROOT_DIR, 'index.html')
+        return send_from_directory(FRONTEND_DIR, 'index.html')
 
     @app.get('/index.html')
     def login_page():
-        return send_from_directory(ROOT_DIR, 'index.html')
+        return send_from_directory(FRONTEND_DIR, 'index.html')
 
     @app.get('/css/<path:filename>')
     def css_assets(filename: str):
-        return send_from_directory(ROOT_DIR / 'css', filename)
+        return send_from_directory(FRONTEND_DIR / 'css', filename)
 
     @app.get('/img/<path:filename>')
     def image_assets(filename: str):
-        return send_from_directory(ROOT_DIR / 'img', filename)
+        return send_from_directory(FRONTEND_DIR / 'assets', filename)
 
     @app.get('/scripts/<path:filename>')
     def script_assets(filename: str):
-        return send_from_directory(ROOT_DIR / 'scripts', filename)
+        return send_from_directory(FRONTEND_DIR / 'js', filename)
 
     @app.get('/pages/<path:filename>')
     def page_assets(filename: str):
-        return send_from_directory(ROOT_DIR / 'pages', filename)
+        return send_from_directory(FRONTEND_DIR / 'pages', filename)
 
     @app.get('/health')
     def health_check():

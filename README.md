@@ -1,7 +1,7 @@
 # SAADI - Sistema de Acompanhamento da Educação Inclusiva
 
 <p align="center">
-	<img src="img/icons8-two-hands-48%20(1).png" alt="Logo SAADI" width="96">
+	<img src="frontend/assets/icons8-two-hands-48%20(1).png" alt="Logo SAADI" width="96">
 </p>
 
 O SAADI é uma plataforma web para organizar informações escolares de alunos com deficiência e apoiar o trabalho de equipes pedagógicas, psicopedagógicas e administrativas.
@@ -36,18 +36,19 @@ O SAADI reduz essa fragmentação por meio de uma interface simples, padronizada
 
 ## Estrutura do repositório
 
-- `index.html`: página inicial de acesso.
-- `css/`: estilos globais e específicos de cada módulo.
-- `img/`: imagens e ícones do sistema.
-- `pages/auth/`: telas de autenticação.
-- `pages/menus/administrador/`: área administrativa.
-- `pages/menus/psicopedagogo/`: área do psicopedagogo.
-- `pages/menus/secretaria/`: área da secretaria escolar.
-- `scripts/`: scripts JavaScript da aplicação.
+- `frontend/index.html`: página inicial de acesso.
+- `frontend/css/`: estilos globais e específicos de cada módulo.
+- `frontend/assets/`: imagens e ícones do sistema.
+- `frontend/pages/auth/`: telas de autenticação.
+- `frontend/pages/menus/administrador/`: área administrativa.
+- `frontend/pages/menus/psicopedagogo/`: área do psicopedagogo.
+- `frontend/pages/menus/secretaria/`: área da secretaria escolar.
+- `frontend/js/`: scripts JavaScript da aplicação.
+- `scripts/`: scripts de infraestrutura, como bootstrap do banco.
 
 ## Como executar
 
-Como o projeto é composto por páginas HTML, CSS e JavaScript, ele pode ser aberto em qualquer servidor estático local. A forma mais simples é usar uma extensão como Live Server no VS Code ou servir a pasta com qualquer servidor web local.
+O frontend está em `frontend/` e continua sendo servido pelo Flask em `/`, então o uso normal segue funcionando pela aplicação backend.
 
 ## Backend Flask
 
