@@ -307,9 +307,9 @@ class Usuario(db.Model):
     unidade = db.relationship('Unidade', backref='usuarios')
 ```
 
-## Exemplo de Configuração: app.py
+## Exemplo de Configuração: run.py
 
-**Arquivo: app.py**
+**Arquivo: run.py**
 
 ```python
 from flask import Flask
