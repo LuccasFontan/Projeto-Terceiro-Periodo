@@ -16,6 +16,8 @@ O projeto centraliza cadastros, acompanha encaminhamentos, registra relatórios 
 - [Estrutura do repositório](#estrutura-do-repositório)
 - [Como executar](#como-executar)
 - [Acessibilidade](#acessibilidade)
+- [Agentes de IA](#agentes-de-ia)
+- [Equipe](#equipe)
 - [Licença](#licença)
 
 ## Problema
@@ -90,18 +92,18 @@ python run.py
 
 ### Contrato de autenticação
 
-- `POST /api/auth/login` retorna `access_token`, `refresh_token` e `redirect_url`.
-- O frontend salva o `access_token` em `localStorage` e envia `Authorization: Bearer <token>` nos requests protegidos.
+- `POST /api/auth/login` valida as credenciais e o Backend injeta automaticamente um **Cookie HttpOnly** com o token JWT.
+- O frontend envia `credentials: 'same-origin'` nos requests protegidos, garantindo o envio seguro do token sem expô-lo no `localStorage` (proteção contra XSS).
 
 ### Exemplo de fetch no frontend
 
 ```javascript
-const token = localStorage.getItem('saadi_access_token');
-
-const response = await fetch('/api/admin/dashboard', {
+// Através do apiClient.js, a configuração de credentials é injetada
+const response = await fetch('/api/admin/usuarios', {
+	method: 'GET',
+	credentials: 'same-origin', // OBRIGATÓRIO PARA ENVIAR O COOKIE
 	headers: {
-		Accept: 'application/json',
-		Authorization: `Bearer ${token}`
+		'Accept': 'application/json'
 	}
 });
 
@@ -128,8 +130,23 @@ O script:
 
 ## Acessibilidade
 
-- Algumas páginas já incluem integração com VLibras.
-- A navegação foi pensada para manter uma estrutura simples e consistente.
+O projeto foi rigorosamente auditado e adaptado para conformidade com **WCAG 2.1 Nível AA**, incluindo:
+- Navegação completa por teclado.
+- Identificação clara de foco em elementos interativos.
+- Suporte nativo a leitores de tela com labels ARIA e `aria-live`.
+- Contraste de cores seguro e integração com VLibras em páginas específicas.
+
+Para consultar a documentação de auditoria, leia [ACESSIBILIDADE.md](ACESSIBILIDADE.md).
+
+## Agentes de IA
+
+A manutenção do código deste repositório utiliza a força de times autônomos baseados em **Multi-Agent Frameworks** (padrão CrewAI), garantindo automações de desenvolvimento, auditorias de cibersegurança e Code Reviews automatizados.
+Consulte o arquivo [agents.md](agents.md) para conhecer a nossa equipe de IA (Tech Lead, Desenvolvedor, Cyber Security e Code Reviewer).
+
+## Equipe
+
+- Jair Pereira Barcelos
+- Lucas Fontan Fernandes
 
 ## Licença
 
