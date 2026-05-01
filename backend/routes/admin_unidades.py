@@ -3,6 +3,9 @@ from __future__ import annotations
 from flask import Blueprint, request
 from flask_jwt_extended import get_jwt_identity
 from sqlalchemy.exc import IntegrityError
+from pydantic import ValidationError
+
+from schemas.admin_schemas import UnidadeSchema
 
 from backend.responses import created, error, success
 from backend.security import jwt_required_admin
@@ -42,14 +45,13 @@ def buscar_unidade(unidade_id: int):
 @jwt_required_admin
 def criar_unidade():
     payload = request.get_json(silent=True) or {}
-
-    obrigatorios = ['nome', 'sigla', 'cnpj', 'email']
-    faltantes = [campo for campo in obrigatorios if not payload.get(campo)]
-    if faltantes:
-        return error(f'Campos obrigatorios: {", ".join(faltantes)}', 400, 'VALIDATION_ERROR')
+    try:
+        dados = UnidadeSchema(**payload)
+    except ValidationError as e:
+        return error('Dados inválidos.', 400, 'VALIDATION_ERROR', details=e.errors())
 
     try:
-        unidade = criar_unidade_service(payload)
+        unidade = criar_unidade_service(dados.model_dump(exclude_none=True))
     except IntegrityError:
         return error('Nao foi possivel criar unidade. Verifique CNPJ e nome/sigla duplicados.', 409, 'CONFLICT')
     except ValueError as exc:

@@ -29,13 +29,20 @@ def create_app(config_object: type[Config] = Config) -> Flask:
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
-    CORS(app, resources={r'/api/*': {'origins': app.config['CORS_ORIGINS']}})
+    CORS(app, resources={r'/api/*': {'origins': app.config['CORS_ORIGINS']}}, supports_credentials=True)
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_unidades_bp)
     app.register_blueprint(admin_usuarios_bp)
     app.register_blueprint(admin_dashboard_bp)
     app.register_blueprint(admin_extra_bp)
+
+    @app.after_request
+    def set_security_headers(response):
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+        return response
 
     with app.app_context():
         db.create_all()

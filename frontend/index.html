@@ -39,13 +39,13 @@
             <!-- Copy -->
             <div class="hero-body">
                 <span class="kicker">
-                    <i class="bi bi-stars"></i>
+                    <i class="bi bi-stars" aria-hidden="true"></i>
                     Versão 2025
                 </span>
 
-                <h2 class="hero-title">
+                <h1 class="hero-title">
                     Gestão inteligente<br>em suas mãos
-                </h2>
+                </h1>
 
                 <p class="hero-desc">
                     Acesse sua área de trabalho com segurança e controle total dos seus processos, equipes e relatórios
@@ -55,17 +55,17 @@
                 <!-- Feature cards -->
                 <div class="features">
                     <div class="feat">
-                        <div class="feat-icon"><i class="bi bi-graph-up-arrow" aria-label="Grafico apontando para cima, demonstrando evolução"></i></div>
+                        <div class="feat-icon"><i class="bi bi-graph-up-arrow" role="img" aria-label="Grafico apontando para cima, demonstrando evolução"></i></div>
                         <div class="feat-title">Dashboards</div>
                         <div class="feat-desc">Métricas e KPIs em tempo real</div>
                     </div>
                     <div class="feat">
-                        <div class="feat-icon"><i class="bi bi-people" aria-label="Pessoas simbolizando um grupo/equipe"></i></div>
+                        <div class="feat-icon"><i class="bi bi-people" role="img" aria-label="Pessoas simbolizando um grupo/equipe"></i></div>
                         <div class="feat-title">Equipes</div>
                         <div class="feat-desc">Gestão completa de usuários</div>
                     </div>
                     <div class="feat">
-                        <div class="feat-icon"><img src="/img/agilidade.png" alt="icone de agilidade, seta apontando para frente"></div>
+                        <div class="feat-icon"><img src="/img/agilidade.png" alt="" role="presentation"></div>
                         <div class="feat-title">Agilidade</div>
                         <div class="feat-desc">Interface simples e responsiva</div>
                     </div>
@@ -78,14 +78,14 @@
             <div class="login-card">
 
                 <span class="eyebrow">
-                    <i class="bi bi-door-open" aria-label="Porta aberta, simbolizando o acesso do sistema"></i>
+                    <i class="bi bi-door-open" role="img" aria-label="Porta aberta, simbolizando o acesso do sistema"></i>
                     Acesso ao sistema
                 </span>
 
-                <h1 class="card-title">Bem-vindo de volta</h1>
+                <h2 class="card-title">Bem-vindo de volta</h2>
                 <p class="card-sub">Insira suas credenciais para continuar.</p>
 
-                <div class="alert alert-danger d-none" id="loginError" role="alert"></div>
+                <div class="alert alert-danger d-none" id="loginError" role="alert" aria-live="assertive"></div>
 
                 <form id="loginForm" class="auth-form" action="#" method="post" aria-label="Formulario de login">
 
@@ -95,7 +95,7 @@
                         <div class="input-icon-wrap">
                             <input type="email" id="email" name="email" class="form-control"
                                 placeholder="voce@empresa.com.br" autocomplete="username" required />
-                            <i class="bi bi-envelope"></i>
+                            <i class="bi bi-envelope" aria-hidden="true"></i>
                         </div>
                     </div>
 
@@ -103,12 +103,12 @@
                     <div class="mb-3">
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <label class="form-label mb-0" for="senha">Senha</label>
-                            <a href="/pages/auth/redefinirSenha.html" class="forgot-link">Esqueceu a senha?</a>
+                            <a href="/pages/auth/redefinirSenha.html" class="forgot-link" aria-label="Recuperar senha esquecida">Esqueceu a senha?</a>
                         </div>
                             <div class="input-icon-wrap position-relative">
                                 <input type="password" id="senha" name="senha" class="form-control pe-5"
                                     placeholder="••••••••" autocomplete="current-password" required />
-                            <i class="bi bi-lock"></i>
+                            <i class="bi bi-lock" aria-hidden="true"></i>
                                 <button type="button" class="password-toggle" id="togglePwd" aria-label="Mostrar senha"
                                     aria-pressed="false">
                                     <i class="bi bi-eye" id="eyeIcon" aria-hidden="true"></i>
@@ -193,12 +193,8 @@
                         throw new Error(data.message || 'Nao foi possivel autenticar.');
                     }
 
-                    if (data.access_token) {
-                        localStorage.setItem(TOKEN_KEY, data.access_token);
-                    }
-
-                    if (data.refresh_token) {
-                        localStorage.setItem(REFRESH_TOKEN_KEY, data.refresh_token);
+                    if (data.user) {
+                        localStorage.setItem('saadi_user_info', JSON.stringify(data.user));
                     }
 
                     window.location.href = data.redirect_url || '/index.html';

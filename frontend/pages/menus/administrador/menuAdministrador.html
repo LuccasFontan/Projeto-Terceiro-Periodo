@@ -145,7 +145,7 @@
     <!-- RESUMO DE ATIVIDADES -->
     <section class="containerPrincipal">
       <h2>Atividades Recentes</h2>
-      <div id="mensagemAtividades" class="alert d-none" role="alert"></div>
+      <div id="mensagemAtividades" class="alert d-none" role="alert" aria-live="polite"></div>
       <table class="tabelaResponsiva" id="tabelaAtividades">
         <thead>
           <tr>
@@ -204,44 +204,18 @@
   <script>
     // ===== CONFIGURAÇÃO =====
     const API_BASE = '/api';
-    const TOKEN_KEY = 'saadi_access_token';
     const ENDPOINTS = {
       dashboard: `${API_BASE}/admin/dashboard`,
       atividades: `${API_BASE}/admin/atividades-recentes`,
       status: `${API_BASE}/admin/status-sistema`
     };
 
-    function obterToken() {
-      return localStorage.getItem(TOKEN_KEY) || '';
-    }
-
     function criarHeadersJson() {
-      const headers = {
-        'Accept': 'application/json'
-      };
-
-      const token = obterToken();
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      }
-
-      return headers;
+      return { 'Accept': 'application/json' };
     }
 
     function redirecionarParaLogin() {
       window.location.href = '/index.html';
-    }
-
-    function extrairPayloadToken(token) {
-      if (!token) return null;
-      try {
-        const payloadBase64 = token.split('.')[1];
-        if (!payloadBase64) return null;
-        const payloadJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
-        return JSON.parse(payloadJson);
-      } catch {
-        return null;
-      }
     }
 
     function primeiroNome(nomeCompleto) {
@@ -263,10 +237,6 @@
     }
 
     async function carregarPerfilLogado() {
-      const token = obterToken();
-      const claims = extrairPayloadToken(token) || {};
-      atualizarPerfil(claims.nome, claims.email, claims.perfil);
-
       try {
         const response = await fetch(`${API_BASE}/auth/me`, {
           headers: criarHeadersJson()
@@ -279,12 +249,9 @@
 
         const dados = await lerJsonSeguro(response);
         const fonte = dados.data || dados;
-        const nome = fonte.user_name || claims.nome;
-        const email = claims.email || '';
-        const perfil = fonte.profile_name || claims.perfil;
-        atualizarPerfil(nome, email, perfil);
-      } catch {
-        atualizarPerfil(claims.nome, claims.email, claims.perfil);
+        atualizarPerfil(fonte.user_name || fonte.nome_completo, fonte.email || '', fonte.profile_name || fonte.perfil_nome);
+      } catch (e) {
+        console.error(e);
       }
     }
 
@@ -442,15 +409,13 @@
           method: 'POST',
           headers: criarHeadersJson()
         }).finally(() => {
-          localStorage.removeItem(TOKEN_KEY);
-          window.location.href = '/pages/auth/login.html';
+          localStorage.removeItem('saadi_user_info');
+          window.location.href = '/index.html';
         });
       }
     }
 
-    if (!obterToken()) {
-      redirecionarParaLogin();
-    }
+    // A validação de token agora é tratada automaticamente pelo apiClient.js com base em HttpOnly cookies.
 
     // ===== INICIALIZAÇÃO =====
     (async function iniciatizarPainel() {
