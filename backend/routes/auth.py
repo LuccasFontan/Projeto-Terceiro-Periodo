@@ -10,8 +10,14 @@ from flask_jwt_extended import (
     get_jwt_identity,
     jwt_required,
     verify_jwt_in_request,
+    set_access_cookies,
+    set_refresh_cookies,
+    unset_jwt_cookies,
 )
 from werkzeug.security import check_password_hash, generate_password_hash
+from pydantic import ValidationError
+
+from schemas.auth_schemas import LoginSchema, RegisterSchema
 
 from backend.extensions import db
 from backend.models import Perfil, TokenBlocklist, Usuario
@@ -42,64 +48,15 @@ PROFILE_REDIRECTS = {
 }
 
 
-def _serializar_usuario(usuario: Usuario) -> dict:
-    return {
-        'id': usuario.id,
-        'nome': usuario.nome_completo,
-        'email': usuario.email,
-        'perfil': usuario.perfil.nome if usuario.perfil else None,
-        'unidade_id': usuario.unidade_id,
-        'unidade_nome': usuario.unidade.nome if usuario.unidade else None,
-    }
-
-
-def _buscar_perfil(nome_ou_id: str | int | None) -> Perfil | None:
-    if nome_ou_id is None:
-        return None
-    if isinstance(nome_ou_id, int):
-        return Perfil.query.get(nome_ou_id)
-
-    texto = str(nome_ou_id).strip()
-    if not texto:
-        return None
-
-    if texto.isdigit():
-        return Perfil.query.get(int(texto))
-
-    return Perfil.query.filter(db.func.lower(Perfil.nome) == texto.lower()).first()
-
-
-def _criar_tokens(usuario: Usuario) -> dict:
-    claims = {
-        'perfil': usuario.perfil.nome if usuario.perfil else 'usuario',
-        'nome': usuario.nome_completo,
-        'email': usuario.email,
-        'unidade_id': usuario.unidade_id,
-    }
-    return {
-        'access_token': create_access_token(identity=str(usuario.id), additional_claims=claims),
-        'refresh_token': create_refresh_token(identity=str(usuario.id), additional_claims=claims),
-    }
-
-
-def _revogar_token_atual() -> None:
-    claims = get_jwt()
-    token = TokenBlocklist(jti=claims['jti'])
-    if claims.get('sub'):
-        token.usuario_id = int(claims['sub'])
-    db.session.add(token)
-
-
 @auth_bp.post('/login')
 def login():
     payload = request.get_json(silent=True) or request.form
-    email = (payload.get('email') or '').strip().lower()
-    senha = payload.get('senha') or ''
+    try:
+        dados = LoginSchema(**payload)
+    except ValidationError as e:
+        return error('Dados inválidos.', 400, 'VALIDATION_ERROR', details=e.errors())
 
-    if not email or not senha:
-        return error('Informe email e senha.', 400, 'VALIDATION_ERROR')
-
-    usuario = autenticar_login(email, senha)
+    usuario = autenticar_login(dados.email, dados.senha)
 
     if usuario is None:
         return error('Credenciais invalidas.', 401, 'INVALID_CREDENTIALS')
@@ -108,23 +65,31 @@ def login():
     tokens = criar_tokens(usuario, create_access_token=create_access_token, create_refresh_token=create_refresh_token)
     registrar_login(usuario)
 
-    return success(
+    resp, status_code = success(
         message='Login realizado com sucesso.',
         data={
             'redirect_url': redirect_url,
-            'token_type': 'Bearer',
-            **tokens,
             'user': serializar_usuario(usuario),
         },
     )
+    
+    set_access_cookies(resp, tokens['access_token'])
+    set_refresh_cookies(resp, tokens['refresh_token'])
+    return resp, status_code
 
 
 @auth_bp.post('/logout')
-@jwt_required()
+@jwt_required(optional=True)
 def logout():
-    revogar_token_atual(get_jwt)
-    registrar_logout(get_jwt, get_jwt_identity)
-    return success('Logout realizado com sucesso.', data={'redirect_url': '/index.html'})
+    try:
+        verify_jwt_in_request()
+        revogar_token_atual(get_jwt)
+        registrar_logout(get_jwt, get_jwt_identity)
+    except Exception:
+        pass
+    resp, status_code = success('Logout realizado com sucesso.', data={'redirect_url': '/index.html'})
+    unset_jwt_cookies(resp)
+    return resp, status_code
 
 
 @auth_bp.post('/refresh')
@@ -133,20 +98,22 @@ def refresh_token():
     usuario = renovar_usuario_por_refresh(int(get_jwt_identity()))
 
     if usuario is None:
-        return error('Credenciais invalidas.', 401, 'INVALID_CREDENTIALS')
+        resp, status_code = error('Credenciais invalidas.', 401, 'INVALID_CREDENTIALS')
+        unset_jwt_cookies(resp)
+        return resp, status_code
 
     revogar_token_atual(get_jwt)
     db.session.commit()
 
     tokens = criar_tokens(usuario, create_access_token=create_access_token, create_refresh_token=create_refresh_token)
-    return success(
+    resp, status_code = success(
         message='Token renovado com sucesso.',
         data={
-            'token_type': 'Bearer',
-            **tokens,
             'user': serializar_usuario(usuario),
         },
     )
+    set_access_cookies(resp, tokens['access_token'])
+    return resp, status_code
 
 
 @auth_bp.get('/me')
@@ -168,31 +135,27 @@ def me():
 @auth_bp.post('/register')
 def register():
     payload = request.get_json(silent=True) or {}
+    try:
+        dados = RegisterSchema(**payload)
+    except ValidationError as e:
+        return error('Dados inválidos.', 400, 'VALIDATION_ERROR', details=e.errors())
 
-    nome = str(payload.get('nome') or payload.get('nome_completo') or '').strip()
-    email = str(payload.get('email') or '').strip().lower()
-    senha = str(payload.get('senha') or '')
-    perfil = buscar_perfil(payload.get('perfil_id') or payload.get('perfil_nome') or payload.get('perfil') or 'administrador')
-
-    if not nome or not email or not senha:
-        return error('Informe nome, email e senha.', 400, 'VALIDATION_ERROR')
-    if len(senha) < 8:
-        return error('A senha deve ter no minimo 8 caracteres.', 400, 'VALIDATION_ERROR')
+    perfil = buscar_perfil(dados.perfil_id or dados.perfil_nome or 'administrador')
     if perfil is None:
         return error('Perfil invalido.', 400, 'INVALID_PROFILE')
 
-    if Usuario.query.filter(db.func.lower(Usuario.email) == email, Usuario.deleted_at.is_(None)).first():
+    if Usuario.query.filter(db.func.lower(Usuario.email) == dados.email.lower(), Usuario.deleted_at.is_(None)).first():
         return error('Email ja cadastrado.', 409, 'CONFLICT')
 
     usuario = Usuario(
-        nome_completo=nome,
-        cpf=str(payload.get('cpf') or email.split('@')[0]).strip(),
-        email=email,
-        matricula=str(payload.get('matricula') or email).strip(),
-        senha_hash=senha_segura(senha),
+        nome_completo=dados.nome,
+        cpf=str(dados.cpf or dados.email.split('@')[0]).strip(),
+        email=dados.email.lower(),
+        matricula=str(dados.matricula or dados.email).strip(),
+        senha_hash=senha_segura(dados.senha),
         perfil_id=perfil.id,
-        unidade_id=payload.get('unidade_id'),
-        status=payload.get('status') or 'ativo',
+        unidade_id=dados.unidade_id,
+        status=dados.status or 'ativo',
     )
     db.session.add(usuario)
     db.session.commit()

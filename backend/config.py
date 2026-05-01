@@ -38,7 +38,11 @@ class Config:
     JSON_AS_ASCII = False
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=int(os.getenv('JWT_ACCESS_HOURS', '8')))
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=int(os.getenv('JWT_REFRESH_DAYS', '7')))
-    JWT_TOKEN_LOCATION = ['headers']
+    JWT_TOKEN_LOCATION = ['cookies']
+    JWT_COOKIE_SECURE = False  # Para desenvolvimento (em prod usar True)
+    JWT_COOKIE_CSRF_PROTECT = False  # Desabilitado inicialmente para simplificar
+    JWT_ACCESS_COOKIE_NAME = 'access_token_cookie'
+    JWT_REFRESH_COOKIE_NAME = 'refresh_token_cookie'
     JWT_HEADER_TYPE = 'Bearer'
     CORS_ORIGINS = [
         origem.strip()

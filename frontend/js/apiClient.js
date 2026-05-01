@@ -6,26 +6,21 @@
   const REFRESH_ENDPOINT = '/api/auth/refresh';
 
   function getAccessToken() {
-    return localStorage.getItem(ACCESS_TOKEN_KEY) || '';
+    return null; // Token agora esta em HttpOnly cookie
   }
 
   function getRefreshToken() {
-    return localStorage.getItem(REFRESH_TOKEN_KEY) || '';
+    return null; // Token agora esta em HttpOnly cookie
   }
 
   function setTokens(data) {
-    if (data.access_token) {
-      localStorage.setItem(ACCESS_TOKEN_KEY, data.access_token);
-    }
-
-    if (data.refresh_token) {
-      localStorage.setItem(REFRESH_TOKEN_KEY, data.refresh_token);
+    if (data.user) {
+      localStorage.setItem('saadi_user_info', JSON.stringify(data.user));
     }
   }
 
   function clearTokens() {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem('saadi_user_info');
   }
 
   async function refreshAccessToken() {
@@ -36,9 +31,9 @@
 
     const response = await nativeFetch(REFRESH_ENDPOINT, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
-        Authorization: `Bearer ${refreshToken}`,
       },
     });
 
@@ -66,17 +61,13 @@
   }
 
   function decodeJwtPayload(token) {
-    if (!token) return null;
+    // Como usamos HttpOnly cookies, o JS nao consegue ler o token.
+    // Usamos o localStorage do user info.
     try {
-      const payloadBase64 = token.split('.')[1];
-      if (!payloadBase64) return null;
-      const base64Url = payloadBase64.replace(/-/g, '+').replace(/_/g, '/');
-      const padding = '='.repeat((4 - (base64Url.length % 4)) % 4);
-      const base64 = base64Url + padding;
-      const json = atob(base64);
-      return JSON.parse(json);
+        const user = JSON.parse(localStorage.getItem('saadi_user_info'));
+        return user || null;
     } catch {
-      return null;
+        return null;
     }
   }
 
@@ -99,10 +90,7 @@
   }
 
   async function hydrateProfile() {
-    let token = getAccessToken();
-    if (!token) return;
-
-    let claims = decodeJwtPayload(token) || {};
+    let claims = decodeJwtPayload() || {};
     renderProfile({
       nome: claims.nome,
       email: claims.email,
@@ -111,21 +99,20 @@
 
     try {
       let response = await nativeFetch('/api/auth/me', {
+        credentials: 'same-origin',
         headers: {
           Accept: 'application/json',
-          Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.status === 401) {
         const refreshed = await refreshAccessToken();
         if (refreshed) {
-          token = getAccessToken();
-          claims = decodeJwtPayload(token) || claims;
+          claims = decodeJwtPayload() || claims;
           response = await nativeFetch('/api/auth/me', {
+            credentials: 'same-origin',
             headers: {
               Accept: 'application/json',
-              Authorization: `Bearer ${token}`,
             },
           });
         }
@@ -148,18 +135,12 @@
   async function apiFetch(url, options = {}) {
     const requestOptions = {
       ...options,
+      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         ...(options.headers || {}),
       },
     };
-
-    if (shouldAttachAuth(url, requestOptions)) {
-      const accessToken = getAccessToken();
-      if (accessToken) {
-        requestOptions.headers.Authorization = `Bearer ${accessToken}`;
-      }
-    }
 
     let response = await nativeFetch(url, requestOptions);
 
@@ -176,10 +157,7 @@
 
     const retryOptions = {
       ...requestOptions,
-      headers: {
-        ...requestOptions.headers,
-        Authorization: `Bearer ${getAccessToken()}`,
-      },
+      credentials: 'same-origin',
     };
 
     response = await nativeFetch(url, retryOptions);
