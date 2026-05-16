@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAADI | Painel do Administrador</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../../../css/menuAdministrador.css">
+</head>
+
+<body>
+  <!-- MENU LATERAL -->
+  <aside class="menuLateral">
+    <div class="logoContainer">
+      <img src="../../../img/icons8-duas-mãos-windows-11-filled/Logo.png" alt="Logo: Duas Mãos abertas">
+      <div class="textoBranding">
+        <div class="nomeBrand">SAADI</div>
+        <div class="nivelAcesso">Nível: Administrador</div>
+      </div>
+    </div>
+
+    <div class="Perfil">
+      <div class="nomePerfil"></div>
+      <div class="emailPerfil"></div>
+    </div>
+
+    <div class="botoesLaterais">
+      <button class="btnLateral ativo" onclick="navegarPara('menuAdministrador.html')"
+        aria-label="Voltar ao Painel Principal">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Painel Principal</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('unidades/listarUnidades.html')"
+        aria-label="Gerenciar Unidades Escolares">
+        <img src="/img/icon-cadastro.png" alt="">
+        <span>Unidades Escolares</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('usuarios/listarUsuarios.html')"
+        aria-label="Gerenciar Usuários do Sistema">
+        <img src="/img/perfil.png" alt="">
+        <span>Usuários do Sistema</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('relatoriosAdministrador.html')"
+        aria-label="Ver Relatórios Consolidados">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Relatórios</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('auditoria.html')" aria-label="Consultar Auditoria e Histórico">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Auditoria</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('parametros.html')" aria-label="Gerenciar Parâmetros do Sistema">
+        <img src="/img/engrenagem.png" alt="">
+        <span>Parâmetros</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('alunos/listarAlunos.html')"
+        aria-label="Acessar Gestão Central de Alunos">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Alunos - Nível Central</span>
+      </button>
+    </div>
+
+    <div class="sair">
+      <button class="btnSair" onclick="logout()" aria-label="Fazer logout do sistema">
+        <img src="/img/sair.png" alt="">
+        <span>Sair da Conta</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="conteudoPrincipal">
+    <!-- CABEÇALHO -->
+    <section class="cabecalhoDashboard">
+      <h1>Painel do Administrador</h1>
+      <p>Gestão centralizada do sistema educacional, usuários, unidades escolares e auditoria</p>
+    </section>
+
+    <!-- INDICADORES PRINCIPAIS -->
+    <section class="painelIndicadores">
+      <div class="cardIndicador info">
+        <div class="numeroIndicador" id="indicadorUnidades">-</div>
+        <div class="labelIndicador">Unidades Escolares</div>
+      </div>
+      <div class="cardIndicador sucesso">
+        <div class="numeroIndicador" id="indicadorUsuarios">-</div>
+        <div class="labelIndicador">Usuários Ativos</div>
+      </div>
+      <div class="cardIndicador aviso">
+        <div class="numeroIndicador" id="indicadorConfiguracoes">-</div>
+        <div class="labelIndicador">Configurações Pendentes</div>
+      </div>
+      <div class="cardIndicador perigo">
+        <div class="numeroIndicador" id="indicadorAlertas">-</div>
+        <div class="labelIndicador">Alertas de Segurança</div>
+      </div>
+    </section>
+
+    <!-- AÇÕES PRINCIPAIS -->
+    <section class="containerPrincipal">
+      <h2>
+        Gerenciamento do Sistema
+      </h2>
+      <p class="subtituloSecao">Escolha um modulo para administrar dados, acessos e configuracoes globais do sistema.
+      </p>
+
+      <div class="gradeNavegacao">
+        <!-- Unidades Escolares -->
+        <a href="unidades/listarUnidades.html" class="cartaoNavegacao"
+          aria-label="Acessar gestão de unidades escolares">
+          <img src="../../../img/icons8-duas-mãos-windows-11-filled/icons8-prédio-96.png" alt="">
+          <div class="nomeCartao">Unidades Escolares</div>
+          <div class="descricaoCartao">Cadastro e manutenção de unidades</div>
+        </a>
+
+        <!-- Usuários do Sistema -->
+        <a href="usuarios/listarUsuarios.html" class="cartaoNavegacao" aria-label="Acessar gestão de usuários">
+          <img src="../../../img/icons8-duas-mãos-windows-11-filled/icons8-usuário-96.png" alt="">
+          <div class="nomeCartao">Usuários do Sistema</div>
+          <div class="descricaoCartao">Cadastro e gerenciamento de usuários</div>
+        </a>
+
+        <!-- Relatórios Consolidados -->
+        <a href="relatoriosAdministrador.html" class="cartaoNavegacao" aria-label="Acessar relatórios consolidados">
+          <img src="../../../img/icons8-duas-mãos-windows-11-filled/icons8-gráfico-de-barras-96.png" alt="">
+          <div class="nomeCartao">Relatórios Consolidados</div>
+          <div class="descricaoCartao">Análise geral de todas as escolas</div>
+        </a>
+
+        <!-- Auditoria e Histórico -->
+        <a href="auditoria.html" class="cartaoNavegacao" aria-label="Acessar auditoria e histórico">
+          <img src="../../../img/icons8-duas-mãos-windows-11-filled/icons8-log-96.png" alt="">
+          <div class="nomeCartao">Auditoria</div>
+          <div class="descricaoCartao">Histórico de ações e mudanças</div>
+        </a>
+
+        <!-- Parâmetros do Sistema -->
+        <a href="parametros.html" class="cartaoNavegacao" aria-label="Acessar configurações do sistema">
+          <img src="../../../img/icons8-duas-mãos-windows-11-filled/icons8-configurações-96.png" alt="">
+          <div class="nomeCartao">Parâmetros do Sistema</div>
+          <div class="descricaoCartao">Configurações e parâmetros globais</div>
+        </a>
+
+        <!-- Cadastro de Alunos Central -->
+        <a href="alunos/listarAlunos.html" class="cartaoNavegacao" aria-label="Acessar gestão central de alunos">
+          <img src="../../../img/icons8-duas-mãos-windows-11-filled/icons8-alunos-96.png" alt="">
+          <div class="nomeCartao">Alunos - Nível Central</div>
+          <div class="descricaoCartao">Consulta e atualização centralizada</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- RESUMO DE ATIVIDADES -->
+    <section class="containerPrincipal">
+      <h2>Atividades Recentes</h2>
+      <div id="mensagemAtividades" class="alert d-none" role="alert" aria-live="polite"></div>
+      <table class="tabelaResponsiva" id="tabelaAtividades">
+        <thead>
+          <tr>
+            <th>Data/Hora</th>
+            <th>Usuário</th>
+            <th>Ação</th>
+            <th>Entidade</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="atividadesTbody">
+          <tr>
+            <td colspan="5">Carregando atividades...</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- MONITORAMENTO DO SISTEMA -->
+    <section class="containerPrincipal">
+      <h2>Status do Sistema</h2>
+      <div class="statusSistemaGrid">
+        <div class="statusSistemaCard sucesso">
+          <h3>Banco de Dados</h3>
+          <div class="statusSistemaValor" id="statusBancoDados">-</div>
+          <div class="statusSistemaMeta" id="textoBancoDados">-</div>
+        </div>
+
+        <div class="statusSistemaCard aviso">
+          <h3>Armazenamento</h3>
+          <div class="statusSistemaValor" id="statusArmazenamento">-</div>
+          <div class="statusSistemaMeta" id="textoArmazenamento">-</div>
+        </div>
+
+        <div class="statusSistemaCard info">
+          <h3>ÚÚltima Sincronização</h3>
+          <div class="statusSistemaMeta" id="textoSincronizacao">-</div>
+          <div class="statusSistemaTempo" id="tempoSincronizacao">-</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- VLIBRAS -->
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
+  <script src="/scripts/apiClient.js"></script>
+  <script>
+    // ===== CONFIGURAÇÃO =====
+    const API_BASE = '/api';
+    const ENDPOINTS = {
+      dashboard: `${API_BASE}/admin/dashboard`,
+      atividades: `${API_BASE}/admin/atividades-recentes`,
+      status: `${API_BASE}/admin/status-sistema`
+    };
+
+    function criarHeadersJson() {
+      return { 'Accept': 'application/json' };
+    }
+
+    function redirecionarParaLogin() {
+      window.location.href = '/index.html';
+    }
+
+    function primeiroNome(nomeCompleto) {
+      const texto = String(nomeCompleto || '').trim();
+      if (!texto) return '';
+      return texto.split(' ')[0];
+    }
+
+    function atualizarPerfil(nome, email, perfil) {
+      const nomeEl = document.querySelector('.nomePerfil');
+      const emailEl = document.querySelector('.emailPerfil');
+      if (!nomeEl || !emailEl) return;
+
+      const primeiro = primeiroNome(nome);
+      nomeEl.textContent = primeiro ? `Olááá, ${primeiro}` : 'Olááá';
+
+      const partes = [email, perfil].filter(Boolean);
+      emailEl.textContent = partes.length ? partes.join(' • ') : 'Sessão ativa';
+    }
+
+    async function carregarPerfilLogado() {
+      try {
+        const response = await fetch(`${API_BASE}/auth/me`, {
+          headers: criarHeadersJson()
+        });
+
+        if (response.status === 401) {
+          redirecionarParaLogin();
+          return;
+        }
+
+        const dados = await lerJsonSeguro(response);
+        const fonte = dados.data || dados;
+        atualizarPerfil(fonte.user_name || fonte.nome_completo, fonte.email || '', fonte.profile_name || fonte.perfil_nome);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // ===== FUNÇÕES UTILITÁRIAS =====
+    function mostrarMensagem(id, tipo, texto) {
+      const box = document.getElementById(id);
+      if (box) {
+        box.className = `alert alert-${tipo}`;
+        box.textContent = texto;
+        box.classList.remove('d-none');
+      }
+    }
+
+    function limparMensagem(id) {
+      const box = document.getElementById(id);
+      if (box) {
+        box.classList.add('d-none');
+        box.textContent = '';
+      }
+    }
+
+    function formatarData(dataIso) {
+      if (!dataIso) return '-';
+      try {
+        return new Date(dataIso).toLocaleString('pt-BR');
+      } catch {
+        return '-';
+      }
+    }
+
+    async function lerJsonSeguro(response) {
+      try {
+        return await response.json();
+      } catch {
+        return {};
+      }
+    }
+
+    // ===== CARREGAMENTO DE INDICADORES =====
+    async function carregarIndicadores() {
+      try {
+        const response = await fetch(ENDPOINTS.dashboard, {
+          headers: criarHeadersJson()
+        });
+
+        if (response.status === 401) {
+          redirecionarParaLogin();
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const dados = await lerJsonSeguro(response);
+
+        // Atualizar indicadores
+        document.getElementById('indicadorUnidades').textContent = dados.totalUnidades || 0;
+        document.getElementById('indicadorUsuarios').textContent = dados.usuariosAtivos || 0;
+        document.getElementById('indicadorConfiguracoes').textContent = dados.configuracoesPendentes || 0;
+        document.getElementById('indicadorAlertas').textContent = dados.alertaSeguranca || 0;
+
+      } catch (erro) {
+        console.error('Erro ao carregar indicadores:', erro);
+        mostrarMensagem('mensagemAtividades', 'danger', 'Erro ao carregar dados do painel.');
+      }
+    }
+
+    // ===== CARREGAMENTO DE ATIVIDADES RECENTES =====
+    async function carregarAtividades() {
+      try {
+        const response = await fetch(ENDPOINTS.atividades, {
+          headers: criarHeadersJson()
+        });
+
+        if (response.status === 401) {
+          redirecionarParaLogin();
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const dados = await lerJsonSeguro(response);
+        const atividades = dados.items || [];
+
+        const tbody = document.getElementById('atividadesTbody');
+
+        if (atividades.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5">Nenhuma atividade registrada.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = atividades.map(atividade => `
+          <tr>
+            <td>${formatarData(atividade.created_at)}</td>
+            <td>${atividade.usuario_nome || '-'}</td>
+            <td>${atividade.acao || '-'}</td>
+            <td>${atividade.entidade || '-'}</td>
+            <td><span class="badge badgeSucesso">${atividade.detalhes?.resultado || 'Sucesso'}</span></td>
+          </tr>
+        `).join('');
+
+      } catch (erro) {
+        console.error('Erro ao carregar atividades:', erro);
+        document.getElementById('atividadesTbody').innerHTML =
+          '<tr><td colspan="5">Erro ao carregar atividades.</td></tr>';
+      }
+    }
+
+    // ===== CARREGAMENTO DE STATUS DO SISTEMA =====
+    async function carregarStatusSistema() {
+      try {
+        const response = await fetch(ENDPOINTS.status, {
+          headers: criarHeadersJson()
+        });
+
+        if (response.status === 401) {
+          redirecionarParaLogin();
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const dados = await lerJsonSeguro(response);
+
+        // Banco de Dados
+        document.getElementById('statusBancoDados').textContent = dados.statusBancoDados || 'OK';
+        document.getElementById('textoBancoDados').textContent = dados.textoBancoDados || 'Online - Funcionando';
+
+        // Armazenamento
+        document.getElementById('statusArmazenamento').textContent = dados.statusArmazenamento || '-';
+        document.getElementById('textoArmazenamento').textContent = dados.textoArmazenamento || '-';
+
+        // Sincronização
+        document.getElementById('textoSincronizacao').textContent = dados.textoSincronizacao || '-';
+        document.getElementById('tempoSincronizacao').textContent = formatarData(dados.tempoSincronizacao) || '-';
+
+      } catch (erro) {
+        console.error('Erro ao carregar status do sistema:', erro);
+      }
+    }
+
+    // ===== FUNÇÕES DE PÁGINA =====
+    function navegarPara(pagina) {
+      window.location.href = pagina;
+    }
+
+    function logout() {
+      if (confirm('Tem certeza que deseja sair do sistema?')) {
+        fetch(`${API_BASE}/auth/logout`, {
+          method: 'POST',
+          headers: criarHeadersJson()
+        }).finally(() => {
+          localStorage.removeItem('saadi_user_info');
+          window.location.href = '/index.html';
+        });
+      }
+    }
+
+    // A validação de token agora é tratada automaticamente pelo apiClient.js com base em HttpOnly cookies.
+
+    // ===== INICIALIZAÇÃO =====
+    (async function iniciatizarPainel() {
+      try {
+        await Promise.all([
+          carregarPerfilLogado(),
+          carregarIndicadores(),
+          carregarAtividades(),
+          carregarStatusSistema()
+        ]);
+      } catch (erro) {
+        console.error('Erro ao inicializar painel:', erro);
+      }
+    })();
+  </script>
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 # SAADI - Sistema de Acompanhamento da Educação Inclusiva
 
 <p align="center">
-	<img src="img/icons8-two-hands-48%20(1).png" alt="Logo SAADI" width="96">
+	<img src="frontend/assets/icons8-two-hands-48%20(1).png" alt="Logo SAADI" width="96">
 </p>
 
 O SAADI é uma plataforma web para organizar informações escolares de alunos com deficiência e apoiar o trabalho de equipes pedagógicas, psicopedagógicas e administrativas.
@@ -16,6 +16,8 @@ O projeto centraliza cadastros, acompanha encaminhamentos, registra relatórios 
 - [Estrutura do repositório](#estrutura-do-repositório)
 - [Como executar](#como-executar)
 - [Acessibilidade](#acessibilidade)
+- [Agentes de IA](#agentes-de-ia)
+- [Equipe](#equipe)
 - [Licença](#licença)
 
 ## Problema
@@ -36,18 +38,77 @@ O SAADI reduz essa fragmentação por meio de uma interface simples, padronizada
 
 ## Estrutura do repositório
 
-- `index.html`: página inicial de acesso.
-- `css/`: estilos globais e específicos de cada módulo.
-- `img/`: imagens e ícones do sistema.
-- `pages/auth/`: telas de autenticação.
-- `pages/menus/administrador/`: área administrativa.
-- `pages/menus/psicopedagogo/`: área do psicopedagogo.
-- `pages/menus/secretaria/`: área da secretaria escolar.
-- `scripts/`: scripts JavaScript da aplicação.
+- `frontend/index.html`: página inicial de acesso.
+- `frontend/css/`: estilos globais e específicos de cada módulo.
+- `frontend/assets/`: imagens e ícones do sistema.
+- `frontend/pages/auth/`: telas de autenticação.
+- `frontend/pages/menus/administrador/`: área administrativa.
+- `frontend/pages/menus/psicopedagogo/`: área do psicopedagogo.
+- `frontend/pages/menus/secretaria/`: área da secretaria escolar.
+- `frontend/js/`: scripts JavaScript da aplicação.
+- `scripts/`: scripts de infraestrutura, como bootstrap do banco.
 
 ## Como executar
 
-Como o projeto é composto por páginas HTML, CSS e JavaScript, ele pode ser aberto em qualquer servidor estático local. A forma mais simples é usar uma extensão como Live Server no VS Code ou servir a pasta com qualquer servidor web local.
+O frontend está em `frontend/` e continua sendo servido pelo Flask em `/`, então o uso normal segue funcionando pela aplicação backend.
+
+## Backend Flask
+
+O projeto agora inclui um backend em Flask com PostgreSQL, SQLAlchemy, Flask-Migrate, JWT e CORS.
+
+### Dependências
+
+Instale os pacotes do backend:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Variáveis de ambiente
+
+Copie `.env.example` para `.env` e configure:
+
+- `PGHOST`
+- `PGPORT`
+- `PGDATABASE`
+- `PGUSER`
+- `PGPASSWORD`
+- `SECRET_KEY`
+- `JWT_SECRET_KEY`
+
+### Inicialização do banco com migrações
+
+```bash
+flask --app run db init
+flask --app run db migrate -m "initial"
+flask --app run db upgrade
+```
+
+### Execução
+
+```bash
+python run.py
+```
+
+### Contrato de autenticação
+
+- `POST /api/auth/login` valida as credenciais e o Backend injeta automaticamente um **Cookie HttpOnly** com o token JWT.
+- O frontend envia `credentials: 'same-origin'` nos requests protegidos, garantindo o envio seguro do token sem expô-lo no `localStorage` (proteção contra XSS).
+
+### Exemplo de fetch no frontend
+
+```javascript
+// Através do apiClient.js, a configuração de credentials é injetada
+const response = await fetch('/api/admin/usuarios', {
+	method: 'GET',
+	credentials: 'same-origin', // OBRIGATÓRIO PARA ENVIAR O COOKIE
+	headers: {
+		'Accept': 'application/json'
+	}
+});
+
+const data = await response.json();
+```
 
 ## Banco de dados (PostgreSQL)
 
@@ -69,8 +130,23 @@ O script:
 
 ## Acessibilidade
 
-- Algumas páginas já incluem integração com VLibras.
-- A navegação foi pensada para manter uma estrutura simples e consistente.
+O projeto foi rigorosamente auditado e adaptado para conformidade com **WCAG 2.1 Nível AA**, incluindo:
+- Navegação completa por teclado.
+- Identificação clara de foco em elementos interativos.
+- Suporte nativo a leitores de tela com labels ARIA e `aria-live`.
+- Contraste de cores seguro e integração com VLibras em páginas específicas.
+
+Para consultar a documentação de auditoria, leia [ACESSIBILIDADE.md](ACESSIBILIDADE.md).
+
+## Agentes de IA
+
+A manutenção do código deste repositório utiliza a força de times autônomos baseados em **Multi-Agent Frameworks** (padrão CrewAI), garantindo automações de desenvolvimento, auditorias de cibersegurança e Code Reviews automatizados.
+Consulte o arquivo [agents.md](agents.md) para conhecer a nossa equipe de IA (Tech Lead, Desenvolvedor, Cyber Security e Code Reviewer).
+
+## Equipe
+
+- Jair Pereira Barcelos
+- Lucas Fontan Fernandes
 
 ## Licença
 

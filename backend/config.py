@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from datetime import timedelta
 from pathlib import Path
 
 
@@ -27,6 +28,7 @@ class Config:
     load_dotenv()
 
     SECRET_KEY = os.getenv('SECRET_KEY', 'saadi-dev-secret')
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', SECRET_KEY)
     SQLALCHEMY_DATABASE_URI = (
         os.getenv('DATABASE_URL')
         or f"postgresql+psycopg2://{os.getenv('PGUSER', 'postgres')}:{os.getenv('PGPASSWORD', '')}"
@@ -34,3 +36,16 @@ class Config:
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JSON_AS_ASCII = False
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=int(os.getenv('JWT_ACCESS_HOURS', '8')))
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=int(os.getenv('JWT_REFRESH_DAYS', '7')))
+    JWT_TOKEN_LOCATION = ['cookies']
+    JWT_COOKIE_SECURE = False  # Para desenvolvimento (em prod usar True)
+    JWT_COOKIE_CSRF_PROTECT = False  # Desabilitado inicialmente para simplificar
+    JWT_ACCESS_COOKIE_NAME = 'access_token_cookie'
+    JWT_REFRESH_COOKIE_NAME = 'refresh_token_cookie'
+    JWT_HEADER_TYPE = 'Bearer'
+    CORS_ORIGINS = [
+        origem.strip()
+        for origem in os.getenv('CORS_ORIGINS', '*').split(',')
+        if origem.strip()
+    ]

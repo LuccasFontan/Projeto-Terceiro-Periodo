@@ -54,3 +54,8 @@ node_modules/
 
 # Notebook checkpoints, if any appear later
 .ipynb_checkpoints/
+
+# Agentes
+.agent/
+.agente/
+.agent

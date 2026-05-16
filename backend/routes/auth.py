@@ -2,83 +2,186 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from flask import Blueprint, jsonify, request, session
-from werkzeug.security import check_password_hash
+from flask import Blueprint, request
+from flask_jwt_extended import (
+    create_access_token,
+    create_refresh_token,
+    get_jwt,
+    get_jwt_identity,
+    jwt_required,
+    verify_jwt_in_request,
+    set_access_cookies,
+    set_refresh_cookies,
+    unset_jwt_cookies,
+)
+from werkzeug.security import check_password_hash, generate_password_hash
+from pydantic import ValidationError
+
+from schemas.auth_schemas import LoginSchema, RegisterSchema
 
 from backend.extensions import db
-from backend.models import Usuario
+from backend.models import Perfil, TokenBlocklist, Usuario
+from backend.responses import created, error, success
+from backend.services.audit import registrar_atividade
+from backend.services.auth_service import (
+    PROFILE_REDIRECTS,
+    autenticar_login,
+    buscar_perfil,
+    criar_tokens,
+    registrar_login,
+    registrar_logout,
+    renovar_usuario_por_refresh,
+    revogar_token_atual,
+    serializar_usuario,
+    senha_segura,
+)
 
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/api/auth')
 
-PROFILE_REDIRECTS = {
-    'administrador': '/pages/menus/administrador/menuAdministrador.html',
-    'secretaria': '/pages/menus/secretaria/menuSecretariaEscolar.html',
-    'psicopedagogo': '/pages/menus/psicopedagogo/menuPsicopedagogo.html',
-    'professor': '/pages/menus/secretaria/menuSecretariaEscolar.html',
-    'diretor': '/pages/menus/administrador/menuAdministrador.html',
-}
+
 
 
 @auth_bp.post('/login')
 def login():
     payload = request.get_json(silent=True) or request.form
-    email = (payload.get('email') or '').strip().lower()
-    senha = payload.get('senha') or ''
+    try:
+        dados = LoginSchema(**payload)
+    except ValidationError as e:
+        return error('Dados inválidos.', 400, 'VALIDATION_ERROR', details=e.errors())
 
-    if not email or not senha:
-        return jsonify(message='Informe email e senha.'), 400
+    usuario = autenticar_login(dados.email, dados.senha)
 
-    usuario = (
-        Usuario.query
-        .join(Usuario.perfil)
-        .filter(db.func.lower(Usuario.email) == email, Usuario.deleted_at.is_(None))
-        .first()
-    )
-
-    if usuario is None or usuario.status != 'ativo':
-        return jsonify(message='Credenciais invalidas.'), 401
-
-    if not check_password_hash(usuario.senha_hash, senha):
-        return jsonify(message='Credenciais invalidas.'), 401
-
-    usuario.ultimo_login_em = datetime.now(timezone.utc)
-    db.session.commit()
+    if usuario is None:
+        return error('Credenciais invalidas.', 401, 'INVALID_CREDENTIALS')
 
     redirect_url = PROFILE_REDIRECTS.get(usuario.perfil.nome, '/index.html')
-    session['user_id'] = usuario.id
-    session['user_name'] = usuario.nome_completo
-    session['profile_name'] = usuario.perfil.nome
-    session['redirect_url'] = redirect_url
+    tokens = criar_tokens(usuario, create_access_token=create_access_token, create_refresh_token=create_refresh_token)
+    registrar_login(usuario)
 
-    return jsonify(
+    resp, status_code = success(
         message='Login realizado com sucesso.',
-        redirect_url=redirect_url,
-        user={
-            'id': usuario.id,
-            'nome': usuario.nome_completo,
+        data={
+            'redirect_url': redirect_url,
+            'user': serializar_usuario(usuario),
+        },
+    )
+    
+    set_access_cookies(resp, tokens['access_token'])
+    set_refresh_cookies(resp, tokens['refresh_token'])
+    return resp, status_code
+
+
+@auth_bp.post('/logout')
+@jwt_required(optional=True)
+def logout():
+    try:
+        verify_jwt_in_request()
+        revogar_token_atual(get_jwt)
+        registrar_logout(get_jwt, get_jwt_identity)
+    except Exception:
+        pass
+    resp, status_code = success('Logout realizado com sucesso.', data={'redirect_url': '/index.html'})
+    unset_jwt_cookies(resp)
+    return resp, status_code
+
+
+@auth_bp.post('/refresh')
+@jwt_required(refresh=True)
+def refresh_token():
+    usuario = renovar_usuario_por_refresh(int(get_jwt_identity()))
+
+    if usuario is None:
+        resp, status_code = error('Credenciais invalidas.', 401, 'INVALID_CREDENTIALS')
+        unset_jwt_cookies(resp)
+        return resp, status_code
+
+    revogar_token_atual(get_jwt)
+    db.session.commit()
+
+    tokens = criar_tokens(usuario, create_access_token=create_access_token, create_refresh_token=create_refresh_token)
+    resp, status_code = success(
+        message='Token renovado com sucesso.',
+        data={
+            'user': serializar_usuario(usuario),
+        },
+    )
+    set_access_cookies(resp, tokens['access_token'])
+    return resp, status_code
+
+
+@auth_bp.get('/me')
+@jwt_required()
+def me():
+    claims = get_jwt()
+    usuario = Usuario.query.get(int(claims['sub']))
+    if not usuario:
+        return error('Usuario nao encontrado.', 404, 'NOT_FOUND')
+        
+    return success(
+        'Sessao validada com sucesso.',
+        data={
+            'authenticated': True,
+            'user_id': usuario.id,
+            'user_name': usuario.nome_completo,
             'email': usuario.email,
+            'cpf': usuario.cpf,
             'perfil': usuario.perfil.nome,
             'unidade_id': usuario.unidade_id,
+            'unidade_nome': usuario.unidade.nome if usuario.unidade else None,
+            'redirect_url': PROFILE_REDIRECTS.get(usuario.perfil.nome, '/index.html'),
         },
     )
 
 
-@auth_bp.post('/logout')
-def logout():
-    session.clear()
-    return jsonify(message='Logout realizado com sucesso.', redirect_url='/index.html')
+@auth_bp.put('/me')
+@jwt_required()
+def update_me():
+    usuario_id = int(get_jwt_identity())
+    usuario = Usuario.query.get(usuario_id)
+    if not usuario:
+        return error('Usuario nao encontrado.', 404, 'NOT_FOUND')
+
+    payload = request.get_json(silent=True) or {}
+    
+    if 'nome_completo' in payload:
+        usuario.nome_completo = payload['nome_completo']
+    
+    if 'senha' in payload and payload['senha'].strip():
+        usuario.senha_hash = senha_segura(payload['senha'])
+
+    db.session.commit()
+    registrar_atividade(usuario, 'Atualização de Perfil', 'Usuário', f'ID: {usuario.id}', 'Sucesso')
+
+    return success('Perfil atualizado com sucesso.', data={'user': serializar_usuario(usuario)})
 
 
-@auth_bp.get('/me')
-def me():
-    if 'user_id' not in session:
-        return jsonify(authenticated=False), 401
+@auth_bp.post('/register')
+def register():
+    payload = request.get_json(silent=True) or {}
+    try:
+        dados = RegisterSchema(**payload)
+    except ValidationError as e:
+        return error('Dados inválidos.', 400, 'VALIDATION_ERROR', details=e.errors())
 
-    return jsonify(
-        authenticated=True,
-        user_id=session.get('user_id'),
-        user_name=session.get('user_name'),
-        profile_name=session.get('profile_name'),
-        redirect_url=session.get('redirect_url'),
+    perfil = buscar_perfil(dados.perfil_id or dados.perfil_nome or 'administrador')
+    if perfil is None:
+        return error('Perfil invalido.', 400, 'INVALID_PROFILE')
+
+    if Usuario.query.filter(db.func.lower(Usuario.email) == dados.email.lower(), Usuario.deleted_at.is_(None)).first():
+        return error('Email ja cadastrado.', 409, 'CONFLICT')
+
+    usuario = Usuario(
+        nome_completo=dados.nome,
+        cpf=str(dados.cpf or dados.email.split('@')[0]).strip(),
+        email=dados.email.lower(),
+        matricula=str(dados.matricula or dados.email).strip(),
+        senha_hash=senha_segura(dados.senha),
+        perfil_id=perfil.id,
+        unidade_id=dados.unidade_id,
+        status=dados.status or 'ativo',
     )
+    db.session.add(usuario)
+    db.session.commit()
+
+    return created('Usuario registrado com sucesso.', data={'user': serializar_usuario(usuario)})

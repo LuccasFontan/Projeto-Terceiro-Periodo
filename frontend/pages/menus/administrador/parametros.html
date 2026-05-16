@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parâmetros do Sistema - Administrador</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../../../../css/menuAdministrador.css">
+</head>
+<body>
+  <!-- MENU LATERAL -->
+  <aside class="menuLateral">
+    <div class="logoContainer">
+      <img src="../../../../assets/icons8-duas-mãos-windows-11-filled/Logo.png" alt="Logo: Duas Mãos abertas">
+      <div class="textoBranding">
+        <div class="nomeBrand">SAADI</div>
+        <div class="nivelAcesso">Nível: Administrador</div>
+      </div>
+    </div>
+
+    <div class="Perfil">
+      <div class="nomePerfil"></div>
+      <div class="emailPerfil"></div>
+    </div>
+
+                <div class="botoesLaterais">
+      <button class="btnLateral" onclick="navegarPara('menuAdministrador.html')" aria-label="Voltar ao Painel Principal">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Painel Principal</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('unidades/listarUnidades.html')" aria-label="Gerenciar Unidades Escolares">
+        <img src="/img/icon-cadastro.png" alt="">
+        <span>Unidades Escolares</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('usuarios/listarUsuarios.html')" aria-label="Gerenciar Usuários do Sistema">
+        <img src="/img/perfil.png" alt="">
+        <span>Usuários do Sistema</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('relatoriosAdministrador.html')" aria-label="Ver Relatórios Consolidados">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Relatórios</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('auditoria.html')" aria-label="Consultar Auditoria e Histórico">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Auditoria</span>
+      </button>
+      <button class="btnLateral ativo" onclick="navegarPara('parametros.html')" aria-label="Gerenciar Parâmetros do Sistema">
+        <img src="/img/engrenagem.png" alt="">
+        <span>Parâmetros</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('alunos/listarAlunos.html')" aria-label="Acessar Gestão Central de Alunos">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Alunos - Nível Central</span>
+      </button>
+    </div>
+
+    <div class="sair">
+      <button class="btnSair" onclick="logout()" aria-label="Fazer logout do sistema">
+        <img src="/img/sair.png" alt="">
+        <span>Sair da Conta</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="conteudoPrincipal">
+    <!-- CABEÇALHO -->
+    <section class="cabecalhoDashboard">
+      <h1>Parâmetros do Sistema</h1>
+      <p>Configure os parâmetros globais do sistema educacional</p>
+    </section>
+
+    <!-- ABAS DE CONFIGURAÇÕES -->
+    <section class="containerPrincipal">
+      <div id="mensagemParametros" class="alert d-none" role="alert" aria-live="polite"></div>
+      <div style="margin-bottom: 20px; border-bottom: 2px solid #d0dce6; display: flex; gap: 0;">
+        <button class="abaBotao ativa" onclick="selecionarAba('anos')" style="padding: 12px 20px; border: none; background: none; cursor: pointer; border-bottom: 3px solid transparent; font-weight: 600;">
+          Anos Letivos
+        </button>
+        <button class="abaBotao" onclick="selecionarAba('categorias')" style="padding: 12px 20px; border: none; background: none; cursor: pointer; border-bottom: 3px solid transparent; font-weight: 600;">
+          Categorias
+        </button>
+        <button class="abaBotao" onclick="selecionarAba('email')" style="padding: 12px 20px; border: none; background: none; cursor: pointer; border-bottom: 3px solid transparent; font-weight: 600;">
+          Configuração de Email
+        </button>
+        <button class="abaBotao" onclick="selecionarAba('sistema')" style="padding: 12px 20px; border: none; background: none; cursor: pointer; border-bottom: 3px solid transparent; font-weight: 600;">
+          Configurações Gerais
+        </button>
+      </div>
+    </section>
+
+    <!-- ABA: ANOS LETIVOS -->
+    <section class="containerPrincipal" id="abAnos" style="display: block;">
+      <h2 style="margin-bottom: 20px; color: #1a3a52;">Anos Letivos</h2>
+      
+      <table class="tabelaResponsiva">
+        <thead>
+          <tr>
+            <th>Ano</th>
+            <th>Status</th>
+            <th>Data Início</th>
+            <th>Data Fim</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="anosLetivosTbody">
+        </tbody>
+      </table>
+
+      <button class="btn btnSucesso" style="margin-top: 20px;" onclick="adicionarAnoLetivo()">+ Adicionar Ano Letivo</button>
+    </section>
+
+    <!-- ABA: CATEGORIAS -->
+    <section class="containerPrincipal" id="abCategorias" style="display: none;">
+      <h2 style="margin-bottom: 20px; color: #1a3a52;">Categorias de Neurodiversidade</h2>
+      
+      <div id="categoriasContainer" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px;"></div>
+
+      <button class="btn btnSucesso" onclick="adicionarCategoria()">+ Adicionar Categoria</button>
+    </section>
+
+    <!-- ABA: EMAIL -->
+    <section class="containerPrincipal" id="abEmail" style="display: none;">
+      <h2 style="margin-bottom: 20px; color: #1a3a52;">Configuração de Email</h2>
+
+      <form class="formulario" onsubmit="salvarEmailConfig(event)">
+        <div class="grupoFormulario coluna-dupla">
+          <label for="smtpServidor">Servidor SMTP *</label>
+          <input type="text" id="smtpServidor" name="smtpServidor" value="" required>
+        </div>
+
+        <div class="grupoFormulario">
+          <label for="smtpPorta">Porta SMTP *</label>
+          <input type="number" id="smtpPorta" name="smtpPorta" value="" required>
+        </div>
+
+        <div class="grupoFormulario">
+          <label for="smtpUsuario">Usuário SMTP *</label>
+          <input type="email" id="smtpUsuario" name="smtpUsuario" value="" required>
+        </div>
+
+        <div class="grupoFormulario coluna-dupla">
+          <label for="smtpSenha">Senha SMTP *</label>
+          <input type="password" id="smtpSenha" name="smtpSenha" value="" required>
+        </div>
+
+        <div class="grupoFormulario">
+          <label for="emailRemetente">Email do Remetente *</label>
+          <input type="email" id="emailRemetente" name="emailRemetente" value="" required>
+        </div>
+
+        <div class="grupoFormulario">
+          <label for="nomeRemetente">Nome do Remetente *</label>
+          <input type="text" id="nomeRemetente" name="nomeRemetente" value="" required>
+        </div>
+
+        <div style="grid-column: span 2;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" checked>
+            <span style="color: #2c3e50; font-size: 14px;">Usar TLS/SSL</span>
+          </label>
+        </div>
+
+        <div class="botoesPrimarios" style="grid-column: span 2;">
+          <button type="button" class="btn btnSecundario" onclick="testarEmail()">?? Testar Configuração</button>
+          <button type="submit" class="btn btnSucesso">Salvar Configurações</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ABA: CONFIGURAÇÕES GERAIS -->
+    <section class="containerPrincipal" id="abSistema" style="display: none;">
+      <h2 style="margin-bottom: 20px; color: #1a3a52;">Configurações Gerais do Sistema</h2>
+
+      <form class="formulario" onsubmit="salvarConfigSistema(event)">
+        <div class="grupoFormulario coluna-dupla">
+          <label for="nomeInstituicao">Nome da Instituição *</label>
+          <input type="text" id="nomeInstituicao" name="nomeInstituicao" value="" required>
+        </div>
+
+        <div class="grupoFormulario">
+          <label for="telefoneInstituicao">Telefone da Instituição</label>
+          <input type="tel" id="telefoneInstituicao" name="telefoneInstituicao" value="">
+        </div>
+
+        <div class="grupoFormulario coluna-dupla">
+          <label for="emailInstituicao">Email da Instituição</label>
+          <input type="email" id="emailInstituicao" name="emailInstituicao" value="">
+        </div>
+
+        <div class="grupoFormulario">
+          <label for="timeoutSessao">Timeout de Sessão (minutos)</label>
+          <input type="number" id="timeoutSessao" name="timeoutSessao" value="30" min="5">
+        </div>
+
+        <div class="grupoFormulario coluna-dupla">
+          <label for="logo">URL do Logo da Instituição</label>
+          <input type="url" id="logo" name="logo" placeholder="https://...">
+        </div>
+
+        <div style="grid-column: span 2;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" checked>
+            <span style="color: #2c3e50; font-size: 14px;">Ativar Modo de Manutenção</span>
+          </label>
+        </div>
+
+        <div style="grid-column: span 2;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" checked>
+            <span style="color: #2c3e50; font-size: 14px;">Permitir Acesso de Visitantes</span>
+          </label>
+        </div>
+
+        <div class="botoesPrimarios" style="grid-column: span 2;">
+          <button type="submit" class="btn btnSucesso">Salvar Configurações</button>
+        </div>
+      </form>
+    </section>
+    <!-- MODAL ANO LETIVO -->
+    <div id="modalAnoLetivo" class="modal">
+      <div class="modalConteudo">
+        <h2 id="tituloModalAno">Novo Ano Letivo</h2>
+        <form id="formAnoLetivo" class="formulario" onsubmit="confirmarSalvarAno(event)">
+          <input type="hidden" id="anoId">
+          <div class="grupoFormulario">
+            <label for="anoInput">Ano *</label>
+            <input type="number" id="anoInput" name="ano" required min="2000" max="2100">
+          </div>
+          <div class="grupoFormulario">
+            <label for="statusAno">Status *</label>
+            <select id="statusAno" name="status" required>
+              <option value="ativo">Ativo</option>
+              <option value="arquivado">Arquivado</option>
+            </select>
+          </div>
+          <div class="grupoFormulario">
+            <label for="inicioAno">Data Início</label>
+            <input type="date" id="inicioAno" name="data_inicio">
+          </div>
+          <div class="grupoFormulario">
+            <label for="fimAno">Data Fim</label>
+            <input type="date" id="fimAno" name="data_fim">
+          </div>
+          <div class="modalBotoes" style="grid-column: span 2;">
+            <button type="button" class="btn btnSecundario" onclick="fecharModal('modalAnoLetivo')">Cancelar</button>
+            <button type="submit" class="btn btnSucesso">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL CATEGORIA -->
+    <div id="modalCategoria" class="modal">
+      <div class="modalConteudo">
+        <h2 id="tituloModalCategoria">Nova Categoria</h2>
+        <form id="formCategoria" class="formulario" onsubmit="confirmarSalvarCategoria(event)">
+          <input type="hidden" id="categoriaId">
+          <div class="grupoFormulario coluna-dupla">
+            <label for="nomeCategoria">Nome da Categoria *</label>
+            <input type="text" id="nomeCategoria" name="nome" required>
+          </div>
+          <div class="grupoFormulario coluna-dupla">
+            <label for="descricaoCategoria">Descrição</label>
+            <textarea id="descricaoCategoria" name="descricao"></textarea>
+          </div>
+          <div style="grid-column: span 2; margin-top: 10px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="ativaCategoria" checked>
+              <span>Categoria Ativa</span>
+            </label>
+          </div>
+          <div class="modalBotoes" style="grid-column: span 2; margin-top: 20px;">
+            <button type="button" class="btn btnSecundario" onclick="fecharModal('modalCategoria')">Cancelar</button>
+            <button type="submit" class="btn btnSucesso">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- VLIBRAS -->
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
+  <script src="/scripts/apiClient.js"></script>
+
+  <script>
+    const TOKEN_KEY = 'saadi_access_token';
+    const ENDPOINT = '/api/admin/parametros';
+    let parametrosCache = { anosLetivos: [], categorias: [], emailConfig: {}, sistemaConfig: {} };
+
+    function obterToken() {
+      return localStorage.getItem(TOKEN_KEY) || '';
+    }
+
+    function criarHeadersJson() {
+      const headers = { 'Accept': 'application/json' };
+      const token = obterToken();
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+      return headers;
+    }
+
+    function mostrarMensagem(tipo, texto) {
+      const box = document.getElementById('mensagemParametros');
+      box.className = `alert alert-${tipo}`;
+      box.textContent = texto;
+      box.classList.remove('d-none');
+    }
+
+    function limparMensagem() {
+      const box = document.getElementById('mensagemParametros');
+      box.classList.add('d-none');
+      box.textContent = '';
+    }
+
+    function formatarData(dataIso) {
+      if (!dataIso) return '-';
+      return new Date(dataIso).toLocaleDateString('pt-BR');
+    }
+
+    function renderizarAnosLetivos() {
+      const tbody = document.getElementById('anosLetivosTbody');
+      const anos = parametrosCache.anosLetivos || [];
+      if (anos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Nenhum ano letivo cadastrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = anos.map((ano) => `
+        <tr>
+          <td>${ano.ano ?? '-'}</td>
+          <td><span class="badge ${String(ano.status || '').toLowerCase() === 'ativo' ? 'badgeSucesso' : 'badgeAviso'}">${ano.status || '-'}</span></td>
+          <td>${formatarData(ano.data_inicio)}</td>
+          <td>${formatarData(ano.data_fim)}</td>
+          <td>
+            <button class="btn btnEditar" style="padding: 6px 12px; font-size:12px;" onclick="editarAnoLetivo(${ano.id})">Editar</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderizarCategorias() {
+      const container = document.getElementById('categoriasContainer');
+      const categorias = parametrosCache.categorias || [];
+      if (categorias.length === 0) {
+        container.innerHTML = '<div style="grid-column: span 2; padding: 15px; border: 1px solid #d0dce6; border-radius: 8px;">Nenhuma categoria cadastrada.</div>';
+        return;
+      }
+
+      container.innerHTML = categorias.map((categoria) => `
+        <div style="border: 1px solid #d0dce6; border-radius: 8px; padding: 15px; opacity: ${categoria.ativa ? '1' : '0.6'}">
+          <h3 style="color: #1a3a52; font-size: 14px; margin-bottom: 10px;">${categoria.nome || '-'} ${categoria.ativa ? '' : '(Inativa)'}</h3>
+          <p style="color: #566575; font-size: 13px; margin-bottom: 10px;">${categoria.descricao || '-'}</p>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btnEditar" style="padding: 6px 12px; font-size:12px;" onclick="editarCategoria(${categoria.id})">Editar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function preencherFormularios() {
+      const email = parametrosCache.emailConfig || {};
+      const sistema = parametrosCache.sistemaConfig || {};
+
+      document.getElementById('smtpServidor').value = email.server || '';
+      document.getElementById('smtpPorta').value = email.port || '';
+      document.getElementById('smtpUsuario').value = email.user || email.usuario || '';
+      document.getElementById('smtpSenha').value = email.password || email.senha || '';
+      document.getElementById('emailRemetente').value = email.from || email.remetente || '';
+      document.getElementById('nomeRemetente').value = email.sender_name || email.nome_remetente || '';
+
+      document.getElementById('nomeInstituicao').value = sistema.instituicao || '';
+      document.getElementById('telefoneInstituicao').value = sistema.telefone || '';
+      document.getElementById('emailInstituicao').value = sistema.email || '';
+      document.getElementById('timeoutSessao').value = sistema.timeout_sessao_min || 30;
+      document.getElementById('logo').value = sistema.logo || '';
+    }
+
+    async function carregarParametros() {
+      limparMensagem();
+      const response = await fetch(ENDPOINT);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao carregar parâmetros.');
+      }
+
+      parametrosCache = data.data || data;
+      renderizarAnosLetivos();
+      renderizarCategorias();
+      preencherFormularios();
+    }
+
+    async function salvarEmailConfig(event) {
+      event.preventDefault();
+      const payload = {
+        emailConfig: {
+          server: document.getElementById('smtpServidor').value.trim(),
+          port: Number(document.getElementById('smtpPorta').value || 0),
+          user: document.getElementById('smtpUsuario').value.trim(),
+          password: document.getElementById('smtpSenha').value,
+          from: document.getElementById('emailRemetente').value.trim(),
+          sender_name: document.getElementById('nomeRemetente').value.trim(),
+        },
+        sistemaConfig: parametrosCache.sistemaConfig || {},
+      };
+
+      try {
+        const response = await fetch(ENDPOINT, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Erro ao salvar configuração de email.');
+
+        parametrosCache = data.data || data;
+        mostrarMensagem('success', 'Configuração de email salva com sucesso.');
+      } catch (err) {
+        mostrarMensagem('danger', err.message);
+      }
+    }
+
+    async function salvarConfigSistema(event) {
+      event.preventDefault();
+      const payload = {
+        emailConfig: parametrosCache.emailConfig || {},
+        sistemaConfig: {
+          instituicao: document.getElementById('nomeInstituicao').value.trim(),
+          telefone: document.getElementById('telefoneInstituicao').value.trim(),
+          email: document.getElementById('emailInstituicao').value.trim(),
+          timeout_sessao_min: Number(document.getElementById('timeoutSessao').value || 30),
+          logo: document.getElementById('logo').value.trim(),
+        },
+      };
+
+      try {
+        const response = await fetch(ENDPOINT, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Erro ao salvar configurações gerais.');
+
+        parametrosCache = data.data || data;
+        mostrarMensagem('success', 'Configurações gerais salvas com sucesso.');
+      } catch (err) {
+        mostrarMensagem('danger', err.message);
+      }
+    }
+
+    function navegarPara(pagina) {
+      window.location.href = pagina;
+    }
+
+    function logout() {
+      if (confirm('Tem certeza que deseja sair do sistema?')) {
+        fetch('/api/auth/logout', { method: 'POST' }).finally(() => {
+          window.location.href = '/index.html';
+        });
+      }
+    }
+
+    function selecionarAba(aba) {
+      document.getElementById('abAnos').style.display = 'none';
+      document.getElementById('abCategorias').style.display = 'none';
+      document.getElementById('abEmail').style.display = 'none';
+      document.getElementById('abSistema').style.display = 'none';
+
+      document.querySelectorAll('.abaBotao').forEach(btn => {
+        btn.classList.remove('ativa');
+      });
+
+      if (aba === 'anos') {
+        document.getElementById('abAnos').style.display = 'block';
+      } else if (aba === 'categorias') {
+        document.getElementById('abCategorias').style.display = 'block';
+      } else if (aba === 'email') {
+        document.getElementById('abEmail').style.display = 'block';
+      } else if (aba === 'sistema') {
+        document.getElementById('abSistema').style.display = 'block';
+      }
+
+      event.target.classList.add('ativa');
+    }
+
+    function fecharModal(id) {
+      document.getElementById(id).classList.remove('ativo');
+    }
+
+    // --- LÓGICA DE ANOS LETIVOS ---
+
+    function adicionarAnoLetivo() {
+      document.getElementById('tituloModalAno').textContent = 'Novo Ano Letivo';
+      document.getElementById('anoId').value = '';
+      document.getElementById('anoInput').value = new Date().getFullYear();
+      document.getElementById('statusAno').value = 'ativo';
+      document.getElementById('inicioAno').value = '';
+      document.getElementById('fimAno').value = '';
+      document.getElementById('modalAnoLetivo').classList.add('ativo');
+    }
+
+    function editarAnoLetivo(id) {
+      const ano = (parametrosCache.anosLetivos || []).find(a => a.id === id);
+      if (!ano) return;
+
+      document.getElementById('tituloModalAno').textContent = 'Editar Ano Letivo';
+      document.getElementById('anoId').value = ano.id;
+      document.getElementById('anoInput').value = ano.ano;
+      document.getElementById('statusAno').value = ano.status;
+      document.getElementById('inicioAno').value = ano.data_inicio ? ano.data_inicio.slice(0, 10) : '';
+      document.getElementById('fimAno').value = ano.data_fim ? ano.data_fim.slice(0, 10) : '';
+      document.getElementById('modalAnoLetivo').classList.add('ativo');
+    }
+
+    async function confirmarSalvarAno(event) {
+      event.preventDefault();
+      const id = document.getElementById('anoId').value;
+      const payload = {
+        ano: Number(document.getElementById('anoInput').value),
+        status: document.getElementById('statusAno').value,
+        data_inicio: document.getElementById('inicioAno').value || null,
+        data_fim: document.getElementById('fimAno').value || null
+      };
+
+      try {
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `/api/admin/anos-letivos/${id}` : '/api/admin/anos-letivos';
+        
+        const response = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+
+        if (!response.ok) throw new Error(data.message || 'Erro ao salvar ano letivo.');
+
+        fecharModal('modalAnoLetivo');
+        await carregarParametros();
+        mostrarMensagem('success', 'Ano letivo salvo com sucesso.');
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    // --- LÓGICA DE CATEGORIAS ---
+
+    function adicionarCategoria() {
+      document.getElementById('tituloModalCategoria').textContent = 'Nova Categoria';
+      document.getElementById('categoriaId').value = '';
+      document.getElementById('nomeCategoria').value = '';
+      document.getElementById('descricaoCategoria').value = '';
+      document.getElementById('ativaCategoria').checked = true;
+      document.getElementById('modalCategoria').classList.add('ativo');
+    }
+
+    function editarCategoria(id) {
+      const cat = (parametrosCache.categorias || []).find(c => c.id === id);
+      if (!cat) return;
+
+      document.getElementById('tituloModalCategoria').textContent = 'Editar Categoria';
+      document.getElementById('categoriaId').value = cat.id;
+      document.getElementById('nomeCategoria').value = cat.nome;
+      document.getElementById('descricaoCategoria').value = cat.descricao || '';
+      document.getElementById('ativaCategoria').checked = cat.ativa;
+      document.getElementById('modalCategoria').classList.add('ativo');
+    }
+
+    async function confirmarSalvarCategoria(event) {
+      event.preventDefault();
+      const id = document.getElementById('categoriaId').value;
+      const payload = {
+        nome: document.getElementById('nomeCategoria').value.trim(),
+        descricao: document.getElementById('descricaoCategoria').value.trim(),
+        ativa: document.getElementById('ativaCategoria').checked,
+      };
+
+      if (!payload.nome) {
+        alert('O nome da categoria é obrigatório.');
+        return;
+      }
+
+      try {
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `/api/admin/categorias/${id}` : '/api/admin/categorias';
+
+        const response = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+
+        if (!response.ok) throw new Error(data.message || 'Erro ao salvar categoria.');
+
+        fecharModal('modalCategoria');
+        await carregarParametros();
+        mostrarMensagem('success', id ? 'Categoria atualizada com sucesso.' : 'Categoria criada com sucesso.');
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    function testarEmail() {
+      alert('A validação real pode ser adicionada quando o envio SMTP estiver integrado.');
+    }
+
+    window.onclick = function(event) {
+      if (event.target.classList.contains('modal')) {
+        event.target.classList.remove('ativo');
+      }
+    };
+
+    (async function iniciarPagina() {
+      try {
+        await carregarParametros();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro ao carregar parâmetros.');
+      }
+    })();
+  </script>
+
+  <style>
+    .abaBotao {
+      color: #2c3e50;
+      transition: all 0.3s ease;
+    }
+
+    .abaBotao:hover {
+      color: #3498db;
+    }
+
+    .abaBotao.ativa {
+      color: #3498db;
+      border-bottom-color: #3498db !important;
+    }
+  </style>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

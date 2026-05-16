@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auditoria - Administrador</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../../../../css/menuAdministrador.css">
+</head>
+<body>
+  <!-- MENU LATERAL -->
+  <aside class="menuLateral">
+    <div class="logoContainer">
+      <img src="../../../../assets/icons8-duas-mãos-windows-11-filled/Logo.png" alt="Logo: Duas Mãos abertas">
+      <div class="textoBranding">
+        <div class="nomeBrand">SAADI</div>
+        <div class="nivelAcesso">Nível: Administrador</div>
+      </div>
+    </div>
+
+    <div class="Perfil">
+      <div class="nomePerfil"></div>
+      <div class="emailPerfil"></div>
+    </div>
+
+                <div class="botoesLaterais">
+      <button class="btnLateral" onclick="navegarPara('menuAdministrador.html')" aria-label="Voltar ao Painel Principal">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Painel Principal</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('unidades/listarUnidades.html')" aria-label="Gerenciar Unidades Escolares">
+        <img src="/img/icon-cadastro.png" alt="">
+        <span>Unidades Escolares</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('usuarios/listarUsuarios.html')" aria-label="Gerenciar Usuários do Sistema">
+        <img src="/img/perfil.png" alt="">
+        <span>Usuários do Sistema</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('relatoriosAdministrador.html')" aria-label="Ver Relatórios Consolidados">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Relatórios</span>
+      </button>
+      <button class="btnLateral ativo" onclick="navegarPara('auditoria.html')" aria-label="Consultar Auditoria e Histórico">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Auditoria</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('parametros.html')" aria-label="Gerenciar Parâmetros do Sistema">
+        <img src="/img/engrenagem.png" alt="">
+        <span>Parâmetros</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('alunos/listarAlunos.html')" aria-label="Acessar Gestão Central de Alunos">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Alunos - Nível Central</span>
+      </button>
+    </div>
+
+    <div class="sair">
+      <button class="btnSair" onclick="logout()" aria-label="Fazer logout do sistema">
+        <img src="/img/sair.png" alt="">
+        <span>Sair da Conta</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="conteudoPrincipal">
+    <!-- CABEÇALHO -->
+    <section class="cabecalhoDashboard">
+      <h1>Auditoria e Histórico de Ações</h1>
+      <p>Visualize o histórico de todas as ações realizadas no sistema para fins de rastreabilidade e segurança</p>
+    </section>
+
+    <!-- FILTROS -->
+    <section class="containerPrincipal">
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
+        <div>
+          <label for="filtroUsuario" style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">Usuário:</label>
+          <input type="text" id="filtroUsuario" placeholder="Nome do usuário..." style="width: 100%; padding: 10px; border: 1px solid #d0dce6; border-radius: 8px;">
+        </div>
+        <div>
+          <label for="filtroTipo" style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">Tipo de Ação:</label>
+          <select id="filtroTipo" style="width: 100%; padding: 10px; border: 1px solid #d0dce6; border-radius: 8px;">
+            <option>Todas</option>
+            <option>Criação</option>
+            <option>Atualização</option>
+            <option>Exclusão</option>
+            <option>Login</option>
+            <option>Logout</option>
+          </select>
+        </div>
+        <div>
+          <label for="filtroDataInicio" style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">Data Inicial:</label>
+          <input type="date" id="filtroDataInicio" style="width: 100%; padding: 10px; border: 1px solid #d0dce6; border-radius: 8px;">
+        </div>
+        <div>
+          <label for="filtroDataFim" style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">Data Final:</label>
+          <input type="date" id="filtroDataFim" style="width: 100%; padding: 10px; border: 1px solid #d0dce6; border-radius: 8px;">
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btnPrimario" onclick="aplicarFiltros()">?? Filtrar</button>
+        <button class="btn btnSecundario" onclick="limparFiltros()">?? Limpar Filtros</button>
+      </div>
+    </section>
+
+    <!-- RESUMO DE ATIVIDADES -->
+    <section class="containerPrincipal">
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
+        <div style="background: #eef3f8; padding: 15px; border-radius: 8px; text-align: center;">
+          <div id="auditoriaTotalAcoes" style="font-size: 24px; font-weight: 700; color: #3498db;">-</div>
+          <div style="font-size: 12px; color: #566575; margin-top: 5px;">TOTAL DE AÇÕES</div>
+        </div>
+        <div style="background: #eef3f8; padding: 15px; border-radius: 8px; text-align: center;">
+          <div id="auditoriaCriacoes" style="font-size: 24px; font-weight: 700; color: #27ae60;">-</div>
+          <div style="font-size: 12px; color: #566575; margin-top: 5px;">CRIAÇÕES</div>
+        </div>
+        <div style="background: #eef3f8; padding: 15px; border-radius: 8px; text-align: center;">
+          <div id="auditoriaAtualizacoes" style="font-size: 24px; font-weight: 700; color: #f39c12;">-</div>
+          <div style="font-size: 12px; color: #566575; margin-top: 5px;">ATUALIZAÇÕES</div>
+        </div>
+        <div style="background: #eef3f8; padding: 15px; border-radius: 8px; text-align: center;">
+          <div id="auditoriaExclusoes" style="font-size: 24px; font-weight: 700; color: #e74c3c;">-</div>
+          <div style="font-size: 12px; color: #566575; margin-top: 5px;">EXCLUSÕES</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABELA DE AUDITORIA -->
+    <section class="containerPrincipal">
+      <div id="mensagemAuditoria" class="alert d-none" role="alert" aria-live="polite"></div>
+      <table class="tabelaResponsiva">
+        <thead>
+          <tr>
+            <th>Data/Hora</th>
+            <th>Usuário</th>
+            <th>Ação</th>
+            <th>Entidade</th>
+            <th>Detalhes</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+        <tbody id="auditoriaTbody">
+
+        </tbody>
+      </table>
+    </section>
+
+    <!-- PAGINAÇÃO -->
+    <section class="containerPrincipal">
+      <div id="paginacaoAuditoria" style="display: flex; gap: 8px; justify-content: center; margin-top: 20px;"></div>
+    </section>
+
+    <!-- BOTÕES DE EXPORTAÇÃO -->
+    <section class="containerPrincipal">
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btnPrimario" onclick="exportarPDF()">?? Exportar em PDF</button>
+        <button class="btn btnPrimario" onclick="exportarCSV()">?? Exportar em CSV</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- VLIBRAS -->
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
+  <script src="/scripts/apiClient.js"></script>
+
+  <script>
+    const TOKEN_KEY = 'saadi_access_token';
+    const ENDPOINT = '/api/admin/auditoria';
+    let auditoriaCache = [];
+    let paginaAtual = 1;
+    let totalPaginas = 1;
+
+    function obterToken() {
+      return localStorage.getItem(TOKEN_KEY) || '';
+    }
+
+    function criarHeadersJson() {
+      const headers = { 'Accept': 'application/json' };
+      const token = obterToken();
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+      return headers;
+    }
+
+    function mostrarMensagem(tipo, texto) {
+      const box = document.getElementById('mensagemAuditoria');
+      box.className = `alert alert-${tipo}`;
+      box.textContent = texto;
+      box.classList.remove('d-none');
+    }
+
+    function limparMensagem() {
+      const box = document.getElementById('mensagemAuditoria');
+      box.classList.add('d-none');
+      box.textContent = '';
+    }
+
+    function formatarData(dataIso) {
+      if (!dataIso) return '-';
+      return new Date(dataIso).toLocaleString('pt-BR');
+    }
+
+    function normalizarAcao(valor) {
+      const texto = String(valor || '').toLowerCase();
+      if (texto.includes('cria')) return 'create';
+      if (texto.includes('atual')) return 'update';
+      if (texto.includes('excl') || texto.includes('remov')) return 'delete';
+      if (texto.includes('login')) return 'login';
+      if (texto.includes('logout')) return 'logout';
+      return texto;
+    }
+
+    function resumoRotulo(acao) {
+      const mapa = {
+        create: 'Criação',
+        update: 'Atualização',
+        delete: 'Exclusão',
+        login: 'Login',
+        logout: 'Logout',
+      };
+      return mapa[acao] || acao || '-';
+    }
+
+    function acaoBadgeClass(acao) {
+      if (acao === 'delete') return 'badgePerigo';
+      if (acao === 'update') return 'badgeAviso';
+      if (acao === 'login' || acao === 'logout') return 'badgeInfo';
+      return 'badgeSucesso';
+    }
+
+    function atualizarResumo(resumo) {
+      document.getElementById('auditoriaTotalAcoes').textContent = resumo?.totalAcoes ?? '-';
+      document.getElementById('auditoriaCriacoes').textContent = resumo?.criacoes ?? '-';
+      document.getElementById('auditoriaAtualizacoes').textContent = resumo?.atualizacoes ?? '-';
+      document.getElementById('auditoriaExclusoes').textContent = resumo?.exclusoes ?? '-';
+    }
+
+    function renderizarTabela() {
+      const tbody = document.getElementById('auditoriaTbody');
+      if (auditoriaCache.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6">Nenhum registro encontrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = auditoriaCache.map((item) => {
+        const acao = normalizarAcao(item.acao);
+        const detalhes = item.detalhes && Object.keys(item.detalhes).length > 0 ? JSON.stringify(item.detalhes) : '-';
+        return `
+          <tr>
+            <td>${formatarData(item.created_at)}</td>
+            <td>${item.usuario_nome || '-'}</td>
+            <td><span class="badge ${acaoBadgeClass(acao)}">${resumoRotulo(acao)}</span></td>
+            <td>${item.entidade || '-'}</td>
+            <td>${detalhes}</td>
+            <td>? Sucesso</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function carregarAuditoria() {
+      const params = new URLSearchParams();
+      params.set('page', String(paginaAtual));
+      params.set('limit', '10');
+
+      const usuario = document.getElementById('filtroUsuario').value.trim();
+      const acao = normalizarAcao(document.getElementById('filtroTipo').value);
+      const dataInicio = document.getElementById('filtroDataInicio').value;
+      const dataFim = document.getElementById('filtroDataFim').value;
+
+      if (usuario) params.set('usuario', usuario);
+      if (acao && acao !== 'todas') params.set('acao', acao);
+      if (dataInicio) params.set('data_inicio', dataInicio);
+      if (dataFim) params.set('data_fim', dataFim);
+
+      limparMensagem();
+      const response = await fetch(`${ENDPOINT}?${params.toString()}`, { headers: criarHeadersJson() });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao carregar auditoria.');
+      }
+
+      const items = data.data && data.data.items ? data.data.items : (data.items || []);
+      auditoriaCache = items;
+      paginaAtual = (data.data && data.data.page) || data.page || 1;
+      totalPaginas = Math.max(1, Math.ceil(((data.data && data.data.total) || data.total || 0) / ((data.data && data.data.limit) || data.limit || 10)));
+      atualizarResumo(data.resumo || {});
+      renderizarTabela();
+      atualizarPaginacao();
+    }
+
+    function atualizarPaginacao() {
+      const container = document.getElementById('paginacaoAuditoria');
+      if (!container) return;
+      container.innerHTML = `
+        <button class="btn btnSecundario" style="padding: 8px 12px;" onclick="irPagina(${Math.max(1, paginaAtual - 1)})">← Anterior</button>
+        <button class="btn btnPrimario" style="padding: 8px 16px;">${paginaAtual}</button>
+        <button class="btn btnSecundario" style="padding: 8px 12px;" onclick="irPagina(${Math.min(totalPaginas, paginaAtual + 1)})">Próxima →</button>
+      `;
+    }
+
+    async function irPagina(pagina) {
+      paginaAtual = pagina;
+      await carregarAuditoria().catch((error) => mostrarMensagem('danger', error.message || 'Erro ao mudar de página.'));
+    }
+
+    function navegarPara(pagina) {
+      window.location.href = pagina;
+    }
+
+    function logout() {
+      if (confirm('Tem certeza que deseja sair do sistema?')) {
+        fetch('/api/auth/logout', { method: 'POST', headers: criarHeadersJson() }).finally(() => {
+          localStorage.removeItem(TOKEN_KEY);
+          window.location.href = '/index.html';
+        });
+      }
+    }
+
+    function aplicarFiltros() {
+      paginaAtual = 1;
+      carregarAuditoria().catch((error) => mostrarMensagem('danger', error.message || 'Erro ao aplicar filtros.'));
+    }
+
+    function limparFiltros() {
+      document.getElementById('filtroUsuario').value = '';
+      document.getElementById('filtroTipo').value = 'Todas';
+      document.getElementById('filtroDataInicio').value = '';
+      document.getElementById('filtroDataFim').value = '';
+      paginaAtual = 1;
+      carregarAuditoria().catch((error) => mostrarMensagem('danger', error.message || 'Erro ao limpar filtros.'));
+    }
+
+    function exportarPDF() {
+      window.print();
+    }
+
+    function exportarCSV() {
+      const linhas = [
+        ['data_hora', 'usuario', 'acao', 'entidade', 'detalhes', 'resultado'],
+        ...auditoriaCache.map((item) => [
+          item.created_at || '',
+          item.usuario_nome || '',
+          item.acao || '',
+          item.entidade || '',
+          item.detalhes ? JSON.stringify(item.detalhes) : '',
+          'Sucesso',
+        ]),
+      ];
+
+      const csv = linhas.map((linha) => linha.map((valor) => `"${String(valor).replace(/"/g, '""')}"`).join(';')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'auditoria.csv';
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    (async function iniciarPagina() {
+      try {
+        await carregarAuditoria();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro ao carregar auditoria.');
+      }
+    })();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

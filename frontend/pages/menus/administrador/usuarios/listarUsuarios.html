@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listar Usuários - Administrador</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../../../../css/menuAdministrador.css">
+  <link rel="stylesheet" href="../../../../css/administrador/usuarios.css">
+</head>
+<body>
+  <!-- MENU LATERAL -->
+  <aside class="menuLateral">
+    <div class="logoContainer">
+      <img src="../../../../assets/icons8-duas-mãos-windows-11-filled/Logo.png" alt="Logo: Duas Mãos abertas">
+      <div class="textoBranding">
+        <div class="nomeBrand">SAADI</div>
+        <div class="nivelAcesso">Nível: Administrador</div>
+      </div>
+    </div>
+
+    <div class="Perfil">
+      <div class="nomePerfil">Usuário Logado</div>
+      <div class="emailPerfil">usuario@escola.edu.br</div>
+    </div>
+
+                <div class="botoesLaterais">
+      <button class="btnLateral" onclick="navegarPara('../menuAdministrador.html')" aria-label="Voltar ao Painel Principal">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Painel Principal</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('../unidades/listarUnidades.html')" aria-label="Gerenciar Unidades Escolares">
+        <img src="/img/icon-cadastro.png" alt="">
+        <span>Unidades Escolares</span>
+      </button>
+      <button class="btnLateral ativo" onclick="navegarPara('../usuarios/listarUsuarios.html')" aria-label="Gerenciar Usuários do Sistema">
+        <img src="/img/perfil.png" alt="">
+        <span>Usuários do Sistema</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('../relatoriosAdministrador.html')" aria-label="Ver Relatórios Consolidados">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Relatórios</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('../auditoria.html')" aria-label="Consultar Auditoria e Histórico">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Auditoria</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('../parametros.html')" aria-label="Gerenciar Parâmetros do Sistema">
+        <img src="/img/engrenagem.png" alt="">
+        <span>Parâmetros</span>
+      </button>
+      <button class="btnLateral" onclick="navegarPara('../alunos/listarAlunos.html')" aria-label="Acessar Gestão Central de Alunos">
+        <img src="/img/icon-lista.png" alt="">
+        <span>Alunos - Nível Central</span>
+      </button>
+    </div>
+
+    <div class="sair">
+      <button class="btnSair" onclick="logout()" aria-label="Fazer logout do sistema">
+        <img src="/img/sair.png" alt="">
+        <span>Sair da Conta</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="conteudoPrincipal">
+    <!-- CABEÇALHO -->
+    <section class="cabecalhoDashboard">
+      <h1>Usuários do Sistema</h1>
+      <p>Visualize e gerencie todos os usuários cadastrados</p>
+    </section>
+
+    <!-- BARRA DE BUSCA E FILTROS -->
+    <section class="containerPrincipal">
+      <div class="barraBuscaUsuarios">
+        <input 
+          type="text" 
+          id="campoBusca" 
+          placeholder="Buscar por nome, email ou matrícula..." 
+          aria-label="Campo de busca de usuários"
+          onkeyup="filtrarUsuarios('busca')"
+        >        <button class="btn btnSecundario" onclick="filtrarUsuarios('busca')" aria-label="Executar busca">
+          Buscar
+        </button>        <a href="cadastroUsuarios.html" class="btn btnPrimario" aria-label="Criar novo usuário">
+          + Novo Usuário
+        </a>
+      </div>
+
+      <div class="filtrosUsuarios">
+        <select id="filtroPerfil" onchange="filtrarUsuarios('perfil')" aria-label="Filtrar por perfil">
+          <option value="">Todos os Perfis</option>
+          <option value="administrador">Administrador</option>
+          <option value="secretaria">Secretaria</option>
+          <option value="psicopedagogo">Psicopedagogo</option>
+          <option value="professor">Professor</option>
+          <option value="diretor">Diretor</option>
+        </select>
+
+        <select id="filtroStatus" onchange="filtrarUsuarios('status')" aria-label="Filtrar por status">
+          <option value="">Todos os Status</option>
+          <option value="ativo">Ativo</option>
+          <option value="inativo">Inativo</option>
+          <option value="bloqueado">Bloqueado</option>
+        </select>
+
+        <select id="filtroUnidade" onchange="filtrarUsuarios('unidade')" aria-label="Filtrar por unidade">
+          <option value="">Todas as Unidades</option>
+          <option value="1">Escola Municipal Centro</option>
+          <option value="2">Escola Estadual Norte</option>
+          <option value="3">CEI Infantil Leste</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- LISTA DE USUÁRIOS -->
+    <section class="containerPrincipal">
+      <div id="mensagemUsuarios" class="alert d-none" role="alert" aria-live="polite"></div>
+      <div id="resumoUsuarios" class="alert alert-info" role="status" aria-live="polite">Carregando dados...</div>
+      <table class="tabelaResponsiva" id="tabelaUsuarios">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Perfil</th>
+            <th>Unidade</th>
+            <th>Status</th>
+            <th>Último Acesso</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="usuariosTbody">
+          <tr>
+            <td colspan="7">Carregando usuários...</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO -->
+  <div id="modalDelecao" class="modal">
+    <div class="modalConteudo">
+      <h2>Confirmar Exclusão</h2>
+      <p>Tem certeza que deseja deletar este usuário do sistema? Esta ação não pode ser desfeita.</p>
+      <div class="modalBotoes">
+        <button class="btn btnSecundario btnFecharModal" onclick="fecharModal()">Cancelar</button>
+        <button class="btn btnPerigo" onclick="executarDelecao()">Deletar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/scripts/apiClient.js"></script>
+
+  <script>
+    const TOKEN_KEY = 'saadi_access_token';
+    let idDelecao = null;
+    let usuariosCache = [];
+    let unidadesMap = {};
+
+    // Decodifica JWT payload
+    function decodificarTokenJWT(token) {
+      if (!token) return null;
+      try {
+        const payloadBase64 = token.split('.')[1];
+        if (!payloadBase64) return null;
+        const base64Url = payloadBase64.replace(/-/g, '+').replace(/_/g, '/');
+        const padding = '='.repeat((4 - (base64Url.length % 4)) % 4);
+        const base64 = base64Url + padding;
+        const json = atob(base64);
+        return JSON.parse(json);
+      } catch {
+        return null;
+      }
+    }
+
+    // Renderiza nome do perfil logado
+    function renderizarPerfil() {
+      const token = localStorage.getItem(TOKEN_KEY);
+      const payload = decodificarTokenJWT(token);
+      
+      if (!payload) return;
+
+      const nomePerfil = document.querySelector('.nomePerfil');
+      const emailPerfil = document.querySelector('.emailPerfil');
+
+      if (nomePerfil) {
+        const nome = payload.nome || payload.user_name || '';
+        const primeiroNome = nome.split(' ')[0];
+        nomePerfil.textContent = primeiroNome ? `Olááá, ${primeiroNome}` : 'Olááá';
+      }
+
+      if (emailPerfil) {
+        const email = payload.email || '';
+        const perfil = payload.perfil || payload.profile_name || '';
+        const texto = [email, perfil].filter(Boolean).join(' • ');
+        emailPerfil.textContent = texto || 'Sessão ativa';
+      }
+    }
+
+    // Wrapper removido. O apiClient.js intercepta nativamente as requisições fetch para anexar credentials e gerenciar tokens.
+
+    function normalizarTexto(valor) {
+      return String(valor || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+    }
+
+    function normalizarBusca(valor) {
+      return normalizarTexto(valor)
+        .replace(/[,;]+$/g, '')
+        .replace(/^['"]+|['"]+$/g, '')
+        .trim();
+    }
+
+    function formatarData(dataIso) {
+      if (!dataIso) return 'Nunca acessou';
+      return new Date(dataIso).toLocaleString('pt-BR');
+    }
+
+    function mostrarMensagem(tipo, texto) {
+      const box = document.getElementById('mensagemUsuarios');
+      box.className = `alert alert-${tipo}`;
+      box.textContent = texto;
+      box.classList.remove('d-none');
+    }
+
+    function limparMensagem() {
+      const box = document.getElementById('mensagemUsuarios');
+      box.classList.add('d-none');
+      box.textContent = '';
+    }
+
+    function atualizarResumo(total, exibidos) {
+      const box = document.getElementById('resumoUsuarios');
+      box.textContent = `Usuários carregados: ${total} | Usuários exibidos: ${exibidos}`;
+    }
+
+    function perfilBadgeClass(perfil) {
+      const nome = (perfil || '').toLowerCase();
+      if (nome === 'secretaria') return 'badgeSucesso';
+      if (nome === 'psicopedagogo') return 'badgeAviso';
+      if (nome === 'administrador') return 'badgeInfo';
+      return 'badgeInfo';
+    }
+
+    function statusBadgeClass(status) {
+      const nome = (status || '').toLowerCase();
+      if (nome === 'ativo') return 'badgeSucesso';
+      if (nome === 'inativo') return 'badgePerigo';
+      return 'badgeAviso';
+    }
+
+    function resetarFiltros() {
+      document.getElementById('campoBusca').value = '';
+      document.getElementById('filtroPerfil').value = '';
+      document.getElementById('filtroStatus').value = '';
+      document.getElementById('filtroUnidade').value = '';
+    }
+
+    function renderUsuarios() {
+      const busca = normalizarBusca(document.getElementById('campoBusca').value);
+      const tokensBusca = busca ? busca.split(/[\s,;]+/).filter(Boolean) : [];
+      const perfil = document.getElementById('filtroPerfil').value;
+      const status = document.getElementById('filtroStatus').value;
+      const unidade = document.getElementById('filtroUnidade').value;
+      const tbody = document.getElementById('usuariosTbody');
+      const semFiltros = !busca && !perfil && !status && !unidade;
+
+      const filtrados = usuariosCache.filter((u) => {
+        const nome = normalizarTexto(u.nome_completo || '');
+        const email = normalizarTexto(u.email || '');
+        const matricula = normalizarTexto(u.matricula || '');
+        const emailToken = tokensBusca.find((token) => token.includes('@'));
+
+        if (emailToken) {
+          if (!email.includes(emailToken)) return false;
+        } else if (tokensBusca.length > 0) {
+          const algumTokenConfere = tokensBusca.some((token) =>
+            nome.includes(token) || email.includes(token) || matricula.includes(token)
+          );
+          if (!algumTokenConfere) return false;
+        }
+
+        if (perfil && (u.perfil_nome || '').toLowerCase() !== perfil) return false;
+        if (status && (u.status || '').toLowerCase() !== status) return false;
+        if (unidade && String(u.unidade_id || '') !== unidade) return false;
+        return true;
+      });
+
+      const listaFinal = semFiltros ? usuariosCache : filtrados;
+
+      if (listaFinal.length === 0) {
+        atualizarResumo(usuariosCache.length, 0);
+        tbody.innerHTML = '<tr><td colspan="7">Nenhum usuário encontrado.</td></tr>';
+        return;
+      }
+
+      atualizarResumo(usuariosCache.length, listaFinal.length);
+
+      tbody.innerHTML = listaFinal.map((u) => {
+        const perfilNome = u.perfil_nome || '-';
+        const unidadeNome = unidadesMap[u.unidade_id] || (u.unidade_id ? `Unidade ${u.unidade_id}` : 'Sem unidade');
+        return `
+          <tr>
+            <td>${u.nome_completo || '-'}</td>
+            <td>${u.email || '-'}</td>
+            <td><span class="badge ${perfilBadgeClass(perfilNome)}">${perfilNome}</span></td>
+            <td>${unidadeNome}</td>
+            <td><span class="badge ${statusBadgeClass(u.status)}">${u.status || '-'}</span></td>
+            <td>${formatarData(u.ultimo_login_em)}</td>
+            <td>
+              <div class="acoes">
+                <a href="atualizarUsuarios.html?id=${u.id}" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
+                <a href="atualizarUsuarios.html?id=${u.id}" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
+                <button onclick="confirmarDelecao(${u.id})" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function carregarUnidades() {
+      const response = await fetch('/api/admin/unidades', {
+        headers: { 'Accept': 'application/json' }
+      });
+      const data = await response.json();
+
+      if (response.status === 401) {
+        window.location.href = '/index.html';
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao carregar unidades.');
+      }
+
+      const select = document.getElementById('filtroUnidade');
+      select.innerHTML = '<option value="">Todas as Unidades</option>';
+      unidadesMap = {};
+
+      const unidades = data.data && data.data.items ? data.data.items : (data.items || []);
+      for (const unidade of unidades) {
+        unidadesMap[unidade.id] = unidade.nome;
+        const option = document.createElement('option');
+        option.value = String(unidade.id);
+        option.textContent = unidade.nome;
+        select.appendChild(option);
+      }
+    }
+
+    async function carregarUsuarios() {
+      limparMensagem();
+      try {
+        await buscarUsuariosServidor();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro ao carregar usuários.');
+      }
+    }
+
+    async function buscarUsuariosServidor() {
+      const busca = normalizarBusca(document.getElementById('campoBusca').value);
+      const perfil = document.getElementById('filtroPerfil').value;
+      const status = document.getElementById('filtroStatus').value;
+      const unidade = document.getElementById('filtroUnidade').value;
+
+      const params = new URLSearchParams();
+      if (busca) params.set('q', busca);
+      if (perfil) params.set('perfil', perfil);
+      if (status) params.set('status', status);
+      if (unidade) params.set('unidade_id', unidade);
+
+      const sufixo = params.toString() ? `?${params.toString()}` : '';
+      const response = await fetch(`/api/admin/usuarios${sufixo}`, {
+        headers: { 'Accept': 'application/json' }
+      });
+      const data = await response.json();
+
+      if (response.status === 401) {
+        window.location.href = '/index.html';
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao carregar usuários.');
+      }
+
+      const candidatos = [
+        data.items,
+        data.usuarios,
+        data.data && data.data.items,
+        data.data,
+        data.results
+      ];
+      const lista = candidatos.find((item) => Array.isArray(item));
+
+      if (!Array.isArray(lista)) {
+        throw new Error('Resposta inesperada da API de usuários.');
+      }
+
+      usuariosCache = lista;
+      renderUsuarios();
+    }
+
+    function navegarPara(pagina) {
+      window.location.href = pagina;
+    }
+
+    function logout() {
+      if (confirm('Tem certeza que deseja sair do sistema?')) {
+        fetch('/api/auth/logout', {
+          method: 'POST'
+        }).finally(() => {
+          window.location.href = '/index.html';
+        });
+      }
+    }
+
+    function filtrarUsuarios(origem) {
+      if (origem === 'busca' || origem === 'perfil' || origem === 'status' || origem === 'unidade') {
+        buscarUsuariosServidor().catch((error) => {
+          mostrarMensagem('danger', error.message || 'Erro ao buscar usuários.');
+        });
+        return;
+      }
+      renderUsuarios();
+    }
+
+    function confirmarDelecao(id) {
+      idDelecao = id;
+      document.getElementById('modalDelecao').classList.add('ativo');
+    }
+
+    function fecharModal() {
+      document.getElementById('modalDelecao').classList.remove('ativo');
+      idDelecao = null;
+    }
+
+    async function executarDelecao() {
+      if (!idDelecao) return;
+
+      try {
+        const response = await fetch(`/api/admin/usuarios/${idDelecao}`, {
+          method: 'DELETE'
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Erro ao excluir usuário.');
+        }
+
+        usuariosCache = usuariosCache.filter((u) => u.id !== idDelecao);
+        renderUsuarios();
+        mostrarMensagem('success', 'Usuário excluído com sucesso.');
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro inesperado ao excluir usuário.');
+      } finally {
+        fecharModal();
+      }
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('modalDelecao');
+      if (event.target === modal) {
+        fecharModal();
+      }
+    };
+
+    (async function iniciarPagina() {
+      renderizarPerfil();
+      resetarFiltros();
+
+      try {
+        await carregarUnidades();
+        await carregarUsuarios();
+      } catch (error) {
+        mostrarMensagem('danger', error.message || 'Erro ao carregar dados.');
+      }
+    })();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
