@@ -438,6 +438,34 @@
       }
     };
 
+    function verificarModoVisualizacao() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('mode') === 'ver') {
+        const titulo = document.querySelector('.cabecalhoDashboard h1');
+        const subtitulo = document.querySelector('.cabecalhoDashboard p');
+        if (titulo) titulo.textContent = 'Visualizar Unidade Escolar';
+        if (subtitulo) subtitulo.textContent = 'Veja as informações detalhadas da unidade escolar';
+
+        const form = document.querySelector('.formulario');
+        if (form) {
+          form.querySelectorAll('input, select, textarea').forEach((el) => {
+            el.disabled = true;
+          });
+        }
+
+        const btnSucesso = document.querySelector('.btnSucesso');
+        const btnPerigo = document.querySelector('.btnPerigo');
+        const btnSecundario = document.querySelector('.btnSecundario');
+
+        if (btnSucesso) btnSucesso.style.display = 'none';
+        if (btnPerigo) btnPerigo.style.display = 'none';
+        if (btnSecundario) {
+          btnSecundario.textContent = 'Voltar';
+          btnSecundario.setAttribute('aria-label', 'Voltar para a listagem');
+        }
+      }
+    }
+
     (async function iniciarPagina() {
       unidadeId = obterUnidadeIdDaUrl();
 
@@ -449,6 +477,7 @@
 
       try {
         await carregarUnidade();
+        verificarModoVisualizacao();
       } catch (error) {
         console.error('Erro geral ao carregar:', error);
         mostrarMensagem('danger', error.message || 'Erro ao carregar dados da unidade.');

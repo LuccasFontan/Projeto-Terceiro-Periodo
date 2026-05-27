@@ -423,7 +423,8 @@
         </div>
       `;
       document.getElementById('conteudoModal').innerHTML = html;
-      document.getElementById('btnEditarDoDetalhe').onclick = function () { fecharModal(); abrirModalAluno(id); };
+      const btnEditar = document.getElementById('btnEditarDoDetalhe');
+      if (btnEditar) btnEditar.style.display = 'none';
       document.getElementById('modalDetalhes').classList.add('ativo');
     }
 
