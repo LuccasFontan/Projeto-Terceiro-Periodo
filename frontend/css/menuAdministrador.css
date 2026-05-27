@@ -776,6 +776,21 @@ body {
   color: var(--cor-info);
 }
 
+.badgeAdministrador {
+  background: rgba(52, 152, 219, 0.2);
+  color: var(--cor-info);
+}
+
+.badgeSecretaria {
+  background: rgba(155, 89, 182, 0.2);
+  color: #8e44ad;
+}
+
+.badgePsicopedagogo {
+  background: rgba(230, 126, 34, 0.2);
+  color: #d35400;
+}
+
 /* ================================================================================
    ANIMAÇÕES
    ================================================================================ */
