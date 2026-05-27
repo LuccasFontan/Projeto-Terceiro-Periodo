@@ -7,6 +7,7 @@
     <title>SAADI | Planos de Acompanhamento</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../../css/menuPsicopedagogo.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -246,7 +247,14 @@
         </section>
 
         <section class="psicoBloco" aria-label="Planos de acompanhamento registrados">
-            <h3>Planos Cadastrados</h3>
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                <h3 class="mb-0">Planos Cadastrados</h3>
+                <small class="text-muted" style="font-size:.8rem;">
+                    <span class="badge bg-secondary me-1">V</span> Visualizar &nbsp;
+                    <span class="badge" style="background:#e8a000;">E</span> Editar &nbsp;
+                    <span class="badge bg-danger">D</span> Excluir
+                </small>
+            </div>
             <div class="psicoTabelaWrap">
                 <table class="table table-striped align-middle" id="tabelaPlanos">
                     <thead>
@@ -257,11 +265,12 @@
                             <th>Objetivo</th>
                             <th>Periodicidade</th>
                             <th>Situação</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">Carregando planos...</td>
+                            <td colspan="7" class="text-center text-muted py-4">Carregando planos...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -278,6 +287,158 @@
             <div class="vw-plugin-top-wrapper"></div>
         </div>
     </div>
+
+    <!-- ══ MODAL: VISUALIZAR PLANO ══════════════════════════════════════ -->
+    <div class="modal fade" id="modalVerPlano" tabindex="-1" aria-labelledby="modalVerPlanoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content" style="border-radius:16px;border:1px solid #d4e3f5;">
+                <div class="modal-header" style="background:linear-gradient(135deg,#0f2744,#2e6fbf);border-radius:16px 16px 0 0;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-eye text-white fs-5"></i>
+                        <h5 class="modal-title text-white mb-0" id="modalVerPlanoLabel">Visualizar Plano</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body p-4" id="modalVerConteudo">
+                    <!-- preenchido via JS -->
+                </div>
+                <div class="modal-footer" style="border-top:1px solid #e8f0fa;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ MODAL: EDITAR PLANO ════════════════════════════════════════════ -->
+    <div class="modal fade" id="modalEditarPlano" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content" style="border-radius:16px;border:1px solid #d4e3f5;">
+                <div class="modal-header" style="background:linear-gradient(135deg,#7a4e00,#e8a000);border-radius:16px 16px 0 0;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-pencil-square text-white fs-5"></i>
+                        <h5 class="modal-title text-white mb-0" id="modalEditarLabel">Editar Plano</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formEditarPlano" class="row g-3" novalidate>
+                        <input type="hidden" id="editPlanoId">
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold" for="editTitulo">Título do Plano</label>
+                            <input type="text" id="editTitulo" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold" for="editDataInicio">Data de Início</label>
+                            <input type="date" id="editDataInicio" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold" for="editDataFim">Previsão de Fim</label>
+                            <input type="date" id="editDataFim" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold" for="editPeriodicidade">Periodicidade</label>
+                            <select id="editPeriodicidade" class="form-select">
+                                <option value="semanal">Semanal</option>
+                                <option value="quinzenal">Quinzenal</option>
+                                <option value="mensal">Mensal</option>
+                                <option value="outra">Outra</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold" for="editStatus">Situação</label>
+                            <select id="editStatus" class="form-select">
+                                <option value="ativo">Ativo</option>
+                                <option value="concluido">Concluído</option>
+                                <option value="suspenso">Suspenso</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold" for="editObjetivo">Objetivo Geral</label>
+                            <textarea id="editObjetivo" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold" for="editEstrategias">Estratégias / Ações</label>
+                            <textarea id="editEstrategias" class="form-control" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid #e8f0fa;">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning fw-bold" id="btnSalvarEdicao" style="color:#fff;">
+                        <span class="spinner-border spinner-border-sm d-none me-1" id="spinnerEdicao"></span>
+                        Salvar Alterações
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ MODAL: CONFIRMAR EXCLUSÃO ══════════════════════════════════════ -->
+    <div class="modal fade" id="modalDeletarPlano" tabindex="-1" aria-labelledby="modalDeletarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius:16px;border:1px solid #f5c6cb;">
+                <div class="modal-header" style="background:linear-gradient(135deg,#7b0000,#c0392b);border-radius:16px 16px 0 0;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-trash3 text-white fs-5"></i>
+                        <h5 class="modal-title text-white mb-0" id="modalDeletarLabel">Confirmar Exclusão</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <div style="font-size:3rem;margin-bottom:.5rem;">⚠️</div>
+                    <p class="mb-1" style="font-size:1.05rem;font-weight:600;color:#7b0000;">Tem certeza que deseja excluir este plano?</p>
+                    <p class="text-muted mb-0" style="font-size:.88rem;">Esta ação <strong>não pode ser desfeita</strong>. O plano será removido permanentemente.</p>
+                    <div class="mt-3 p-2 rounded" style="background:#fff5f5;border:1px solid #f5c6cb;">
+                        <small class="text-danger fw-semibold" id="modalDeletarNomePlano"></small>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center gap-3" style="border-top:1px solid #f5c6cb;">
+                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger fw-bold px-4" id="btnConfirmarExclusao">
+                        <span class="spinner-border spinner-border-sm d-none me-1" id="spinnerDelecao"></span>
+                        Confirmar Exclusão
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ TOAST de sucesso/erro ══════════════════════════════════════════ -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index:9999">
+        <div id="toastAcao" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" style="border-radius:12px;min-width:280px;">
+            <div class="d-flex">
+                <div class="toast-body d-flex align-items-center gap-2" id="toastMensagem"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estilos dos botões de ação -->
+    <style>
+        .btn-acao {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform .15s ease, filter .2s ease, box-shadow .15s ease;
+            font-size: .85rem;
+            flex-shrink: 0;
+        }
+        .btn-acao:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,.18);
+            filter: brightness(1.1);
+        }
+        .btn-acao:active { transform: translateY(0); }
+        .btn-ver   { background: #e8f2ff; color: #1a4d82; }
+        .btn-editar{ background: #fff3cd; color: #7a4e00; }
+        .btn-deletar{ background: #ffe0e0; color: #b71c1c; }
+        .acoes-cell { white-space: nowrap; }
+    </style>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"

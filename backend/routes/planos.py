@@ -95,3 +95,53 @@ def criar_plano():
 
     registrar_atividade_plano(psicopedagogo_id, 'create', plano)
     return created('Plano de acompanhamento criado com sucesso.', data={'item': serializar_plano(plano)})
+
+
+@planos_bp.put('/<int:plano_id>')
+@jwt_required_any
+def atualizar_plano(plano_id: int):
+    """Atualiza um plano de acompanhamento existente."""
+    claims = get_jwt()
+    perfil = claims.get('perfil')
+    unidade_id = claims.get('unidade_id') if perfil != 'administrador' else None
+
+    try:
+        plano = buscar_plano_service(plano_id, unidade_id)
+    except ValueError as exc:
+        return error(str(exc), 403, 'FORBIDDEN')
+
+    payload = request.get_json(silent=True) or {}
+    try:
+        dados = PlanoAcompanhamentoUpdateSchema(**payload)
+    except ValidationError as e:
+        return error('Dados inválidos para atualização.', 400, 'VALIDATION_ERROR', details=e.errors())
+
+    from backend.services.planos_service import atualizar_plano_service
+    try:
+        plano = atualizar_plano_service(plano, dados.model_dump(exclude_none=True))
+    except ValueError as exc:
+        return error(str(exc), 400, 'VALIDATION_ERROR')
+
+    psicopedagogo_id = int(get_jwt_identity())
+    registrar_atividade_plano(psicopedagogo_id, 'update', plano)
+    return success('Plano de acompanhamento atualizado com sucesso.', data={'item': serializar_plano(plano)})
+
+
+@planos_bp.delete('/<int:plano_id>')
+@jwt_required_any
+def deletar_plano(plano_id: int):
+    """Remove um plano de acompanhamento."""
+    claims = get_jwt()
+    perfil = claims.get('perfil')
+    unidade_id = claims.get('unidade_id') if perfil != 'administrador' else None
+
+    try:
+        plano = buscar_plano_service(plano_id, unidade_id)
+    except ValueError as exc:
+        return error(str(exc), 403, 'FORBIDDEN')
+
+    from backend.services.planos_service import deletar_plano_service
+    psicopedagogo_id = int(get_jwt_identity())
+    registrar_atividade_plano(psicopedagogo_id, 'delete', plano)
+    deletar_plano_service(plano)
+    return success('Plano de acompanhamento excluído com sucesso.')

@@ -185,3 +185,61 @@ def register():
     db.session.commit()
 
     return created('Usuario registrado com sucesso.', data={'user': serializar_usuario(usuario)})
+
+
+@auth_bp.post('/forgot-password/check')
+def forgot_password_check():
+    """Verifica se o e-mail existe e retorna um token de redefinição de 15 min."""
+    from datetime import timedelta
+
+    payload = request.get_json(silent=True) or {}
+    email = payload.get('email', '').strip()
+
+    if not email:
+        return error('E-mail é obrigatório.', 400, 'BAD_REQUEST')
+
+    usuario = Usuario.query.filter(
+        db.func.lower(Usuario.email) == email.lower(),
+        Usuario.deleted_at.is_(None)
+    ).first()
+
+    if not usuario:
+        return error('E-mail não encontrado.', 404, 'NOT_FOUND')
+
+    reset_token = create_access_token(
+        identity=str(usuario.id),
+        additional_claims={'is_reset_token': True},
+        expires_delta=timedelta(minutes=15),
+    )
+
+    return success('E-mail verificado com sucesso.', data={'reset_token': reset_token})
+
+
+@auth_bp.post('/forgot-password/reset')
+def forgot_password_reset():
+    """Valida o token de redefinição e atualiza a senha do usuário."""
+    from flask_jwt_extended import decode_token
+
+    payload = request.get_json(silent=True) or {}
+    reset_token = payload.get('reset_token')
+    nova_senha = payload.get('nova_senha', '').strip()
+
+    if not reset_token or not nova_senha:
+        return error('Token e nova senha são obrigatórios.', 400, 'BAD_REQUEST')
+
+    try:
+        decoded = decode_token(reset_token)
+        if not decoded.get('is_reset_token'):
+            return error('Token inválido para redefinição de senha.', 401, 'UNAUTHORIZED')
+
+        usuario = Usuario.query.get(int(decoded['sub']))
+        if not usuario or usuario.deleted_at:
+            return error('Usuário não encontrado.', 404, 'NOT_FOUND')
+
+        usuario.senha_hash = senha_segura(nova_senha)
+        db.session.commit()
+        registrar_atividade(usuario, 'Redefinição de Senha', 'Usuário', f'ID: {usuario.id}', 'Sucesso')
+
+        return success('Senha redefinida com sucesso.')
+    except Exception:
+        return error('Token inválido ou expirado.', 401, 'UNAUTHORIZED')

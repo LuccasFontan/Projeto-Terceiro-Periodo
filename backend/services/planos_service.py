@@ -163,3 +163,29 @@ def registrar_atividade_plano(usuario_id: int, acao: str, plano: PlanoAcompanham
         user_agent=request.headers.get('User-Agent'),
     )
     db.session.commit()
+
+
+def atualizar_plano_service(plano: PlanoAcompanhamento, payload: dict) -> PlanoAcompanhamento:
+    """Atualiza os campos de um plano de acompanhamento existente."""
+    campos_texto = ('titulo', 'objetivo_geral', 'estrategias', 'periodicidade', 'status')
+    for campo in campos_texto:
+        if campo in payload and payload[campo] is not None:
+            setattr(plano, campo, payload[campo])
+
+    if 'data_inicio' in payload and payload['data_inicio']:
+        plano.data_inicio = date.fromisoformat(payload['data_inicio'])
+
+    if 'data_fim_prevista' in payload and payload['data_fim_prevista']:
+        plano.data_fim_prevista = date.fromisoformat(payload['data_fim_prevista'])
+
+    if 'data_fim_real' in payload and payload['data_fim_real']:
+        plano.data_fim_real = date.fromisoformat(payload['data_fim_real'])
+
+    db.session.commit()
+    return plano
+
+
+def deletar_plano_service(plano: PlanoAcompanhamento) -> None:
+    """Remove permanentemente um plano de acompanhamento do banco de dados."""
+    db.session.delete(plano)
+    db.session.commit()

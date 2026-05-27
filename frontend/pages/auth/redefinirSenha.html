@@ -1,27 +1,817 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAADI</title>
-    <link rel="stylesheet" href="../../css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="../../img/favicon-duas-mãos-32px-branco.png" type="image/x-icon">
-</head>
-<body>
 
-<div vw class="enabled">
-    <div vw-access-button class="active"></div>
-    <div vw-plugin-wrapper>
-        <div class="vw-plugin-top-wrapper"></div>
-    </div>
-</div>
-<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-<script>
-    new window.VLibras.Widget('https://vlibras.gov.br/app');
-</script>
-    
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SAADI | Recuperar Senha</title>
+    <meta name="description" content="Redefina sua senha de acesso à plataforma SAADI de forma segura." />
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <!-- SAADI base styles -->
+    <link rel="stylesheet" href="../../css/style.css" />
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../img/favicon-duas-mãos-32px-branco.png" type="image/x-icon" />
+
+    <style>
+        /* ─── Page Layout ────────────────────────────────────── */
+        body {
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ─── Wizard Card ─────────────────────────────────────── */
+        .rp-card {
+            width: 100%;
+            max-width: 440px;
+            background: #fff;
+            border-radius: 28px;
+            box-shadow: 0 24px 64px rgba(10, 30, 60, 0.14);
+            border: 1px solid #d4e3f5;
+            padding: clamp(28px, 4vw, 44px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative top accent bar */
+        .rp-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0f2744, #2e6fbf, #4a9eff);
+            border-radius: 28px 28px 0 0;
+        }
+
+        /* ─── Step animations ─────────────────────────────────── */
+        .rp-step {
+            display: none;
+        }
+
+        .rp-step.entering {
+            display: block;
+            animation: stepSlideIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .rp-step.active {
+            display: block;
+        }
+
+        .rp-step.leaving {
+            display: block;
+            animation: stepSlideOut 0.28s ease-in forwards;
+        }
+
+        @keyframes stepSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(32px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes stepSlideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-32px);
+            }
+        }
+
+        /* ─── Step indicator dots ────────────────────────────── */
+        .rp-dots {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+
+        .rp-dot {
+            height: 4px;
+            border-radius: 4px;
+            background: #d4e3f5;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .rp-dot.active {
+            background: #2e6fbf;
+        }
+
+        .rp-dot.done {
+            background: #4a9eff;
+        }
+
+        /* ─── Brand header ───────────────────────────────────── */
+        .rp-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 32px;
+            padding: 8px 14px;
+            background: #f0f6ff;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .rp-brand:hover {
+            background: #e2eeff;
+        }
+
+        .rp-brand-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0f2744, #2e6fbf);
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+        }
+
+        .rp-brand-icon img {
+            width: 22px;
+            height: 22px;
+            filter: brightness(0) invert(1);
+        }
+
+        .rp-brand-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f2744;
+            letter-spacing: 0.03em;
+        }
+
+        /* ─── Step header ─────────────────────────────────────── */
+        .rp-step-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+        }
+
+        .rp-step-icon.blue {
+            background: #e8f2ff;
+            color: #1a4d82;
+        }
+
+        .rp-step-icon.green {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .rp-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0f2744;
+            line-height: 1.15;
+            margin-bottom: 8px;
+        }
+
+        .rp-desc {
+            font-size: 0.92rem;
+            color: #5b7494;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* ─── Error alert ─────────────────────────────────────── */
+        .rp-error {
+            border-radius: 12px;
+            font-size: 0.88rem;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        /* ─── Password strength indicator ────────────────────── */
+        .pw-strength {
+            margin-top: 6px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .pw-strength-bar {
+            height: 3px;
+            flex: 1;
+            border-radius: 3px;
+            background: #e2e8f0;
+            transition: background 0.3s;
+        }
+
+        .pw-strength-bar.weak  { background: #e53e3e; }
+        .pw-strength-bar.fair  { background: #dd6b20; }
+        .pw-strength-bar.good  { background: #d69e2e; }
+        .pw-strength-bar.strong{ background: #38a169; }
+
+        .pw-strength-label {
+            font-size: 0.78rem;
+            color: #8aa3be;
+            margin-top: 4px;
+            transition: color 0.3s;
+        }
+
+        /* ─── Action buttons ──────────────────────────────────── */
+        .rp-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .rp-btn-primary {
+            flex: 1;
+            padding: 0.82rem 1rem;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #0f2744, #2e6fbf);
+            color: #fff;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(15, 39, 68, 0.2);
+            transition: filter 0.2s, transform 0.15s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .rp-btn-primary:hover:not(:disabled) {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(15, 39, 68, 0.28);
+        }
+
+        .rp-btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .rp-btn-primary:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .rp-btn-secondary {
+            flex: 1;
+            padding: 0.82rem 1rem;
+            border: 1.5px solid #c5d8ee;
+            border-radius: 14px;
+            background: transparent;
+            color: #5b7494;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+        }
+
+        .rp-btn-secondary:hover {
+            border-color: #1a4d82;
+            color: #0f2744;
+            background: #f0f6ff;
+        }
+
+        /* ─── Success panel ───────────────────────────────────── */
+        .rp-success-wrap {
+            text-align: center;
+            padding: 8px 0;
+        }
+
+        .rp-success-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: #2e7d32;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin: 0 auto 20px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.4); opacity: 0; }
+            to   { transform: scale(1);   opacity: 1; }
+        }
+
+        .rp-countdown {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: #8aa3be;
+            margin-top: 16px;
+            padding: 6px 14px;
+            background: #f0f6ff;
+            border-radius: 999px;
+        }
+
+        /* ─── Divider ─────────────────────────────────────────── */
+        .rp-divider {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e8f0fa;
+            font-size: 0.86rem;
+            color: #8aa3be;
+        }
+
+        .rp-divider a {
+            color: #1a4d82;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 2px 6px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .rp-divider a:hover {
+            background: #e8f2ff;
+        }
+
+        /* ─── Eye toggle ──────────────────────────────────────── */
+        .rp-eye-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #8aa3be;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            z-index: 2;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .rp-eye-btn:hover {
+            color: #2e6fbf;
+            background: rgba(46, 111, 191, 0.08);
+        }
+
+        /* ─── Responsive ──────────────────────────────────────── */
+        @media (max-width: 500px) {
+            .rp-card {
+                border-radius: 20px;
+                padding: 28px 20px;
+                box-shadow: none;
+                border: none;
+            }
+            .rp-actions {
+                flex-direction: column-reverse;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#rp-main" class="skip-link">Pular para o conteúdo</a>
+
+    <main id="rp-main" class="rp-card" role="main">
+
+        <!-- Brand link back to login -->
+        <a href="/index.html" class="rp-brand" aria-label="Voltar para página inicial SAADI">
+            <div class="rp-brand-icon">
+                <img src="../../img/icons8-two-hands-48 (1).png" alt="" role="presentation" />
+            </div>
+            <span class="rp-brand-name">SAADI</span>
+        </a>
+
+        <!-- Progress dots (3 steps) -->
+        <div class="rp-dots" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1"
+            aria-label="Etapa 1 de 3" id="rpDots">
+            <div class="rp-dot active" id="dot1"></div>
+            <div class="rp-dot" id="dot2"></div>
+            <div class="rp-dot" id="dot3"></div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════ -->
+        <!-- Step 1 – E-mail                                       -->
+        <!-- ══════════════════════════════════════════════════════ -->
+        <section class="rp-step active" id="step1" aria-labelledby="step1-title">
+            <div class="rp-step-icon blue">
+                <i class="bi bi-envelope-open" aria-hidden="true"></i>
+            </div>
+            <h1 class="rp-title" id="step1-title">Recuperar senha</h1>
+            <p class="rp-desc">Informe o e-mail cadastrado para continuar.</p>
+
+            <div class="alert alert-danger rp-error d-none" id="errorEmail" role="alert" aria-live="assertive">
+                <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
+                <span id="errorEmailMsg"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="inputEmail">E-mail</label>
+                <div class="input-icon-wrap">
+                    <input
+                        type="email"
+                        id="inputEmail"
+                        name="email"
+                        class="form-control"
+                        placeholder="voce@empresa.com.br"
+                        autocomplete="email"
+                        required />
+                    <i class="bi bi-envelope" aria-hidden="true"></i>
+                </div>
+            </div>
+
+            <div class="rp-actions">
+                <a href="/index.html" class="rp-btn-secondary" id="btnCancel">Cancelar</a>
+                <button type="button" class="rp-btn-primary" id="btnNext">
+                    <span class="spinner spinner-border spinner-border-sm d-none" id="spinnerEmail"
+                        aria-hidden="true"></span>
+                    <span id="btnNextText">Próximo</span>
+                    <i class="bi bi-arrow-right" id="btnNextIcon" aria-hidden="true"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════ -->
+        <!-- Step 2 – Nova Senha                                    -->
+        <!-- ══════════════════════════════════════════════════════ -->
+        <section class="rp-step" id="step2" aria-labelledby="step2-title">
+            <div class="rp-step-icon blue">
+                <i class="bi bi-shield-lock" aria-hidden="true"></i>
+            </div>
+            <h1 class="rp-title" id="step2-title">Nova senha</h1>
+            <p class="rp-desc">Crie uma senha segura para o seu acesso.</p>
+
+            <div class="alert alert-danger rp-error d-none" id="errorReset" role="alert" aria-live="assertive">
+                <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
+                <span id="errorResetMsg"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="inputNewPwd">Nova senha</label>
+                <div class="input-icon-wrap position-relative">
+                    <input
+                        type="password"
+                        id="inputNewPwd"
+                        class="form-control pe-5"
+                        placeholder="Mínimo 6 caracteres"
+                        autocomplete="new-password"
+                        required />
+                    <i class="bi bi-lock" aria-hidden="true"></i>
+                    <button type="button" class="rp-eye-btn" id="togglePwd1"
+                        aria-label="Mostrar nova senha" aria-pressed="false">
+                        <i class="bi bi-eye" id="eye1" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <!-- Strength bars -->
+                <div class="pw-strength" id="strengthBars" aria-hidden="true">
+                    <div class="pw-strength-bar" id="bar1"></div>
+                    <div class="pw-strength-bar" id="bar2"></div>
+                    <div class="pw-strength-bar" id="bar3"></div>
+                    <div class="pw-strength-bar" id="bar4"></div>
+                </div>
+                <p class="pw-strength-label" id="strengthLabel" aria-live="polite"></p>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="inputConfirmPwd">Confirmar senha</label>
+                <div class="input-icon-wrap position-relative">
+                    <input
+                        type="password"
+                        id="inputConfirmPwd"
+                        class="form-control pe-5"
+                        placeholder="Repita a senha"
+                        autocomplete="new-password"
+                        required />
+                    <i class="bi bi-lock-fill" aria-hidden="true"></i>
+                    <button type="button" class="rp-eye-btn" id="togglePwd2"
+                        aria-label="Mostrar confirmação de senha" aria-pressed="false">
+                        <i class="bi bi-eye" id="eye2" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="rp-actions">
+                <button type="button" class="rp-btn-secondary" id="btnBack">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar
+                </button>
+                <button type="button" class="rp-btn-primary" id="btnConfirm">
+                    <span class="spinner spinner-border spinner-border-sm d-none" id="spinnerReset"
+                        aria-hidden="true"></span>
+                    <span>Confirmar nova senha</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════ -->
+        <!-- Step 3 – Sucesso                                       -->
+        <!-- ══════════════════════════════════════════════════════ -->
+        <section class="rp-step" id="step3" aria-labelledby="step3-title">
+            <div class="rp-success-wrap">
+                <div class="rp-success-circle" role="img" aria-label="Sucesso">
+                    <i class="bi bi-check-lg" aria-hidden="true"></i>
+                </div>
+                <h1 class="rp-title" id="step3-title">Senha alterada!</h1>
+                <p class="rp-desc" style="margin-bottom: 0;">Sua senha foi redefinida com sucesso.<br>Você já pode fazer login com a nova senha.</p>
+                <div class="rp-countdown">
+                    <i class="bi bi-clock" aria-hidden="true"></i>
+                    Redirecionando em <strong id="countdownNum">5</strong>s…
+                </div>
+            </div>
+        </section>
+
+        <!-- Back to login link (shown on steps 1 and 2) -->
+        <div class="rp-divider" id="backLink">
+            Lembra da senha?
+            <a href="/index.html">Entrar</a>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        /* ─── Element References ──────────────────────────────── */
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+
+        const dot1 = document.getElementById('dot1');
+        const dot2 = document.getElementById('dot2');
+        const dot3 = document.getElementById('dot3');
+        const rpDots = document.getElementById('rpDots');
+
+        const inputEmail      = document.getElementById('inputEmail');
+        const inputNewPwd     = document.getElementById('inputNewPwd');
+        const inputConfirmPwd = document.getElementById('inputConfirmPwd');
+
+        const errorEmail    = document.getElementById('errorEmail');
+        const errorEmailMsg = document.getElementById('errorEmailMsg');
+        const errorReset    = document.getElementById('errorReset');
+        const errorResetMsg = document.getElementById('errorResetMsg');
+
+        const btnNext    = document.getElementById('btnNext');
+        const btnBack    = document.getElementById('btnBack');
+        const btnConfirm = document.getElementById('btnConfirm');
+
+        const spinnerEmail = document.getElementById('spinnerEmail');
+        const btnNextText  = document.getElementById('btnNextText');
+        const btnNextIcon  = document.getElementById('btnNextIcon');
+        const spinnerReset = document.getElementById('spinnerReset');
+
+        const togglePwd1 = document.getElementById('togglePwd1');
+        const togglePwd2 = document.getElementById('togglePwd2');
+        const eye1       = document.getElementById('eye1');
+        const eye2       = document.getElementById('eye2');
+
+        const backLink   = document.getElementById('backLink');
+        const countdownNum = document.getElementById('countdownNum');
+
+        let resetToken = null;
+
+        /* ─── Step Navigation ─────────────────────────────────── */
+        function goToStep(from, to) {
+            return new Promise(resolve => {
+                // Slide out current
+                from.classList.remove('active');
+                from.classList.add('leaving');
+
+                from.addEventListener('animationend', function handler() {
+                    from.removeEventListener('animationend', handler);
+                    from.classList.remove('leaving');
+
+                    // Slide in next
+                    to.classList.add('entering');
+                    to.addEventListener('animationend', function h2() {
+                        to.removeEventListener('animationend', h2);
+                        to.classList.remove('entering');
+                        to.classList.add('active');
+                        resolve();
+                    }, { once: true });
+                }, { once: true });
+            });
+        }
+
+        function updateDots(step) {
+            [dot1, dot2, dot3].forEach((d, i) => {
+                d.classList.remove('active', 'done');
+                if (i + 1 < step) d.classList.add('done');
+                if (i + 1 === step) d.classList.add('active');
+            });
+            rpDots.setAttribute('aria-valuenow', step);
+            rpDots.setAttribute('aria-label', `Etapa ${step} de 3`);
+        }
+
+        /* ─── Error helpers ───────────────────────────────────── */
+        function showError(el, msgEl, msg) {
+            msgEl.textContent = msg;
+            el.classList.remove('d-none');
+        }
+
+        function hideError(el) {
+            el.classList.add('d-none');
+        }
+
+        /* ─── Password strength ───────────────────────────────── */
+        const bars   = [document.getElementById('bar1'), document.getElementById('bar2'),
+                        document.getElementById('bar3'), document.getElementById('bar4')];
+        const labels = { 0: '', 1: 'Muito fraca', 2: 'Fraca', 3: 'Boa', 4: 'Forte' };
+        const levelClass = { 1: 'weak', 2: 'fair', 3: 'good', 4: 'strong' };
+
+        function evaluateStrength(pwd) {
+            let score = 0;
+            if (pwd.length >= 6)  score++;
+            if (pwd.length >= 10) score++;
+            if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) score++;
+            if (/[0-9]/.test(pwd) && /[^A-Za-z0-9]/.test(pwd)) score++;
+            return score;
+        }
+
+        inputNewPwd.addEventListener('input', () => {
+            const score = evaluateStrength(inputNewPwd.value);
+            bars.forEach((b, i) => {
+                b.className = 'pw-strength-bar';
+                if (i < score) b.classList.add(levelClass[score] || '');
+            });
+            const lbl = document.getElementById('strengthLabel');
+            lbl.textContent = inputNewPwd.value.length ? labels[score] : '';
+            lbl.style.color = score <= 1 ? '#e53e3e' : score === 2 ? '#dd6b20' : score === 3 ? '#d69e2e' : '#38a169';
+        });
+
+        /* ─── Eye toggle ──────────────────────────────────────── */
+        function wireEye(btn, input, icon) {
+            btn.addEventListener('click', () => {
+                const show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                icon.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+                btn.setAttribute('aria-pressed', String(show));
+                btn.setAttribute('aria-label', show ? 'Ocultar senha' : 'Mostrar senha');
+            });
+        }
+        wireEye(togglePwd1, inputNewPwd, eye1);
+        wireEye(togglePwd2, inputConfirmPwd, eye2);
+
+        /* ─── Step 1 → 2 (Check email) ────────────────────────── */
+        btnNext.addEventListener('click', async () => {
+            const email = inputEmail.value.trim();
+            hideError(errorEmail);
+
+            if (!email) {
+                showError(errorEmail, errorEmailMsg, 'Por favor, informe seu e-mail.');
+                inputEmail.focus();
+                return;
+            }
+
+            // Loading state
+            btnNext.disabled = true;
+            spinnerEmail.classList.remove('d-none');
+            btnNextText.textContent = 'Verificando…';
+            btnNextIcon.classList.add('d-none');
+
+            try {
+                const res  = await fetch('/api/auth/forgot-password/check', {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({ email }),
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.message || 'E-mail não encontrado.');
+                }
+
+                resetToken = data.data.reset_token;
+
+                // Animate to step 2
+                await goToStep(step1, step2);
+                updateDots(2);
+                inputNewPwd.focus();
+
+            } catch (err) {
+                showError(errorEmail, errorEmailMsg, err.message);
+            } finally {
+                btnNext.disabled = false;
+                spinnerEmail.classList.add('d-none');
+                btnNextText.textContent = 'Próximo';
+                btnNextIcon.classList.remove('d-none');
+            }
+        });
+
+        /* Press Enter on email field */
+        inputEmail.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') btnNext.click();
+        });
+
+        /* ─── Step 2 → 1 (Back) ───────────────────────────────── */
+        btnBack.addEventListener('click', async () => {
+            hideError(errorReset);
+            inputNewPwd.value     = '';
+            inputConfirmPwd.value = '';
+            // Reset strength bars
+            bars.forEach(b => b.className = 'pw-strength-bar');
+            document.getElementById('strengthLabel').textContent = '';
+
+            await goToStep(step2, step1);
+            updateDots(1);
+            inputEmail.focus();
+        });
+
+        /* ─── Step 2 → 3 (Reset password) ────────────────────── */
+        btnConfirm.addEventListener('click', async () => {
+            const pw1 = inputNewPwd.value;
+            const pw2 = inputConfirmPwd.value;
+            hideError(errorReset);
+
+            if (!pw1) {
+                showError(errorReset, errorResetMsg, 'Por favor, insira uma nova senha.');
+                inputNewPwd.focus();
+                return;
+            }
+            if (pw1.length < 6) {
+                showError(errorReset, errorResetMsg, 'A senha deve ter no mínimo 6 caracteres.');
+                inputNewPwd.focus();
+                return;
+            }
+            if (!pw2) {
+                showError(errorReset, errorResetMsg, 'Por favor, confirme a nova senha.');
+                inputConfirmPwd.focus();
+                return;
+            }
+            if (pw1 !== pw2) {
+                showError(errorReset, errorResetMsg, 'As senhas não coincidem. Tente novamente.');
+                inputConfirmPwd.focus();
+                return;
+            }
+
+            // Loading state
+            btnConfirm.disabled = true;
+            spinnerReset.classList.remove('d-none');
+
+            try {
+                const res  = await fetch('/api/auth/forgot-password/reset', {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({ reset_token: resetToken, nova_senha: pw1 }),
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.message || 'Erro ao redefinir a senha.');
+                }
+
+                // Animate to step 3 (success)
+                backLink.classList.add('d-none');
+                await goToStep(step2, step3);
+                updateDots(3);
+                startCountdown();
+
+            } catch (err) {
+                showError(errorReset, errorResetMsg, err.message);
+            } finally {
+                btnConfirm.disabled = false;
+                spinnerReset.classList.add('d-none');
+            }
+        });
+
+        /* ─── Countdown & redirect ────────────────────────────── */
+        function startCountdown() {
+            let secs = 5;
+            countdownNum.textContent = secs;
+            const timer = setInterval(() => {
+                secs--;
+                countdownNum.textContent = secs;
+                if (secs <= 0) {
+                    clearInterval(timer);
+                    window.location.href = '/index.html';
+                }
+            }, 1000);
+        }
+    </script>
+
 </body>
+
 </html>
