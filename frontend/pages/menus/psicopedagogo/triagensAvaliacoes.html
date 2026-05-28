@@ -53,8 +53,8 @@
     </section>
 
     <!-- Barra de ação: botão Nova Triagem abaixo do cabeçalho -->
-    <div class="triagem-action-bar" style="justify-content: flex-start;">
-      <button id="btnNovaTriagem" class="btn-nova-triagem btn-nova-triagem--standalone" data-bs-toggle="modal" data-bs-target="#modalNovaTriagem" aria-label="Registrar nova triagem">
+    <div class="d-flex justify-content-start mt-3 mb-4">
+      <button id="btnNovaTriagem" class="btn btn-primary d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNovaTriagem" aria-label="Registrar nova triagem">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/></svg>
         Nova Triagem
       </button>
@@ -103,7 +103,7 @@
         </section>
       </div>
     </div>
-  <section class="psicoBloco" aria-label="Histórico de triagens">
+  <section class="psicoBloco mt-4 mt-lg-5" aria-label="Histórico de triagens">
     <h3>Histórico de Triagens</h3>
     <div id="alertaHistorico"></div>
     <div class="psicoTabelaWrap">
@@ -168,9 +168,10 @@
         <div id="alertaModal"></div>
 
         <!-- Seção 1: Identificação -->
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo">👤 Identificação do Estudante</div>
-          <div class="row g-3">
+        <div class="card mb-3 shadow-sm border-0 bg-light">
+          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">👤 Identificação do Estudante</div>
+          <div class="card-body">
+            <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label fw-semibold" for="selectAluno">Nome do Aluno <span class="text-danger">*</span></label>
               <select id="selectAluno" class="form-select" required aria-required="true">
@@ -219,70 +220,81 @@
               <textarea id="queixaPrincipal" class="form-control" rows="3" placeholder="Descreva a principal demanda ou queixa relatada pelos responsáveis e/ou escola..."></textarea>
             </div>
           </div>
+          </div>
         </div>
 
         <!-- Seção 2: Avaliação Cognitiva -->
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo avaliacao-cognitiva-titulo">🧠 Avaliação Cognitiva</div>
-          <div class="avaliacao-grid">
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="cognitiva" value="atencao"> Atenção</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="cognitiva" value="memoria"> Memória</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="cognitiva" value="raciocinio_logico"> Raciocínio Lógico</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="cognitiva" value="organizacao"> Organização</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="cognitiva" value="resolucao_problemas"> Resolução de Problemas</label>
+        <div class="card mb-3 shadow-sm border-0 bg-light">
+          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">🧠 Avaliação Cognitiva</div>
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="cognitiva" value="atencao" id="cog-atencao"><label class="form-check-label" for="cog-atencao">Atenção</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="cognitiva" value="memoria" id="cog-memoria"><label class="form-check-label" for="cog-memoria">Memória</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="cognitiva" value="raciocinio_logico" id="cog-raciocinio"><label class="form-check-label" for="cog-raciocinio">Raciocínio Lógico</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="cognitiva" value="organizacao" id="cog-organizacao"><label class="form-check-label" for="cog-organizacao">Organização</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="cognitiva" value="resolucao_problemas" id="cog-resolucao"><label class="form-check-label" for="cog-resolucao">Resolução de Problemas</label></div>
+            </div>
           </div>
         </div>
 
         <!-- Seção 3: Avaliação Pedagógica -->
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo avaliacao-pedagogica-titulo">📚 Avaliação Pedagógica</div>
-          <div class="avaliacao-grid">
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="pedagogica" value="leitura"> Leitura</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="pedagogica" value="escrita"> Escrita</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="pedagogica" value="interpretacao"> Interpretação</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="pedagogica" value="matematica"> Matemática</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="pedagogica" value="coord_motora_fina"> Coordenação Motora Fina</label>
+        <div class="card mb-3 shadow-sm border-0 bg-light">
+          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">📚 Avaliação Pedagógica</div>
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="pedagogica" value="leitura" id="ped-leitura"><label class="form-check-label" for="ped-leitura">Leitura</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="pedagogica" value="escrita" id="ped-escrita"><label class="form-check-label" for="ped-escrita">Escrita</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="pedagogica" value="interpretacao" id="ped-interpretacao"><label class="form-check-label" for="ped-interpretacao">Interpretação</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="pedagogica" value="matematica" id="ped-matematica"><label class="form-check-label" for="ped-matematica">Matemática</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="pedagogica" value="coord_motora_fina" id="ped-coord"><label class="form-check-label" for="ped-coord">Coordenação Motora Fina</label></div>
+            </div>
           </div>
         </div>
 
         <!-- Seção 4: Avaliação Comportamental -->
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo avaliacao-comportamental-titulo">🔍 Avaliação Comportamental</div>
-          <div class="avaliacao-grid">
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="comportamental" value="interacao_social"> Interação Social</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="comportamental" value="hiperatividade"> Hiperatividade</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="comportamental" value="impulsividade"> Impulsividade</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="comportamental" value="rotina"> Rotina</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="comportamental" value="comunicacao"> Comunicação</label>
+        <div class="card mb-3 shadow-sm border-0 bg-light">
+          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">🔍 Avaliação Comportamental</div>
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="comportamental" value="interacao_social" id="comp-interacao"><label class="form-check-label" for="comp-interacao">Interação Social</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="comportamental" value="hiperatividade" id="comp-hiper"><label class="form-check-label" for="comp-hiper">Hiperatividade</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="comportamental" value="impulsividade" id="comp-impulsividade"><label class="form-check-label" for="comp-impulsividade">Impulsividade</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="comportamental" value="rotina" id="comp-rotina"><label class="form-check-label" for="comp-rotina">Rotina</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="comportamental" value="comunicacao" id="comp-comunicacao"><label class="form-check-label" for="comp-comunicacao">Comunicação</label></div>
+            </div>
           </div>
         </div>
 
         <!-- Seção 5: Avaliação Socioemocional -->
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo avaliacao-socioemocional-titulo">💛 Avaliação Socioemocional</div>
-          <div class="avaliacao-grid">
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="socioemocional" value="ansiedade"> Ansiedade</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="socioemocional" value="frustracao"> Frustração</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="socioemocional" value="autoestima"> Autoestima</label>
-            <label class="avaliacao-item"><input type="checkbox" class="avaliacao-check" name="socioemocional" value="regulacao_emocional"> Regulação Emocional</label>
+        <div class="card mb-3 shadow-sm border-0 bg-light">
+          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">💛 Avaliação Socioemocional</div>
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="socioemocional" value="ansiedade" id="socio-ansiedade"><label class="form-check-label" for="socio-ansiedade">Ansiedade</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="socioemocional" value="frustracao" id="socio-frustracao"><label class="form-check-label" for="socio-frustracao">Frustração</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="socioemocional" value="autoestima" id="socio-autoestima"><label class="form-check-label" for="socio-autoestima">Autoestima</label></div>
+              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="socioemocional" value="regulacao_emocional" id="socio-regulacao"><label class="form-check-label" for="socio-regulacao">Regulação Emocional</label></div>
+            </div>
           </div>
         </div>
 
         <!-- Seção 6: Observações -->
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo">📝 Observações Complementares</div>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label fw-semibold" for="descricaoTriagem">Descrição</label>
-              <textarea id="descricaoTriagem" class="form-control" rows="3" placeholder="Observações gerais sobre a triagem..."></textarea>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label fw-semibold" for="evolucaoTriagem">Evolução</label>
-              <textarea id="evolucaoTriagem" class="form-control" rows="3" placeholder="Evolução observada..."></textarea>
-            </div>
-            <div class="col-12">
-              <label class="form-label fw-semibold" for="observacoesTriagem">Observações Finais</label>
-              <textarea id="observacoesTriagem" class="form-control" rows="2" placeholder="Próximos passos, encaminhamentos sugeridos..."></textarea>
+        <div class="card mb-3 shadow-sm border-0 bg-light">
+          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">📝 Observações Complementares</div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="descricaoTriagem">Descrição</label>
+                <textarea id="descricaoTriagem" class="form-control" rows="3" placeholder="Observações gerais sobre a triagem..."></textarea>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="evolucaoTriagem">Evolução</label>
+                <textarea id="evolucaoTriagem" class="form-control" rows="3" placeholder="Evolução observada..."></textarea>
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold" for="observacoesTriagem">Observações Finais</label>
+                <textarea id="observacoesTriagem" class="form-control" rows="2" placeholder="Próximos passos, encaminhamentos sugeridos..."></textarea>
+              </div>
             </div>
           </div>
         </div>
@@ -612,8 +624,10 @@ function vazio(msg) { return '<p class="text-muted py-3 text-center">' + msg + '
 
 function statusBadge(s) {
   var cor = { aguardando_entrevista:'#4c7adf', em_avaliacao:'#0f9d93', concluida:'#2e7d32', alta_prioridade:'#e14e5b', rascunho:'#888', publicado:'#2e7d32', arquivado:'#999' };
+  var names = { aguardando_entrevista:'Aguardando', em_avaliacao:'Em Avaliação', concluida:'Concluída', alta_prioridade:'Prioridade', rascunho:'Rascunho', publicado:'Publicado', arquivado:'Arquivado' };
   var c = cor[s] || '#888';
-  return '<span style="background:' + c + '20;color:' + c + ';padding:2px 10px;border-radius:999px;font-size:.8rem;font-weight:600">' + s + '</span>';
+  var n = names[s] || s;
+  return '<span style="background:' + c + '20;color:' + c + ';padding:2px 10px;border-radius:999px;font-size:.8rem;font-weight:600">' + n + '</span>';
 }
 
 async function carregarHistorico() {
@@ -633,13 +647,22 @@ async function carregarHistorico() {
 function renderHistorico(d) {
   var a = d.aluno || {};
   var card = document.getElementById('aluno-card');
-  card.style.display = 'flex';
-  card.innerHTML = '<div class="hist-aluno-info"><strong>' + a.nome + '</strong><span>' +
-    (a.serie_turma || 'Serie nao informada') + '</span><span>Responsavel: ' + (a.responsavel || '--') + '</span>' +
-    '<span>Unidade: ' + (a.unidade || '--') + '</span></div>' +
-    '<div class="hist-aluno-tags">' +
-    (a.categorias || []).map(function(c){ return '<span class="hist-tag">' + c + '</span>'; }).join('') +
-    (!(a.categorias || []).length ? '<span class="text-muted small">Sem categorias</span>' : '') + '</div>';
+  card.style.display = 'block';
+  card.className = 'card mb-4 shadow-sm border-0 bg-light';
+  card.innerHTML = '<div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">' +
+    '<div>' +
+      '<h5 class="card-title fw-bold text-primary mb-2">' + a.nome + '</h5>' +
+      '<div class="text-muted small d-flex flex-wrap gap-3">' +
+        '<span><strong>Série:</strong> ' + (a.serie_turma || 'Não informada') + '</span>' +
+        '<span><strong>Responsável:</strong> ' + (a.responsavel || '--') + '</span>' +
+        '<span><strong>Unidade:</strong> ' + (a.unidade || '--') + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="d-flex flex-wrap gap-1">' +
+      (a.categorias || []).map(function(c){ return '<span class="badge bg-secondary">' + c + '</span>'; }).join('') +
+      (!(a.categorias || []).length ? '<span class="text-muted small">Sem categorias</span>' : '') +
+    '</div>' +
+  '</div>';
 
   document.getElementById('hist-tabs-wrapper').style.display = 'block';
   document.getElementById('badge-triagens').textContent = d.triagens.length;
@@ -650,60 +673,65 @@ function renderHistorico(d) {
   document.getElementById('badge-auto').textContent = d.relatorios_automaticos.length;
 
   document.getElementById('hist-triagens-body').innerHTML = d.triagens.length
-    ? '<div class="triagem-cards-grid">' + d.triagens.map(function(t) {
+    ? '<div class="row g-3 mt-2">' + d.triagens.map(function(t) {
         var av = t.avaliacoes_json || {};
         var tagsList = [];
         var catMap = {cognitiva:'Cog',pedagogica:'Ped',comportamental:'Comp',socioemocional:'Soc'};
+        var colorMap = {cognitiva:'primary',pedagogica:'success',comportamental:'warning',socioemocional:'danger'};
         Object.keys(catMap).forEach(function(k){
-          (av[k]||[]).forEach(function(v){ tagsList.push('<span class="triagem-card-tag triagem-tag-'+k+'">'+catMap[k]+': '+v.replace(/_/g,' ')+'</span>'); });
+          (av[k]||[]).forEach(function(v){ 
+            tagsList.push('<span class="badge bg-'+colorMap[k]+' bg-opacity-75">'+catMap[k]+': '+v.replace(/_/g,' ')+'</span>'); 
+          });
         });
-        return '<div class="triagem-card">'
-          + '<div class="triagem-card-header">'
-            + '<div class="triagem-card-meta">'
-              + '<span class="triagem-card-data">'+dataFmt(t.data)+'</span>'
-              + '<span class="triagem-card-tipo">'+t.tipo+'</span>'
+        return '<div class="col-md-6 col-lg-4">'
+          + '<div class="card h-100 shadow-sm border-0">'
+            + '<div class="card-header bg-transparent d-flex justify-content-between align-items-center pb-2 pt-3">'
+              + '<div>'
+                + '<div class="fw-bold text-dark fs-6">'+dataFmt(t.data)+'</div>'
+                + '<small class="text-muted">'+(t.tipo||'Triagem')+'</small>'
+              + '</div>'
+              + '<div>' + statusBadge(t.status) + '</div>'
             + '</div>'
-            + statusBadge(t.status)
-          + '</div>'
-          + '<div class="triagem-card-body">'
-            + (t.queixa_principal ? '<p class="triagem-card-queixa"><strong>Queixa:</strong> '+t.queixa_principal+'</p>' : '')
-            + (t.descricao ? '<p class="triagem-card-desc text-muted small">'+t.descricao+'</p>' : '')
-            + (tagsList.length ? '<div class="triagem-card-tags">'+tagsList.join('')+'</div>' : '')
-          + '</div>'
-          + '<div class="triagem-card-footer">'
-            + '<small class="text-muted">Profissional: '+(t.profissional||'--')+'</small>'
-            + '<button class="btn btn-sm btn-outline-primary triagem-edit-btn" '
-              + 'onclick="abrirEditTriagem('+JSON.stringify(t).replace(/"/g,'&quot;')+')">'
-              + '&#9998; Editar'
-            + '</button>'
+            + '<div class="card-body py-2">'
+              + (t.queixa_principal ? '<p class="card-text mb-2"><strong>Queixa:</strong> '+t.queixa_principal+'</p>' : '')
+              + (t.descricao ? '<p class="card-text text-muted small mb-2">'+t.descricao+'</p>' : '')
+              + (tagsList.length ? '<div class="d-flex flex-wrap gap-1 mt-3">'+tagsList.join('')+'</div>' : '')
+            + '</div>'
+            + '<div class="card-footer bg-transparent d-flex justify-content-between align-items-center pt-2 pb-3">'
+              + '<small class="text-muted">Por: '+(t.profissional||'--')+'</small>'
+              + '<button class="btn btn-sm btn-outline-primary" '
+                + 'onclick="abrirEditTriagem('+JSON.stringify(t).replace(/"/g,'&quot;')+')">'
+                + '&#9998; Editar'
+              + '</button>'
+            + '</div>'
           + '</div>'
         + '</div>';
       }).join('') + '</div>'
     : vazio('Nenhuma triagem registrada para este aluno.');
 
   document.getElementById('hist-avaliacoes-body').innerHTML = d.avaliacoes.length
-    ? d.avaliacoes.map(function(av){ return '<div class="hist-av-bloco"><div class="hist-av-meta">' + dataFmt(av.data) + ' - ' + (av.profissional||'--') + '</div><div class="hist-av-itens">' +
-      av.itens.map(function(i){ return '<span class="hist-av-tag">[' + i.categoria + '] ' + i.item + '</span>'; }).join('') + '</div></div>'; }).join('')
-    : vazio('Nenhuma avaliacao com itens marcados.');
+    ? '<div class="row g-3 mt-2">' + d.avaliacoes.map(function(av){ return '<div class="col-12"><div class="card shadow-sm border-0"><div class="card-header bg-transparent fw-bold text-primary">' + dataFmt(av.data) + ' <span class="text-muted fw-normal ms-2">Por: ' + (av.profissional||'--') + '</span></div><div class="card-body d-flex flex-wrap gap-2">' +
+      av.itens.map(function(i){ return '<span class="badge border border-secondary text-secondary">[' + i.categoria + '] ' + i.item + '</span>'; }).join('') + '</div></div></div>'; }).join('') + '</div>'
+    : vazio('Nenhuma avaliação com itens marcados.');
 
   document.getElementById('hist-evolucao-body').innerHTML = d.evolucoes.length
-    ? d.evolucoes.map(function(e){ return '<div class="hist-linha"><div class="hist-linha-data">' + dataFmt(e.data) + '</div><div class="hist-linha-body"><p class="mb-1">' +
-      (e.texto || '').replace(/\n/g,'<br>') + '</p><small class="text-muted">' + (e.profissional||'--') + '</small></div></div>'; }).join('')
-    : vazio('Nenhum registro de evolucao encontrado.');
+    ? '<div class="list-group mt-3">' + d.evolucoes.map(function(e){ return '<div class="list-group-item list-group-item-action flex-column align-items-start border-0 shadow-sm mb-3 rounded"><div class="d-flex w-100 justify-content-between"><h6 class="mb-1 fw-bold text-primary">' + dataFmt(e.data) + '</h6><small class="text-muted">' + (e.profissional||'--') + '</small></div><p class="mb-1 mt-2">' +
+      (e.texto || '').replace(/\n/g,'<br>') + '</p></div>'; }).join('') + '</div>'
+    : vazio('Nenhum registro de evolução encontrado.');
 
   document.getElementById('hist-obs-body').innerHTML = d.observacoes_comportamentais.length
-    ? d.observacoes_comportamentais.map(function(o){ return '<div class="hist-linha"><div class="hist-linha-data">' + dataFmt(o.data) + '</div><div class="hist-linha-body">' +
-      (o.itens_comportamentais.length ? '<div class="mb-2">' + o.itens_comportamentais.map(function(i){ return '<span class="badge bg-warning text-dark me-1">' + i + '</span>'; }).join('') + '</div>' : '') +
-      (o.observacoes ? '<p class="mb-1">' + o.observacoes.replace(/\n/g,'<br>') + '</p>' : '') +
-      '<small class="text-muted">' + (o.profissional||'--') + '</small></div></div>'; }).join('')
-    : vazio('Nenhuma observacao comportamental registrada.');
+    ? '<div class="list-group mt-3">' + d.observacoes_comportamentais.map(function(o){ return '<div class="list-group-item list-group-item-action flex-column align-items-start border-0 shadow-sm mb-3 rounded"><div class="d-flex w-100 justify-content-between"><h6 class="mb-1 fw-bold text-warning text-darken" style="color:#b57600">' + dataFmt(o.data) + '</h6><small class="text-muted">' + (o.profissional||'--') + '</small></div>' +
+      (o.itens_comportamentais.length ? '<div class="mb-2 mt-2">' + o.itens_comportamentais.map(function(i){ return '<span class="badge bg-warning text-dark me-1">' + i + '</span>'; }).join('') + '</div>' : '') +
+      (o.observacoes ? '<p class="mb-1 mt-2">' + o.observacoes.replace(/\n/g,'<br>') + '</p>' : '') +
+      '</div>'; }).join('') + '</div>'
+    : vazio('Nenhuma observação comportamental registrada.');
 
   function renderRels(lista, elId) {
     document.getElementById(elId).innerHTML = lista.length
-      ? '<div class="table-responsive"><table class="table table-striped align-middle mt-3"><thead><tr><th>Titulo</th><th>Tipo</th><th>Origem</th><th>Status</th><th>Data</th></tr></thead><tbody>' +
-        lista.map(function(r){ return '<tr><td>' + r.titulo + '</td><td>' + r.tipo + '</td><td>' + r.origem + '</td><td>' + statusBadge(r.status) + '</td><td>' +
-        (r.created_at ? new Date(r.created_at).toLocaleDateString('pt-BR') : '--') + '</td></tr>'; }).join('') + '</tbody></table></div>'
-      : vazio('Nenhum relatorio encontrado.');
+      ? '<div class="card shadow-sm border-0 mt-3"><div class="card-body p-0"><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th class="ps-3">Título</th><th>Tipo</th><th>Origem</th><th>Status</th><th>Data</th></tr></thead><tbody>' +
+        lista.map(function(r){ return '<tr><td class="ps-3 fw-semibold">' + r.titulo + '</td><td>' + r.tipo + '</td><td>' + r.origem + '</td><td>' + statusBadge(r.status) + '</td><td>' +
+        (r.created_at ? new Date(r.created_at).toLocaleDateString('pt-BR') : '--') + '</td></tr>'; }).join('') + '</tbody></table></div></div></div>'
+      : vazio('Nenhum relatório encontrado.');
   }
   renderRels(d.relatorios, 'hist-relatorios-body');
   renderRels(d.relatorios_automaticos, 'hist-auto-body');
