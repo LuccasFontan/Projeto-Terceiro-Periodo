@@ -807,3 +807,113 @@ hr {
         font-size: 0.86rem;
     }
 }
+
+/* ==================== FILTROS DE PLANOS ==================== */
+.filtros-planos {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto auto;
+    gap: 16px;
+    align-items: end;
+    transition: box-shadow 0.3s ease;
+}
+
+.filtros-planos:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.filtro-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.filtro-item label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 6px;
+}
+
+.filtro-input, .filtro-select {
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #2d3748;
+    background-color: #f8fafc;
+    transition: all 0.2s ease;
+}
+
+.filtro-input:focus, .filtro-select:focus {
+    border-color: #163a63;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(22, 58, 99, 0.1);
+}
+
+.btn-filtrar {
+    background-color: #163a63;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    height: 42px;
+}
+
+.btn-filtrar:hover {
+    background-color: #0f2a4a;
+}
+
+.btn-filtrar:active {
+    transform: scale(0.97);
+}
+
+.btn-limpar {
+    background-color: transparent;
+    color: #64748b;
+    border: 1px solid #cbd5e1;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 42px;
+}
+
+.btn-limpar:hover {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.novo-plano-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+/* Responsividade Filtros */
+@media (max-width: 1200px) {
+    .filtros-planos {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .filtros-planos {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .filtros-planos {
+        grid-template-columns: 1fr;
+    }
+}
+

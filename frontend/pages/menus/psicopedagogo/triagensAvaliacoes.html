@@ -1,828 +1,1047 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SAADI | Triagens e Avaliações</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-<link rel="stylesheet" href="../../../css/menuPsicopedagogo.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="shortcut icon" href="../../../img/favicon-duas-mãos-32px-branco.png" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAADI | Triagens e Avaliações</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../../css/menuPsicopedagogo.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="../../../img/favicon-duas-mãos-32px-branco.png" type="image/x-icon">
 </head>
+
 <body>
-<a class="pularConteudo" href="#conteudo-principal">Pular para o conteudo principal</a>
-<div class="app">
-  <nav class="menuLateral" aria-label="Menu principal do psicopedagogo">
-    <a class="menuSecretaria" id="telaInicial" href="/pages/menus/psicopedagogo/menuPsicopedagogo.html">
-      <div class="logoContainer">
-        <div class="logoMenu"><img src="/img/icons8-duas-mãos-windows-11-filled/Logo.png" alt="Logo: Duas Mãos abertas"></div>
-        <div><h3>SAADI</h3><p>Psicopedagogo</p></div>
-      </div>
-    </a>
-    <hr>
-    <div class="Perfil">
-      <div class="fotoPerfil"><img src="/img/perfil.png" alt="Foto de Perfil vazia"></div>
-      <div><p id="nomeUsuario">Bem-vindo(a)!</p></div>
-      <div class="config"><button type="button" aria-label="Abrir configuracoes"><img src="/img/engrenagem.png" alt="Configurações"></button></div>
+    <a class="pularConteudo" href="#conteudo-principal">Pular para o conteudo principal</a>
+    <div class="app">
+        <nav class="menuLateral" aria-label="Menu principal do psicopedagogo">
+            <a class="menuSecretaria" id="telaInicial" href="/pages/menus/psicopedagogo/menuPsicopedagogo.html">
+                <div class="logoContainer">
+                    <div class="logoMenu"><img src="/img/icons8-duas-mãos-windows-11-filled/Logo.png"
+                            alt="Logo: Duas Mãos abertas"></div>
+                    <div>
+                        <h3>SAADI</h3>
+                        <p>Psicopedagogo</p>
+                    </div>
+                </div>
+            </a>
+            <hr>
+            <div class="Perfil">
+                <div class="fotoPerfil"><img src="/img/perfil.png" alt="Foto de Perfil vazia"></div>
+                <div>
+                    <p id="nomeUsuario">Bem-vindo(a)!</p>
+                </div>
+                <div class="config"><button type="button" aria-label="Abrir configuracoes"><img
+                            src="/img/engrenagem.png" alt="Configurações"></button></div>
+            </div>
+            <hr>
+            <a class="botoesLaterais" href="/pages/menus/psicopedagogo/triagensAvaliacoes.html" aria-current="page">
+                <div class="alinhamento">
+                    <div class="fotos"><img src="/img/icon-cadastro.png" alt="Triagens"></div>
+                    <p>Triagens e Avaliações</p>
+                </div>
+            </a>
+            <a class="botoesLaterais" href="/pages/menus/psicopedagogo/planosAcompanhamento.html">
+                <div class="alinhamento">
+                    <div class="fotos"><img src="/img/icon-lista.png" alt="Planos"></div>
+                    <p>Planos de Acompanhamento</p>
+                </div>
+            </a>
+            <a class="botoesLaterais" href="/pages/menus/psicopedagogo/encaminhamentosPsicopedagogo.html">
+                <div class="alinhamento">
+                    <div class="fotos"><img src="/img/icon-atualizar.png" alt="Encaminhamentos"></div>
+                    <p>Encaminhamentos</p>
+                </div>
+            </a>
+            <a class="botoesLaterais" href="/pages/menus/psicopedagogo/relatoriosPsicopedagogo.html">
+                <div class="alinhamento">
+                    <div class="fotos"><img src="/img/icon-relatorio.png" alt="Relatórios"></div>
+                    <p>Relatórios</p>
+                </div>
+            </a>
+            <div class="baixo">
+                <hr>
+            </div>
+            <a class="textoSair" id="btnSair" href="/pages/auth/login.html">
+                <div class="sair">
+                    <div class="fotoSair"><img src="/img/sair.png" alt="Sair"></div>
+                    <p>Sair da Conta</p>
+                </div>
+            </a>
+        </nav>
+
+        <main id="conteudo-principal" class="conteudoPrincipal" tabindex="-1">
+            <section class="cabecalhoInstituicao" aria-label="Cabeçalho do módulo">
+                <p class="cabecalhoLabel">Módulo</p>
+                <h2 class="nomeInstituicao">Triagens e Avaliações Psicopedagógicas</h2>
+            </section>
+
+            <!-- Barra de ação: botão Nova Triagem abaixo do cabeçalho -->
+            <div class="d-flex justify-content-start mt-3 mb-4" style="margin: 0 auto; width: min(92%, 1100px);">
+                <button id="btnNovaTriagem"
+                    class="btn btn-primary d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-3 shadow-sm"
+                    data-bs-toggle="modal" data-bs-target="#modalNovaTriagem" aria-label="Registrar nova triagem">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        viewBox="0 0 16 16" aria-hidden="true">
+                        <path
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                    </svg>
+                    Nova Triagem
+                </button>
+            </div>
+
+            <div class="inferior">
+                <div class="ladoEsquerdo">
+                    <section class="painelIntro" aria-label="Descrição do módulo de triagens">
+                        <p class="painelIntroTag">Gestão de Triagens</p>
+                        <h1 class="painelIntroTitulo">Registre e acompanhe avaliações iniciais dos estudantes</h1>
+                        <p class="painelIntroTexto">Organize as triagens por prioridade, etapa e situação. Este módulo
+                            facilita a visão dos casos novos e ajuda na definição de planos de atendimento mais
+                            assertivos.</p>
+                        <p class="painelIntroTexto">Utilize as informações para documentar observações pedagógicas,
+                            hipóteses iniciais e necessidades de encaminhamento para equipe multiprofissional.</p>
+                    </section>
+                </div>
+                <div class="ladoDireito">
+                    <section class="dashboardPainel" aria-label="Resumo de triagens">
+                        <div class="dashboardCabecalho">
+                            <h3 class="dashboardTitulo">Resumo</h3>
+                            <p class="dashboardSubtitulo">Panorama rápido das triagens</p>
+                        </div>
+                        <div class="caixaTotal cardDestaque">
+                            <div class="metricaInfo">
+                                <p class="metricaRotulo">Total de Triagens</p>
+                                <p class="metricaComplemento">Período atual</p>
+                            </div>
+                            <div class="contagem" id="metric-total">—</div>
+                        </div>
+                        <div class="fileira">
+                            <div class="metricaCard autistas">
+                                <div class="metricaInfo">
+                                    <p class="metricaRotulo">Aguardando Entrevista</p>
+                                </div>
+                                <div class="contagem" id="metric-aguardando">—</div>
+                            </div>
+                            <div class="metricaCard tdah">
+                                <div class="metricaInfo">
+                                    <p class="metricaRotulo">Em Avaliação</p>
+                                </div>
+                                <div class="contagem" id="metric-avaliacao">—</div>
+                            </div>
+                            <div class="metricaCard dislexia">
+                                <div class="metricaInfo">
+                                    <p class="metricaRotulo">Concluídas</p>
+                                </div>
+                                <div class="contagem" id="metric-concluidas">—</div>
+                            </div>
+                            <div class="metricaCard outras">
+                                <div class="metricaInfo">
+                                    <p class="metricaRotulo">Alta Prioridade</p>
+                                </div>
+                                <div class="contagem" id="metric-prioridade">—</div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <section class="psicoBloco" aria-label="Histórico de triagens">
+                <h3>Histórico de Triagens</h3>
+                <div id="alertaHistorico"></div>
+                <div class="psicoTabelaWrap">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Aluno</th>
+                                <th>Série/Turma</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th>Queixa Principal</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="triagens-tbody">
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">Carregando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="psicoBloco" aria-label="Historico do aluno">
+                <h3 style="color:#163a63;margin-bottom:6px">&#128194; Hist&#243;rico do Aluno</h3>
+                <p class="psicoInfo">Selecione um aluno para visualizar triagens, avalia&#231;&#245;es,
+                    evolu&#231;&#227;o, observa&#231;&#245;es e relat&#243;rios.</p>
+                <div class="row g-3 mb-4" style="align-items:flex-end">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="selectHistoricoAluno">Aluno</label>
+                        <select id="selectHistoricoAluno" class="form-select">
+                            <option value="">Selecione o aluno...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-auto">
+                        <button id="btnCarregarHistorico" class="btn btn-primary">Carregar Hist&#243;rico</button>
+                    </div>
+                </div>
+                <div id="aluno-card" class="hist-aluno-card" style="display:none"></div>
+                <div id="hist-tabs-wrapper" style="display:none">
+                    <ul class="nav nav-tabs" id="histTabs" role="tablist">
+                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab"
+                                data-bs-target="#tab-triagens" type="button">Triagens <span id="badge-triagens"
+                                    class="badge bg-primary ms-1">0</span></button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab"
+                                data-bs-target="#tab-avaliacoes" type="button">Avalia&#231;&#245;es <span
+                                    id="badge-avaliacoes" class="badge bg-secondary ms-1">0</span></button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab"
+                                data-bs-target="#tab-evolucao" type="button">Evolu&#231;&#227;o <span
+                                    id="badge-evolucao" class="badge bg-success ms-1">0</span></button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-obs"
+                                type="button">Observa&#231;&#245;es <span id="badge-obs"
+                                    class="badge bg-warning ms-1">0</span></button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab"
+                                data-bs-target="#tab-relatorios" type="button">Relat&#243;rios <span
+                                    id="badge-relatorios" class="badge bg-info ms-1">0</span></button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-auto"
+                                type="button">Auto&#45;Relat&#243;rios <span id="badge-auto"
+                                    class="badge bg-dark ms-1">0</span></button></li>
+                    </ul>
+                    <div class="tab-content hist-tab-content" id="histTabContent">
+                        <div class="tab-pane fade show active" id="tab-triagens" role="tabpanel">
+                            <div id="hist-triagens-body"></div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-avaliacoes" role="tabpanel">
+                            <div id="hist-avaliacoes-body"></div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-evolucao" role="tabpanel">
+                            <div id="hist-evolucao-body"></div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-obs" role="tabpanel">
+                            <div id="hist-obs-body"></div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-relatorios" role="tabpanel">
+                            <div id="hist-relatorios-body"></div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-auto" role="tabpanel">
+                            <div id="hist-auto-body"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
-    <hr>
-    <a class="botoesLaterais" href="/pages/menus/psicopedagogo/triagensAvaliacoes.html" aria-current="page">
-      <div class="alinhamento"><div class="fotos"><img src="/img/icon-cadastro.png" alt="Triagens"></div><p>Triagens e Avaliações</p></div>
-    </a>
-    <a class="botoesLaterais" href="/pages/menus/psicopedagogo/planosAcompanhamento.html">
-      <div class="alinhamento"><div class="fotos"><img src="/img/icon-lista.png" alt="Planos"></div><p>Planos de Acompanhamento</p></div>
-    </a>
-    <a class="botoesLaterais" href="/pages/menus/psicopedagogo/encaminhamentosPsicopedagogo.html">
-      <div class="alinhamento"><div class="fotos"><img src="/img/icon-atualizar.png" alt="Encaminhamentos"></div><p>Encaminhamentos</p></div>
-    </a>
-    <a class="botoesLaterais" href="/pages/menus/psicopedagogo/relatoriosPsicopedagogo.html">
-      <div class="alinhamento"><div class="fotos"><img src="/img/icon-relatorio.png" alt="Relatórios"></div><p>Relatórios</p></div>
-    </a>
-    <div class="baixo"><hr></div>
-    <a class="textoSair" id="btnSair" href="/pages/auth/login.html">
-      <div class="sair"><div class="fotoSair"><img src="/img/sair.png" alt="Sair"></div><p>Sair da Conta</p></div>
-    </a>
-  </nav>
 
-  <main id="conteudo-principal" class="conteudoPrincipal" tabindex="-1">
-    <section class="cabecalhoInstituicao" aria-label="Cabeçalho do módulo">
-      <p class="cabecalhoLabel">Módulo</p>
-      <h2 class="nomeInstituicao">Triagens e Avaliações Psicopedagógicas</h2>
-    </section>
+    <!-- Modal Nova Triagem -->
+    <div class="modal fade" id="modalNovaTriagem" tabindex="-1" aria-labelledby="modalTriagemLabel" aria-modal="true"
+        role="dialog">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header" style="background:linear-gradient(135deg,#163a63,#2e5f92);color:#fff">
+                    <h5 class="modal-title" id="modalTriagemLabel">📋 Nova Triagem Psicopedagógica</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="alertaModal"></div>
 
-    <!-- Barra de ação: botão Nova Triagem abaixo do cabeçalho -->
-    <div class="d-flex justify-content-start mt-3 mb-4">
-      <button id="btnNovaTriagem" class="btn btn-primary d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNovaTriagem" aria-label="Registrar nova triagem">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/></svg>
-        Nova Triagem
-      </button>
+                    <!-- Seção 1: Identificação -->
+                    <div class="card mb-3 shadow-sm border-0 bg-light">
+                        <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">👤 Identificação
+                            do Estudante</div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold" for="selectAluno">Nome do Aluno <span
+                                            class="text-danger">*</span></label>
+                                    <select id="selectAluno" class="form-select" required aria-required="true">
+                                        <option value="">Selecione o aluno...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold" for="idadeAluno">Idade</label>
+                                    <input id="idadeAluno" type="text" class="form-control"
+                                        placeholder="Calculada automaticamente" readonly>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold" for="serieAluno">Série / Turma</label>
+                                    <input id="serieAluno" type="text" class="form-control" placeholder="Ex: 3º Ano A"
+                                        readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold" for="responsavelAluno">Responsável</label>
+                                    <input id="responsavelAluno" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold" for="escolaAluno">Escola / Unidade</label>
+                                    <input id="escolaAluno" type="text" class="form-control" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold" for="dataTriagem">Data da Triagem <span
+                                            class="text-danger">*</span></label>
+                                    <input id="dataTriagem" type="date" class="form-control" required
+                                        aria-required="true">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold" for="tipoRegistro">Tipo de Registro <span
+                                            class="text-danger">*</span></label>
+                                    <select id="tipoRegistro" class="form-select" required aria-required="true">
+                                        <option value="triagem">Triagem</option>
+                                        <option value="acompanhamento">Acompanhamento</option>
+                                        <option value="concluido">Concluído</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold" for="statusTriagem">Status</label>
+                                    <select id="statusTriagem" class="form-select">
+                                        <option value="aguardando_entrevista">Aguardando Entrevista</option>
+                                        <option value="em_avaliacao">Em Avaliação</option>
+                                        <option value="alta_prioridade">Alta Prioridade</option>
+                                        <option value="concluida">Concluída</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold" for="queixaPrincipal">Queixa Principal</label>
+                                    <textarea id="queixaPrincipal" class="form-control" rows="3"
+                                        placeholder="Descreva a principal demanda ou queixa relatada pelos responsáveis e/ou escola..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 2: Avaliação Cognitiva -->
+                    <div class="card mb-3 shadow-sm border-0 bg-light">
+                        <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">🧠 Avaliação
+                            Cognitiva</div>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="cognitiva"
+                                        value="atencao" id="cog-atencao"><label class="form-check-label"
+                                        for="cog-atencao">Atenção</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="cognitiva"
+                                        value="memoria" id="cog-memoria"><label class="form-check-label"
+                                        for="cog-memoria">Memória</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="cognitiva"
+                                        value="raciocinio_logico" id="cog-raciocinio"><label class="form-check-label"
+                                        for="cog-raciocinio">Raciocínio Lógico</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="cognitiva"
+                                        value="organizacao" id="cog-organizacao"><label class="form-check-label"
+                                        for="cog-organizacao">Organização</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="cognitiva"
+                                        value="resolucao_problemas" id="cog-resolucao"><label class="form-check-label"
+                                        for="cog-resolucao">Resolução de Problemas</label></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 3: Avaliação Pedagógica -->
+                    <div class="card mb-3 shadow-sm border-0 bg-light">
+                        <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">📚 Avaliação
+                            Pedagógica</div>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="pedagogica"
+                                        value="leitura" id="ped-leitura"><label class="form-check-label"
+                                        for="ped-leitura">Leitura</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="pedagogica"
+                                        value="escrita" id="ped-escrita"><label class="form-check-label"
+                                        for="ped-escrita">Escrita</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="pedagogica"
+                                        value="interpretacao" id="ped-interpretacao"><label class="form-check-label"
+                                        for="ped-interpretacao">Interpretação</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="pedagogica"
+                                        value="matematica" id="ped-matematica"><label class="form-check-label"
+                                        for="ped-matematica">Matemática</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="pedagogica"
+                                        value="coord_motora_fina" id="ped-coord"><label class="form-check-label"
+                                        for="ped-coord">Coordenação Motora Fina</label></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 4: Avaliação Comportamental -->
+                    <div class="card mb-3 shadow-sm border-0 bg-light">
+                        <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">🔍 Avaliação
+                            Comportamental</div>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="comportamental"
+                                        value="interacao_social" id="comp-interacao"><label class="form-check-label"
+                                        for="comp-interacao">Interação Social</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="comportamental"
+                                        value="hiperatividade" id="comp-hiper"><label class="form-check-label"
+                                        for="comp-hiper">Hiperatividade</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="comportamental"
+                                        value="impulsividade" id="comp-impulsividade"><label class="form-check-label"
+                                        for="comp-impulsividade">Impulsividade</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="comportamental"
+                                        value="rotina" id="comp-rotina"><label class="form-check-label"
+                                        for="comp-rotina">Rotina</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="comportamental"
+                                        value="comunicacao" id="comp-comunicacao"><label class="form-check-label"
+                                        for="comp-comunicacao">Comunicação</label></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 5: Avaliação Socioemocional -->
+                    <div class="card mb-3 shadow-sm border-0 bg-light">
+                        <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">💛 Avaliação
+                            Socioemocional</div>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="socioemocional"
+                                        value="ansiedade" id="socio-ansiedade"><label class="form-check-label"
+                                        for="socio-ansiedade">Ansiedade</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="socioemocional"
+                                        value="frustracao" id="socio-frustracao"><label class="form-check-label"
+                                        for="socio-frustracao">Frustração</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="socioemocional"
+                                        value="autoestima" id="socio-autoestima"><label class="form-check-label"
+                                        for="socio-autoestima">Autoestima</label></div>
+                                <div class="col-md-6 col-lg-4 form-check"><input
+                                        class="form-check-input avaliacao-check" type="checkbox" name="socioemocional"
+                                        value="regulacao_emocional" id="socio-regulacao"><label class="form-check-label"
+                                        for="socio-regulacao">Regulação Emocional</label></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 6: Observações -->
+                    <div class="card mb-3 shadow-sm border-0 bg-light">
+                        <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">📝 Observações
+                            Complementares</div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold" for="descricaoTriagem">Descrição</label>
+                                    <textarea id="descricaoTriagem" class="form-control" rows="3"
+                                        placeholder="Observações gerais sobre a triagem..."></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold" for="evolucaoTriagem">Evolução</label>
+                                    <textarea id="evolucaoTriagem" class="form-control" rows="3"
+                                        placeholder="Evolução observada..."></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold" for="observacoesTriagem">Observações
+                                        Finais</label>
+                                    <textarea id="observacoesTriagem" class="form-control" rows="2"
+                                        placeholder="Próximos passos, encaminhamentos sugeridos..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnSalvarTriagem" class="btn btn-primary px-4">Salvar Triagem</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="inferior">
-      <div class="ladoEsquerdo">
-        <section class="painelIntro" aria-label="Descrição do módulo de triagens">
-          <p class="painelIntroTag">Gestão de Triagens</p>
-          <h1 class="painelIntroTitulo">Registre e acompanhe avaliações iniciais dos estudantes</h1>
-          <p class="painelIntroTexto">Organize as triagens por prioridade, etapa e situação. Este módulo facilita a visão dos casos novos e ajuda na definição de planos de atendimento mais assertivos.</p>
-          <p class="painelIntroTexto">Utilize as informações para documentar observações pedagógicas, hipóteses iniciais e necessidades de encaminhamento para equipe multiprofissional.</p>
-        </section>
-      </div>
-      <div class="ladoDireito">
-        <section class="dashboardPainel" aria-label="Resumo de triagens">
-          <div class="dashboardCabecalho">
-            <h3 class="dashboardTitulo">Resumo</h3>
-            <p class="dashboardSubtitulo">Panorama rápido das triagens</p>
-          </div>
-          <div class="caixaTotal cardDestaque">
-            <div class="metricaInfo">
-              <p class="metricaRotulo">Total de Triagens</p>
-              <p class="metricaComplemento">Período atual</p>
+
+    <!-- Modal Edicao de Triagem -->
+    <div class="modal fade" id="modalEditTriagem" tabindex="-1" aria-labelledby="modalEditLabel" aria-modal="true"
+        role="dialog">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header" style="background:linear-gradient(135deg,#0f6e5a,#1a9e80);color:#fff">
+                    <h5 class="modal-title" id="modalEditLabel">&#9998; Editar Triagem</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editTriagemId">
+                    <div id="alertaEditModal"></div>
+
+                    <div class="avaliacao-secao">
+                        <div class="avaliacao-secao-titulo">&#128100; Dados Gerais</div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Data da Triagem</label>
+                                <input id="editDataTriagem" type="date" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Tipo de Registro</label>
+                                <select id="editTipoRegistro" class="form-select">
+                                    <option value="triagem">Triagem</option>
+                                    <option value="acompanhamento">Acompanhamento</option>
+                                    <option value="concluido">Conclu&#237;do</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Status</label>
+                                <select id="editStatusTriagem" class="form-select">
+                                    <option value="aguardando_entrevista">Aguardando Entrevista</option>
+                                    <option value="em_avaliacao">Em Avalia&#231;&#227;o</option>
+                                    <option value="alta_prioridade">Alta Prioridade</option>
+                                    <option value="concluida">Conclu&#237;da</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Queixa Principal</label>
+                                <textarea id="editQueixaPrincipal" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="avaliacao-secao">
+                        <div class="avaliacao-secao-titulo avaliacao-cognitiva-titulo">&#129504; Avalia&#231;&#227;o
+                            Cognitiva</div>
+                        <div class="avaliacao-grid">
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_cognitiva"
+                                    value="atencao"> Aten&#231;&#227;o</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_cognitiva"
+                                    value="memoria"> Mem&#243;ria</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_cognitiva"
+                                    value="raciocinio_logico"> Racioc&#237;nio L&#243;gico</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_cognitiva"
+                                    value="organizacao"> Organiza&#231;&#227;o</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_cognitiva"
+                                    value="resolucao_problemas"> Resolu&#231;&#227;o de Problemas</label>
+                        </div>
+                    </div>
+
+                    <div class="avaliacao-secao">
+                        <div class="avaliacao-secao-titulo avaliacao-pedagogica-titulo">&#128218; Avalia&#231;&#227;o
+                            Pedag&#243;gica</div>
+                        <div class="avaliacao-grid">
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_pedagogica"
+                                    value="leitura"> Leitura</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_pedagogica"
+                                    value="escrita"> Escrita</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_pedagogica"
+                                    value="interpretacao"> Interpreta&#231;&#227;o</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_pedagogica"
+                                    value="matematica"> Matem&#225;tica</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_pedagogica"
+                                    value="coord_motora_fina"> Coord. Motora Fina</label>
+                        </div>
+                    </div>
+
+                    <div class="avaliacao-secao">
+                        <div class="avaliacao-secao-titulo avaliacao-comportamental-titulo">&#128269;
+                            Avalia&#231;&#227;o Comportamental</div>
+                        <div class="avaliacao-grid">
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check"
+                                    name="e_comportamental" value="interacao_social"> Intera&#231;&#227;o Social</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check"
+                                    name="e_comportamental" value="hiperatividade"> Hiperatividade</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check"
+                                    name="e_comportamental" value="impulsividade"> Impulsividade</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check"
+                                    name="e_comportamental" value="rotina"> Rotina</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check"
+                                    name="e_comportamental" value="comunicacao"> Comunica&#231;&#227;o</label>
+                        </div>
+                    </div>
+
+                    <div class="avaliacao-secao">
+                        <div class="avaliacao-secao-titulo avaliacao-socioemocional-titulo">&#128155;
+                            Avalia&#231;&#227;o Socioemocional</div>
+                        <div class="avaliacao-grid">
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check"
+                                    name="e_socioemocional" value="ansiedade"> Ansiedade</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check"
+                                    name="e_socioemocional" value="frustracao"> Frustra&#231;&#227;o</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check"
+                                    name="e_socioemocional" value="autoestima"> Autoestima</label>
+                            <label class="avaliacao-item"><input type="checkbox" class="edit-check"
+                                    name="e_socioemocional" value="regulacao_emocional"> Regula&#231;&#227;o
+                                Emocional</label>
+                        </div>
+                    </div>
+
+                    <div class="avaliacao-secao">
+                        <div class="avaliacao-secao-titulo">&#128221; Observa&#231;&#245;es</div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Descri&#231;&#227;o</label>
+                                <textarea id="editDescricao" class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Evolu&#231;&#227;o</label>
+                                <textarea id="editEvolucao" class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Observa&#231;&#245;es Finais</label>
+                                <textarea id="editObservacoes" class="form-control" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnSalvarEdit" class="btn btn-success px-4">Salvar
+                        Altera&#231;&#245;es</button>
+                </div>
             </div>
-            <div class="contagem" id="metric-total">—</div>
-          </div>
-          <div class="fileira">
-            <div class="metricaCard autistas">
-              <div class="metricaInfo"><p class="metricaRotulo">Aguardando Entrevista</p></div>
-              <div class="contagem" id="metric-aguardando">—</div>
-            </div>
-            <div class="metricaCard tdah">
-              <div class="metricaInfo"><p class="metricaRotulo">Em Avaliação</p></div>
-              <div class="contagem" id="metric-avaliacao">—</div>
-            </div>
-            <div class="metricaCard dislexia">
-              <div class="metricaInfo"><p class="metricaRotulo">Concluídas</p></div>
-              <div class="contagem" id="metric-concluidas">—</div>
-            </div>
-            <div class="metricaCard outras">
-              <div class="metricaInfo"><p class="metricaRotulo">Alta Prioridade</p></div>
-              <div class="contagem" id="metric-prioridade">—</div>
-            </div>
-          </div>
-        </section>
-      </div>
+        </div>
     </div>
-  <section class="psicoBloco mt-4 mt-lg-5" aria-label="Histórico de triagens">
-    <h3>Histórico de Triagens</h3>
-    <div id="alertaHistorico"></div>
-    <div class="psicoTabelaWrap">
-      <table class="table table-striped align-middle">
-        <thead>
-          <tr>
-            <th>Data</th><th>Aluno</th><th>Série/Turma</th><th>Tipo</th><th>Status</th><th>Queixa Principal</th>
-          </tr>
-        </thead>
-        <tbody id="triagens-tbody">
-          <tr><td colspan="6" class="text-center text-muted py-4">Carregando...</td></tr>
-        </tbody>
-      </table>
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
     </div>
-  </section>
-  <section class="psicoBloco" aria-label="Historico do aluno">
-    <h3 style="color:#163a63;margin-bottom:6px">&#128194; Hist&#243;rico do Aluno</h3>
-    <p class="psicoInfo">Selecione um aluno para visualizar triagens, avalia&#231;&#245;es, evolu&#231;&#227;o, observa&#231;&#245;es e relat&#243;rios.</p>
-    <div class="row g-3 mb-4" style="align-items:flex-end">
-      <div class="col-md-6">
-        <label class="form-label fw-semibold" for="selectHistoricoAluno">Aluno</label>
-        <select id="selectHistoricoAluno" class="form-select">
-          <option value="">Selecione o aluno...</option>
-        </select>
-      </div>
-      <div class="col-md-auto">
-        <button id="btnCarregarHistorico" class="btn btn-primary">Carregar Hist&#243;rico</button>
-      </div>
-    </div>
-    <div id="aluno-card" class="hist-aluno-card" style="display:none"></div>
-    <div id="hist-tabs-wrapper" style="display:none">
-      <ul class="nav nav-tabs" id="histTabs" role="tablist">
-        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-triagens" type="button">Triagens <span id="badge-triagens" class="badge bg-primary ms-1">0</span></button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-avaliacoes" type="button">Avalia&#231;&#245;es <span id="badge-avaliacoes" class="badge bg-secondary ms-1">0</span></button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-evolucao" type="button">Evolu&#231;&#227;o <span id="badge-evolucao" class="badge bg-success ms-1">0</span></button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-obs" type="button">Observa&#231;&#245;es <span id="badge-obs" class="badge bg-warning ms-1">0</span></button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-relatorios" type="button">Relat&#243;rios <span id="badge-relatorios" class="badge bg-info ms-1">0</span></button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-auto" type="button">Auto&#45;Relat&#243;rios <span id="badge-auto" class="badge bg-dark ms-1">0</span></button></li>
-      </ul>
-      <div class="tab-content hist-tab-content" id="histTabContent">
-        <div class="tab-pane fade show active" id="tab-triagens" role="tabpanel"><div id="hist-triagens-body"></div></div>
-        <div class="tab-pane fade" id="tab-avaliacoes" role="tabpanel"><div id="hist-avaliacoes-body"></div></div>
-        <div class="tab-pane fade" id="tab-evolucao" role="tabpanel"><div id="hist-evolucao-body"></div></div>
-        <div class="tab-pane fade" id="tab-obs" role="tabpanel"><div id="hist-obs-body"></div></div>
-        <div class="tab-pane fade" id="tab-relatorios" role="tabpanel"><div id="hist-relatorios-body"></div></div>
-        <div class="tab-pane fade" id="tab-auto" role="tabpanel"><div id="hist-auto-body"></div></div>
-      </div>
-    </div>
-  </section>
-</main>
-</div>
 
-<!-- Modal Nova Triagem -->
-<div class="modal fade" id="modalNovaTriagem" tabindex="-1" aria-labelledby="modalTriagemLabel" aria-modal="true" role="dialog">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header" style="background:linear-gradient(135deg,#163a63,#2e5f92);color:#fff">
-        <h5 class="modal-title" id="modalTriagemLabel">📋 Nova Triagem Psicopedagógica</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-      <div class="modal-body">
-        <div id="alertaModal"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
+    <script>
+        const API = '';
+        const TOKEN_KEY = 'saadi_access_token';
 
-        <!-- Seção 1: Identificação -->
-        <div class="card mb-3 shadow-sm border-0 bg-light">
-          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">👤 Identificação do Estudante</div>
-          <div class="card-body">
-            <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label fw-semibold" for="selectAluno">Nome do Aluno <span class="text-danger">*</span></label>
-              <select id="selectAluno" class="form-select" required aria-required="true">
-                <option value="">Selecione o aluno...</option>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-semibold" for="idadeAluno">Idade</label>
-              <input id="idadeAluno" type="text" class="form-control" placeholder="Calculada automaticamente" readonly>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-semibold" for="serieAluno">Série / Turma</label>
-              <input id="serieAluno" type="text" class="form-control" placeholder="Ex: 3º Ano A" readonly>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label fw-semibold" for="responsavelAluno">Responsável</label>
-              <input id="responsavelAluno" type="text" class="form-control" readonly>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label fw-semibold" for="escolaAluno">Escola / Unidade</label>
-              <input id="escolaAluno" type="text" class="form-control" readonly>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-semibold" for="dataTriagem">Data da Triagem <span class="text-danger">*</span></label>
-              <input id="dataTriagem" type="date" class="form-control" required aria-required="true">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-semibold" for="tipoRegistro">Tipo de Registro <span class="text-danger">*</span></label>
-              <select id="tipoRegistro" class="form-select" required aria-required="true">
-                <option value="triagem">Triagem</option>
-                <option value="acompanhamento">Acompanhamento</option>
-                <option value="concluido">Concluído</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-semibold" for="statusTriagem">Status</label>
-              <select id="statusTriagem" class="form-select">
-                <option value="aguardando_entrevista">Aguardando Entrevista</option>
-                <option value="em_avaliacao">Em Avaliação</option>
-                <option value="alta_prioridade">Alta Prioridade</option>
-                <option value="concluida">Concluída</option>
-              </select>
-            </div>
-            <div class="col-12">
-              <label class="form-label fw-semibold" for="queixaPrincipal">Queixa Principal</label>
-              <textarea id="queixaPrincipal" class="form-control" rows="3" placeholder="Descreva a principal demanda ou queixa relatada pelos responsáveis e/ou escola..."></textarea>
-            </div>
-          </div>
-          </div>
-        </div>
+        function getToken() { return localStorage.getItem(TOKEN_KEY); }
 
-        <!-- Seção 2: Avaliação Cognitiva -->
-        <div class="card mb-3 shadow-sm border-0 bg-light">
-          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">🧠 Avaliação Cognitiva</div>
-          <div class="card-body">
-            <div class="row g-2">
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="cognitiva" value="atencao" id="cog-atencao"><label class="form-check-label" for="cog-atencao">Atenção</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="cognitiva" value="memoria" id="cog-memoria"><label class="form-check-label" for="cog-memoria">Memória</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="cognitiva" value="raciocinio_logico" id="cog-raciocinio"><label class="form-check-label" for="cog-raciocinio">Raciocínio Lógico</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="cognitiva" value="organizacao" id="cog-organizacao"><label class="form-check-label" for="cog-organizacao">Organização</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="cognitiva" value="resolucao_problemas" id="cog-resolucao"><label class="form-check-label" for="cog-resolucao">Resolução de Problemas</label></div>
-            </div>
-          </div>
-        </div>
+        function authHeaders() {
+            return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() };
+        }
 
-        <!-- Seção 3: Avaliação Pedagógica -->
-        <div class="card mb-3 shadow-sm border-0 bg-light">
-          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">📚 Avaliação Pedagógica</div>
-          <div class="card-body">
-            <div class="row g-2">
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="pedagogica" value="leitura" id="ped-leitura"><label class="form-check-label" for="ped-leitura">Leitura</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="pedagogica" value="escrita" id="ped-escrita"><label class="form-check-label" for="ped-escrita">Escrita</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="pedagogica" value="interpretacao" id="ped-interpretacao"><label class="form-check-label" for="ped-interpretacao">Interpretação</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="pedagogica" value="matematica" id="ped-matematica"><label class="form-check-label" for="ped-matematica">Matemática</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="pedagogica" value="coord_motora_fina" id="ped-coord"><label class="form-check-label" for="ped-coord">Coordenação Motora Fina</label></div>
-            </div>
-          </div>
-        </div>
+        function calcIdade(dataNasc) {
+            if (!dataNasc) return '';
+            const hoje = new Date();
+            const nasc = new Date(dataNasc);
+            let idade = hoje.getFullYear() - nasc.getFullYear();
+            if (hoje.getMonth() < nasc.getMonth() || (hoje.getMonth() === nasc.getMonth() && hoje.getDate() < nasc.getDate())) idade--;
+            return idade + ' anos';
+        }
 
-        <!-- Seção 4: Avaliação Comportamental -->
-        <div class="card mb-3 shadow-sm border-0 bg-light">
-          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">🔍 Avaliação Comportamental</div>
-          <div class="card-body">
-            <div class="row g-2">
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="comportamental" value="interacao_social" id="comp-interacao"><label class="form-check-label" for="comp-interacao">Interação Social</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="comportamental" value="hiperatividade" id="comp-hiper"><label class="form-check-label" for="comp-hiper">Hiperatividade</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="comportamental" value="impulsividade" id="comp-impulsividade"><label class="form-check-label" for="comp-impulsividade">Impulsividade</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="comportamental" value="rotina" id="comp-rotina"><label class="form-check-label" for="comp-rotina">Rotina</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="comportamental" value="comunicacao" id="comp-comunicacao"><label class="form-check-label" for="comp-comunicacao">Comunicação</label></div>
-            </div>
-          </div>
-        </div>
+        function statusLabel(s) {
+            const map = { aguardando_entrevista: 'Aguardando', em_avaliacao: 'Em Avaliação', concluida: 'Concluída', alta_prioridade: 'Alta Prioridade' };
+            const cor = { aguardando_entrevista: '#4c7adf', em_avaliacao: '#0f9d93', concluida: '#2e7d32', alta_prioridade: '#e14e5b' };
+            const c = cor[s] || '#666';
+            return `<span style="background:${c}20;color:${c};padding:3px 10px;border-radius:999px;font-size:.82rem;font-weight:600">${map[s] || s}</span>`;
+        }
 
-        <!-- Seção 5: Avaliação Socioemocional -->
-        <div class="card mb-3 shadow-sm border-0 bg-light">
-          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">💛 Avaliação Socioemocional</div>
-          <div class="card-body">
-            <div class="row g-2">
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="socioemocional" value="ansiedade" id="socio-ansiedade"><label class="form-check-label" for="socio-ansiedade">Ansiedade</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="socioemocional" value="frustracao" id="socio-frustracao"><label class="form-check-label" for="socio-frustracao">Frustração</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="socioemocional" value="autoestima" id="socio-autoestima"><label class="form-check-label" for="socio-autoestima">Autoestima</label></div>
-              <div class="col-md-6 col-lg-4 form-check"><input class="form-check-input avaliacao-check" type="checkbox" name="socioemocional" value="regulacao_emocional" id="socio-regulacao"><label class="form-check-label" for="socio-regulacao">Regulação Emocional</label></div>
-            </div>
-          </div>
-        </div>
+        function tipoLabel(t) {
+            const m = { triagem: 'Triagem', acompanhamento: 'Acompanhamento', concluido: 'Concluído' };
+            return m[t] || t;
+        }
 
-        <!-- Seção 6: Observações -->
-        <div class="card mb-3 shadow-sm border-0 bg-light">
-          <div class="card-header bg-transparent border-0 fw-bold text-primary pb-0 pt-3">📝 Observações Complementares</div>
-          <div class="card-body">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label fw-semibold" for="descricaoTriagem">Descrição</label>
-                <textarea id="descricaoTriagem" class="form-control" rows="3" placeholder="Observações gerais sobre a triagem..."></textarea>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold" for="evolucaoTriagem">Evolução</label>
-                <textarea id="evolucaoTriagem" class="form-control" rows="3" placeholder="Evolução observada..."></textarea>
-              </div>
-              <div class="col-12">
-                <label class="form-label fw-semibold" for="observacoesTriagem">Observações Finais</label>
-                <textarea id="observacoesTriagem" class="form-control" rows="2" placeholder="Próximos passos, encaminhamentos sugeridos..."></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" id="btnSalvarTriagem" class="btn btn-primary px-4">Salvar Triagem</button>
-      </div>
-    </div>
-  </div>
-</div>
+        async function carregarDashboard() {
+            try {
+                const r = await fetch(API + '/api/triagens/dashboard', { headers: authHeaders() });
+                if (!r.ok) return;
+                const d = await r.json();
+                document.getElementById('metric-total').textContent = d.total ?? '—';
+                document.getElementById('metric-aguardando').textContent = d.aguardando_entrevista ?? '—';
+                document.getElementById('metric-avaliacao').textContent = d.em_avaliacao ?? '—';
+                document.getElementById('metric-concluidas').textContent = d.concluidas ?? '—';
+                document.getElementById('metric-prioridade').textContent = d.alta_prioridade ?? '—';
+            } catch (e) { console.warn('Dashboard:', e); }
+        }
 
-
-<!-- Modal Edicao de Triagem -->
-<div class="modal fade" id="modalEditTriagem" tabindex="-1" aria-labelledby="modalEditLabel" aria-modal="true" role="dialog">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header" style="background:linear-gradient(135deg,#0f6e5a,#1a9e80);color:#fff">
-        <h5 class="modal-title" id="modalEditLabel">&#9998; Editar Triagem</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="editTriagemId">
-        <div id="alertaEditModal"></div>
-
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo">&#128100; Dados Gerais</div>
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label class="form-label fw-semibold">Data da Triagem</label>
-              <input id="editDataTriagem" type="date" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-semibold">Tipo de Registro</label>
-              <select id="editTipoRegistro" class="form-select">
-                <option value="triagem">Triagem</option>
-                <option value="acompanhamento">Acompanhamento</option>
-                <option value="concluido">Conclu&#237;do</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-semibold">Status</label>
-              <select id="editStatusTriagem" class="form-select">
-                <option value="aguardando_entrevista">Aguardando Entrevista</option>
-                <option value="em_avaliacao">Em Avalia&#231;&#227;o</option>
-                <option value="alta_prioridade">Alta Prioridade</option>
-                <option value="concluida">Conclu&#237;da</option>
-              </select>
-            </div>
-            <div class="col-12">
-              <label class="form-label fw-semibold">Queixa Principal</label>
-              <textarea id="editQueixaPrincipal" class="form-control" rows="3"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo avaliacao-cognitiva-titulo">&#129504; Avalia&#231;&#227;o Cognitiva</div>
-          <div class="avaliacao-grid">
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_cognitiva" value="atencao"> Aten&#231;&#227;o</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_cognitiva" value="memoria"> Mem&#243;ria</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_cognitiva" value="raciocinio_logico"> Racioc&#237;nio L&#243;gico</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_cognitiva" value="organizacao"> Organiza&#231;&#227;o</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_cognitiva" value="resolucao_problemas"> Resolu&#231;&#227;o de Problemas</label>
-          </div>
-        </div>
-
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo avaliacao-pedagogica-titulo">&#128218; Avalia&#231;&#227;o Pedag&#243;gica</div>
-          <div class="avaliacao-grid">
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_pedagogica" value="leitura"> Leitura</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_pedagogica" value="escrita"> Escrita</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_pedagogica" value="interpretacao"> Interpreta&#231;&#227;o</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_pedagogica" value="matematica"> Matem&#225;tica</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_pedagogica" value="coord_motora_fina"> Coord. Motora Fina</label>
-          </div>
-        </div>
-
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo avaliacao-comportamental-titulo">&#128269; Avalia&#231;&#227;o Comportamental</div>
-          <div class="avaliacao-grid">
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_comportamental" value="interacao_social"> Intera&#231;&#227;o Social</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_comportamental" value="hiperatividade"> Hiperatividade</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_comportamental" value="impulsividade"> Impulsividade</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_comportamental" value="rotina"> Rotina</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_comportamental" value="comunicacao"> Comunica&#231;&#227;o</label>
-          </div>
-        </div>
-
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo avaliacao-socioemocional-titulo">&#128155; Avalia&#231;&#227;o Socioemocional</div>
-          <div class="avaliacao-grid">
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_socioemocional" value="ansiedade"> Ansiedade</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_socioemocional" value="frustracao"> Frustra&#231;&#227;o</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_socioemocional" value="autoestima"> Autoestima</label>
-            <label class="avaliacao-item"><input type="checkbox" class="edit-check" name="e_socioemocional" value="regulacao_emocional"> Regula&#231;&#227;o Emocional</label>
-          </div>
-        </div>
-
-        <div class="avaliacao-secao">
-          <div class="avaliacao-secao-titulo">&#128221; Observa&#231;&#245;es</div>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Descri&#231;&#227;o</label>
-              <textarea id="editDescricao" class="form-control" rows="3"></textarea>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Evolu&#231;&#227;o</label>
-              <textarea id="editEvolucao" class="form-control" rows="3"></textarea>
-            </div>
-            <div class="col-12">
-              <label class="form-label fw-semibold">Observa&#231;&#245;es Finais</label>
-              <textarea id="editObservacoes" class="form-control" rows="2"></textarea>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" id="btnSalvarEdit" class="btn btn-success px-4">Salvar Altera&#231;&#245;es</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div vw class="enabled">
-  <div vw-access-button class="active"></div>
-  <div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-<script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
-<script>
-const API = '';
-const TOKEN_KEY = 'saadi_access_token';
-
-function getToken() { return localStorage.getItem(TOKEN_KEY); }
-
-function authHeaders() {
-  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() };
-}
-
-function calcIdade(dataNasc) {
-  if (!dataNasc) return '';
-  const hoje = new Date();
-  const nasc = new Date(dataNasc);
-  let idade = hoje.getFullYear() - nasc.getFullYear();
-  if (hoje.getMonth() < nasc.getMonth() || (hoje.getMonth() === nasc.getMonth() && hoje.getDate() < nasc.getDate())) idade--;
-  return idade + ' anos';
-}
-
-function statusLabel(s) {
-  const map = { aguardando_entrevista: 'Aguardando', em_avaliacao: 'Em Avaliação', concluida: 'Concluída', alta_prioridade: 'Alta Prioridade' };
-  const cor = { aguardando_entrevista: '#4c7adf', em_avaliacao: '#0f9d93', concluida: '#2e7d32', alta_prioridade: '#e14e5b' };
-  const c = cor[s] || '#666';
-  return `<span style="background:${c}20;color:${c};padding:3px 10px;border-radius:999px;font-size:.82rem;font-weight:600">${map[s] || s}</span>`;
-}
-
-function tipoLabel(t) {
-  const m = { triagem: 'Triagem', acompanhamento: 'Acompanhamento', concluido: 'Concluído' };
-  return m[t] || t;
-}
-
-async function carregarDashboard() {
-  try {
-    const r = await fetch(API + '/api/triagens/dashboard', { headers: authHeaders() });
-    if (!r.ok) return;
-    const d = await r.json();
-    document.getElementById('metric-total').textContent = d.total ?? '—';
-    document.getElementById('metric-aguardando').textContent = d.aguardando_entrevista ?? '—';
-    document.getElementById('metric-avaliacao').textContent = d.em_avaliacao ?? '—';
-    document.getElementById('metric-concluidas').textContent = d.concluidas ?? '—';
-    document.getElementById('metric-prioridade').textContent = d.alta_prioridade ?? '—';
-  } catch(e) { console.warn('Dashboard:', e); }
-}
-
-async function carregarHistoricoGeral() {
-  const tbody = document.getElementById('triagens-tbody');
-  try {
-    const r = await fetch(API + '/api/triagens?limit=50', { headers: authHeaders() });
-    const d = await r.json();
-    const items = d.items || [];
-    if (!items.length) {
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">Nenhuma triagem registrada.</td></tr>';
-      return;
-    }
-    tbody.innerHTML = items.map(t => `
+        async function carregarHistoricoGeral() {
+            const tbody = document.getElementById('triagens-tbody');
+            try {
+                const r = await fetch(API + '/api/triagens?limit=50', { headers: authHeaders() });
+                const d = await r.json();
+                const items = d.items || [];
+                if (!items.length) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">Nenhuma triagem registrada.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = items.map(t => `
       <tr>
         <td>${t.data_registro ? new Date(t.data_registro + 'T00:00').toLocaleDateString('pt-BR') : '—'}</td>
         <td><strong>${t.aluno_nome || '—'}</strong></td>
         <td>${t.aluno_serie_turma || '—'}</td>
         <td>${tipoLabel(t.tipo_registro)}</td>
         <td>${statusLabel(t.status)}</td>
-        <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(t.queixa_principal||'').replace(/"/g,'&quot;')}">${t.queixa_principal || '<em class="text-muted">—</em>'}</td>
+        <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(t.queixa_principal || '').replace(/"/g, '&quot;')}">${t.queixa_principal || '<em class="text-muted">—</em>'}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary py-0 px-2" onclick="abrirEditTriagem(${JSON.stringify(t).replace(/"/g, '&quot;')})" title="Editar">&#9998;</button>
+          <button class="btn btn-sm btn-outline-danger py-0 px-2 ms-1" onclick="deletarTriagem(${t.id})" title="Deletar">&#128465;</button>
+        </td>
       </tr>`).join('');
-  } catch(e) {
-    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-4">Erro ao carregar triagens.</td></tr>';
-  }
-}
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-4">Erro ao carregar triagens.</td></tr>';
+            }
+        }
 
-async function carregarAlunos() {
-  const sel = document.getElementById('selectAluno');
-  try {
-    const r = await fetch(API + '/api/triagens/alunos-select', { headers: authHeaders() });
-    const d = await r.json();
-    const alunos = d.alunos || [];
-    window._alunosData = {};
-    alunos.forEach(a => {
-      window._alunosData[a.id] = a;
-      const opt = document.createElement('option');
-      opt.value = a.id;
-      opt.textContent = a.nome + (a.serie_turma ? ' — ' + a.serie_turma : '');
-      sel.appendChild(opt);
-    });
-  } catch(e) { console.warn('Alunos:', e); }
-}
+        async function deletarTriagem(id) {
+            if (!confirm('Tem certeza que deseja deletar este registro de triagem? Esta ação é irreversível.')) return;
+            try {
+                const r = await fetch(API + '/api/triagens/' + id, { method: 'DELETE', headers: authHeaders() });
+                if (r.ok) {
+                    await carregarDashboard();
+                    await carregarHistoricoGeral();
+                    var aluno_id = document.getElementById('selectHistoricoAluno').value;
+                    if (aluno_id) {
+                        var r2 = await fetch(API + '/api/alunos/historico/' + aluno_id, { headers: authHeaders() });
+                        var d2 = await r2.json();
+                        renderHistorico(d2);
+                    }
+                } else {
+                    const d = await r.json();
+                    alert(d.message || 'Erro ao deletar.');
+                }
+            } catch (e) {
+                alert('Erro de conexão ao deletar.');
+            }
+        }
 
-document.getElementById('selectAluno').addEventListener('change', function() {
-  const a = window._alunosData && window._alunosData[this.value];
-  document.getElementById('idadeAluno').value = a ? calcIdade(a.data_nascimento) : '';
-  document.getElementById('serieAluno').value = a ? (a.serie_turma || '') : '';
-  document.getElementById('responsavelAluno').value = a ? (a.responsavel || '') : '';
-  document.getElementById('escolaAluno').value = a ? (a.unidade || '') : '';
-});
+        async function carregarAlunos() {
+            const sel = document.getElementById('selectAluno');
+            try {
+                const r = await fetch(API + '/api/triagens/alunos-select', { headers: authHeaders() });
+                const d = await r.json();
+                const alunos = d.alunos || [];
+                window._alunosData = {};
+                alunos.forEach(a => {
+                    window._alunosData[a.id] = a;
+                    const opt = document.createElement('option');
+                    opt.value = a.id;
+                    opt.textContent = a.nome + (a.serie_turma ? ' — ' + a.serie_turma : '');
+                    sel.appendChild(opt);
+                });
+            } catch (e) { console.warn('Alunos:', e); }
+        }
 
-document.getElementById('btnSalvarTriagem').addEventListener('click', async function() {
-  const btn = this;
-  const aluno_id = parseInt(document.getElementById('selectAluno').value);
-  const data_registro = document.getElementById('dataTriagem').value;
-
-  if (!aluno_id || !data_registro) {
-    const al = document.getElementById('alertaModal');
-    al.innerHTML = '<div class="alert alert-danger py-2">Preencha Aluno e Data da Triagem.</div>';
-    setTimeout(() => al.innerHTML = '', 3000);
-    return;
-  }
-
-  const getChecked = name => [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(c => c.value);
-
-  const payload = {
-    aluno_id,
-    data_registro,
-    tipo_registro: document.getElementById('tipoRegistro').value,
-    status: document.getElementById('statusTriagem').value,
-    queixa_principal: document.getElementById('queixaPrincipal').value.trim() || null,
-    descricao: document.getElementById('descricaoTriagem').value.trim() || null,
-    evolucao: document.getElementById('evolucaoTriagem').value.trim() || null,
-    observacoes: document.getElementById('observacoesTriagem').value.trim() || null,
-    avaliacoes_json: {
-      cognitiva: getChecked('cognitiva'),
-      pedagogica: getChecked('pedagogica'),
-      comportamental: getChecked('comportamental'),
-      socioemocional: getChecked('socioemocional'),
-    }
-  };
-
-  btn.disabled = true;
-  btn.textContent = 'Salvando...';
-
-  try {
-    const r = await fetch(API + '/api/triagens', {
-      method: 'POST',
-      headers: authHeaders(),
-      body: JSON.stringify(payload),
-    });
-    const d = await r.json();
-    if (r.ok) {
-      bootstrap.Modal.getInstance(document.getElementById('modalNovaTriagem')).hide();
-      await carregarDashboard();
-      await carregarHistoricoGeral();
-    } else {
-      const al = document.getElementById('alertaModal');
-      al.innerHTML = `<div class="alert alert-danger py-2">${d.message || 'Erro ao salvar.'}</div>`;
-    }
-  } catch(e) {
-    document.getElementById('alertaModal').innerHTML = '<div class="alert alert-danger py-2">Erro de conexão.</div>';
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Salvar Triagem';
-  }
-});
-
-document.getElementById('modalNovaTriagem').addEventListener('hidden.bs.modal', function() {
-  document.getElementById('selectAluno').value = '';
-  document.getElementById('idadeAluno').value = '';
-  document.getElementById('serieAluno').value = '';
-  document.getElementById('responsavelAluno').value = '';
-  document.getElementById('escolaAluno').value = '';
-  document.getElementById('dataTriagem').value = '';
-  document.getElementById('queixaPrincipal').value = '';
-  document.getElementById('descricaoTriagem').value = '';
-  document.getElementById('evolucaoTriagem').value = '';
-  document.getElementById('observacoesTriagem').value = '';
-  document.querySelectorAll('.avaliacao-check').forEach(c => c.checked = false);
-  document.getElementById('alertaModal').innerHTML = '';
-});
-
-// Definir data padrão como hoje
-document.getElementById('dataTriagem').value = new Date().toISOString().split('T')[0];
-
-// Carregar dados ao iniciar
-carregarDashboard();
-carregarHistoricoGeral();
-carregarAlunos();
-
-// === HISTORICO DO ALUNO ===
-async function popularSelectHistorico() {
-  const sel = document.getElementById('selectHistoricoAluno');
-  try {
-    const r = await fetch(API + '/api/triagens/alunos-select', { headers: authHeaders() });
-    const d = await r.json();
-    (d.alunos || []).forEach(function(a) {
-      const opt = document.createElement('option');
-      opt.value = a.id;
-      opt.textContent = a.nome + (a.serie_turma ? ' -- ' + a.serie_turma : '');
-      sel.appendChild(opt);
-    });
-  } catch(e) {}
-}
-
-function dataFmt(d) {
-  if (!d) return '--';
-  return new Date(d + 'T00:00').toLocaleDateString('pt-BR');
-}
-
-function vazio(msg) { return '<p class="text-muted py-3 text-center">' + msg + '</p>'; }
-
-function statusBadge(s) {
-  var cor = { aguardando_entrevista:'#4c7adf', em_avaliacao:'#0f9d93', concluida:'#2e7d32', alta_prioridade:'#e14e5b', rascunho:'#888', publicado:'#2e7d32', arquivado:'#999' };
-  var names = { aguardando_entrevista:'Aguardando', em_avaliacao:'Em Avaliação', concluida:'Concluída', alta_prioridade:'Prioridade', rascunho:'Rascunho', publicado:'Publicado', arquivado:'Arquivado' };
-  var c = cor[s] || '#888';
-  var n = names[s] || s;
-  return '<span style="background:' + c + '20;color:' + c + ';padding:2px 10px;border-radius:999px;font-size:.8rem;font-weight:600">' + n + '</span>';
-}
-
-async function carregarHistorico() {
-  var aluno_id = document.getElementById('selectHistoricoAluno').value;
-  if (!aluno_id) { alert('Selecione um aluno.'); return; }
-  var btn = document.getElementById('btnCarregarHistorico');
-  btn.disabled = true; btn.textContent = 'Carregando...';
-  try {
-    var r = await fetch(API + '/api/alunos/historico/' + aluno_id, { headers: authHeaders() });
-    if (!r.ok) { alert('Erro ao carregar historico.'); return; }
-    var d = await r.json();
-    renderHistorico(d);
-  } catch(e) { alert('Erro de conexao.'); }
-  finally { btn.disabled = false; btn.textContent = 'Carregar Historico'; }
-}
-
-function renderHistorico(d) {
-  var a = d.aluno || {};
-  var card = document.getElementById('aluno-card');
-  card.style.display = 'block';
-  card.className = 'card mb-4 shadow-sm border-0 bg-light';
-  card.innerHTML = '<div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">' +
-    '<div>' +
-      '<h5 class="card-title fw-bold text-primary mb-2">' + a.nome + '</h5>' +
-      '<div class="text-muted small d-flex flex-wrap gap-3">' +
-        '<span><strong>Série:</strong> ' + (a.serie_turma || 'Não informada') + '</span>' +
-        '<span><strong>Responsável:</strong> ' + (a.responsavel || '--') + '</span>' +
-        '<span><strong>Unidade:</strong> ' + (a.unidade || '--') + '</span>' +
-      '</div>' +
-    '</div>' +
-    '<div class="d-flex flex-wrap gap-1">' +
-      (a.categorias || []).map(function(c){ return '<span class="badge bg-secondary">' + c + '</span>'; }).join('') +
-      (!(a.categorias || []).length ? '<span class="text-muted small">Sem categorias</span>' : '') +
-    '</div>' +
-  '</div>';
-
-  document.getElementById('hist-tabs-wrapper').style.display = 'block';
-  document.getElementById('badge-triagens').textContent = d.triagens.length;
-  document.getElementById('badge-avaliacoes').textContent = d.avaliacoes.length;
-  document.getElementById('badge-evolucao').textContent = d.evolucoes.length;
-  document.getElementById('badge-obs').textContent = d.observacoes_comportamentais.length;
-  document.getElementById('badge-relatorios').textContent = d.relatorios.length;
-  document.getElementById('badge-auto').textContent = d.relatorios_automaticos.length;
-
-  document.getElementById('hist-triagens-body').innerHTML = d.triagens.length
-    ? '<div class="row g-3 mt-2">' + d.triagens.map(function(t) {
-        var av = t.avaliacoes_json || {};
-        var tagsList = [];
-        var catMap = {cognitiva:'Cog',pedagogica:'Ped',comportamental:'Comp',socioemocional:'Soc'};
-        var colorMap = {cognitiva:'primary',pedagogica:'success',comportamental:'warning',socioemocional:'danger'};
-        Object.keys(catMap).forEach(function(k){
-          (av[k]||[]).forEach(function(v){ 
-            tagsList.push('<span class="badge bg-'+colorMap[k]+' bg-opacity-75">'+catMap[k]+': '+v.replace(/_/g,' ')+'</span>'); 
-          });
+        document.getElementById('selectAluno').addEventListener('change', function () {
+            const a = window._alunosData && window._alunosData[this.value];
+            document.getElementById('idadeAluno').value = a ? calcIdade(a.data_nascimento) : '';
+            document.getElementById('serieAluno').value = a ? (a.serie_turma || '') : '';
+            document.getElementById('responsavelAluno').value = a ? (a.responsavel || '') : '';
+            document.getElementById('escolaAluno').value = a ? (a.unidade || '') : '';
         });
-        return '<div class="col-md-6 col-lg-4">'
-          + '<div class="card h-100 shadow-sm border-0">'
-            + '<div class="card-header bg-transparent d-flex justify-content-between align-items-center pb-2 pt-3">'
-              + '<div>'
-                + '<div class="fw-bold text-dark fs-6">'+dataFmt(t.data)+'</div>'
-                + '<small class="text-muted">'+(t.tipo||'Triagem')+'</small>'
-              + '</div>'
-              + '<div>' + statusBadge(t.status) + '</div>'
-            + '</div>'
-            + '<div class="card-body py-2">'
-              + (t.queixa_principal ? '<p class="card-text mb-2"><strong>Queixa:</strong> '+t.queixa_principal+'</p>' : '')
-              + (t.descricao ? '<p class="card-text text-muted small mb-2">'+t.descricao+'</p>' : '')
-              + (tagsList.length ? '<div class="d-flex flex-wrap gap-1 mt-3">'+tagsList.join('')+'</div>' : '')
-            + '</div>'
-            + '<div class="card-footer bg-transparent d-flex justify-content-between align-items-center pt-2 pb-3">'
-              + '<small class="text-muted">Por: '+(t.profissional||'--')+'</small>'
-              + '<button class="btn btn-sm btn-outline-primary" '
-                + 'onclick="abrirEditTriagem('+JSON.stringify(t).replace(/"/g,'&quot;')+')">'
-                + '&#9998; Editar'
-              + '</button>'
-            + '</div>'
-          + '</div>'
-        + '</div>';
-      }).join('') + '</div>'
-    : vazio('Nenhuma triagem registrada para este aluno.');
 
-  document.getElementById('hist-avaliacoes-body').innerHTML = d.avaliacoes.length
-    ? '<div class="row g-3 mt-2">' + d.avaliacoes.map(function(av){ return '<div class="col-12"><div class="card shadow-sm border-0"><div class="card-header bg-transparent fw-bold text-primary">' + dataFmt(av.data) + ' <span class="text-muted fw-normal ms-2">Por: ' + (av.profissional||'--') + '</span></div><div class="card-body d-flex flex-wrap gap-2">' +
-      av.itens.map(function(i){ return '<span class="badge border border-secondary text-secondary">[' + i.categoria + '] ' + i.item + '</span>'; }).join('') + '</div></div></div>'; }).join('') + '</div>'
-    : vazio('Nenhuma avaliação com itens marcados.');
+        document.getElementById('btnSalvarTriagem').addEventListener('click', async function () {
+            const btn = this;
+            const aluno_id = parseInt(document.getElementById('selectAluno').value);
+            const data_registro = document.getElementById('dataTriagem').value;
 
-  document.getElementById('hist-evolucao-body').innerHTML = d.evolucoes.length
-    ? '<div class="list-group mt-3">' + d.evolucoes.map(function(e){ return '<div class="list-group-item list-group-item-action flex-column align-items-start border-0 shadow-sm mb-3 rounded"><div class="d-flex w-100 justify-content-between"><h6 class="mb-1 fw-bold text-primary">' + dataFmt(e.data) + '</h6><small class="text-muted">' + (e.profissional||'--') + '</small></div><p class="mb-1 mt-2">' +
-      (e.texto || '').replace(/\n/g,'<br>') + '</p></div>'; }).join('') + '</div>'
-    : vazio('Nenhum registro de evolução encontrado.');
+            if (!aluno_id || !data_registro) {
+                const al = document.getElementById('alertaModal');
+                al.innerHTML = '<div class="alert alert-danger py-2">Preencha Aluno e Data da Triagem.</div>';
+                setTimeout(() => al.innerHTML = '', 3000);
+                return;
+            }
 
-  document.getElementById('hist-obs-body').innerHTML = d.observacoes_comportamentais.length
-    ? '<div class="list-group mt-3">' + d.observacoes_comportamentais.map(function(o){ return '<div class="list-group-item list-group-item-action flex-column align-items-start border-0 shadow-sm mb-3 rounded"><div class="d-flex w-100 justify-content-between"><h6 class="mb-1 fw-bold text-warning text-darken" style="color:#b57600">' + dataFmt(o.data) + '</h6><small class="text-muted">' + (o.profissional||'--') + '</small></div>' +
-      (o.itens_comportamentais.length ? '<div class="mb-2 mt-2">' + o.itens_comportamentais.map(function(i){ return '<span class="badge bg-warning text-dark me-1">' + i + '</span>'; }).join('') + '</div>' : '') +
-      (o.observacoes ? '<p class="mb-1 mt-2">' + o.observacoes.replace(/\n/g,'<br>') + '</p>' : '') +
-      '</div>'; }).join('') + '</div>'
-    : vazio('Nenhuma observação comportamental registrada.');
+            const getChecked = name => [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(c => c.value);
 
-  function renderRels(lista, elId) {
-    document.getElementById(elId).innerHTML = lista.length
-      ? '<div class="card shadow-sm border-0 mt-3"><div class="card-body p-0"><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th class="ps-3">Título</th><th>Tipo</th><th>Origem</th><th>Status</th><th>Data</th></tr></thead><tbody>' +
-        lista.map(function(r){ return '<tr><td class="ps-3 fw-semibold">' + r.titulo + '</td><td>' + r.tipo + '</td><td>' + r.origem + '</td><td>' + statusBadge(r.status) + '</td><td>' +
-        (r.created_at ? new Date(r.created_at).toLocaleDateString('pt-BR') : '--') + '</td></tr>'; }).join('') + '</tbody></table></div></div></div>'
-      : vazio('Nenhum relatório encontrado.');
-  }
-  renderRels(d.relatorios, 'hist-relatorios-body');
-  renderRels(d.relatorios_automaticos, 'hist-auto-body');
-}
+            const payload = {
+                aluno_id,
+                data_registro,
+                tipo_registro: document.getElementById('tipoRegistro').value,
+                status: document.getElementById('statusTriagem').value,
+                queixa_principal: document.getElementById('queixaPrincipal').value.trim() || null,
+                descricao: document.getElementById('descricaoTriagem').value.trim() || null,
+                evolucao: document.getElementById('evolucaoTriagem').value.trim() || null,
+                observacoes: document.getElementById('observacoesTriagem').value.trim() || null,
+                avaliacoes_json: {
+                    cognitiva: getChecked('cognitiva'),
+                    pedagogica: getChecked('pedagogica'),
+                    comportamental: getChecked('comportamental'),
+                    socioemocional: getChecked('socioemocional'),
+                }
+            };
 
-document.getElementById('btnCarregarHistorico').addEventListener('click', carregarHistorico);
-popularSelectHistorico();
+            btn.disabled = true;
+            btn.textContent = 'Salvando...';
 
-// === EDICAO DE TRIAGEM ===
-function abrirEditTriagem(triagem) {
-  document.getElementById('editTriagemId').value = triagem.id;
-  document.getElementById('editDataTriagem').value = triagem.data || '';
-  document.getElementById('editTipoRegistro').value = triagem.tipo_registro || 'triagem';
-  document.getElementById('editStatusTriagem').value = triagem.status_raw || triagem.status || 'aguardando_entrevista';
-  document.getElementById('editQueixaPrincipal').value = triagem.queixa_principal || '';
-  document.getElementById('editDescricao').value = triagem.descricao || '';
-  document.getElementById('editEvolucao').value = triagem.evolucao || '';
-  document.getElementById('editObservacoes').value = triagem.observacoes || '';
+            try {
+                const r = await fetch(API + '/api/triagens', {
+                    method: 'POST',
+                    headers: authHeaders(),
+                    body: JSON.stringify(payload),
+                });
+                const d = await r.json();
+                if (r.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalNovaTriagem')).hide();
+                    await carregarDashboard();
+                    await carregarHistoricoGeral();
+                } else {
+                    const al = document.getElementById('alertaModal');
+                    al.innerHTML = `<div class="alert alert-danger py-2">${d.message || 'Erro ao salvar.'}</div>`;
+                }
+            } catch (e) {
+                document.getElementById('alertaModal').innerHTML = '<div class="alert alert-danger py-2">Erro de conexão.</div>';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Salvar Triagem';
+            }
+        });
 
-  // Limpar e marcar checkboxes
-  document.querySelectorAll('.edit-check').forEach(function(c){ c.checked = false; });
-  var av = triagem.avaliacoes_json || {};
-  var mapa = { e_cognitiva:'cognitiva', e_pedagogica:'pedagogica', e_comportamental:'comportamental', e_socioemocional:'socioemocional' };
-  Object.keys(mapa).forEach(function(name) {
-    var items = av[mapa[name]] || [];
-    items.forEach(function(val) {
-      var cb = document.querySelector('input[name="' + name + '"][value="' + val + '"]');
-      if (cb) cb.checked = true;
-    });
-  });
+        document.getElementById('modalNovaTriagem').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('selectAluno').value = '';
+            document.getElementById('idadeAluno').value = '';
+            document.getElementById('serieAluno').value = '';
+            document.getElementById('responsavelAluno').value = '';
+            document.getElementById('escolaAluno').value = '';
+            document.getElementById('dataTriagem').value = '';
+            document.getElementById('queixaPrincipal').value = '';
+            document.getElementById('descricaoTriagem').value = '';
+            document.getElementById('evolucaoTriagem').value = '';
+            document.getElementById('observacoesTriagem').value = '';
+            document.querySelectorAll('.avaliacao-check').forEach(c => c.checked = false);
+            document.getElementById('alertaModal').innerHTML = '';
+        });
 
-  document.getElementById('alertaEditModal').innerHTML = '';
-  var modal = new bootstrap.Modal(document.getElementById('modalEditTriagem'));
-  modal.show();
-}
+        // Definir data padrão como hoje
+        document.getElementById('dataTriagem').value = new Date().toISOString().split('T')[0];
 
-document.getElementById('btnSalvarEdit').addEventListener('click', async function() {
-  var btn = this;
-  var id = document.getElementById('editTriagemId').value;
-  if (!id) return;
+        // Carregar dados ao iniciar
+        carregarDashboard();
+        carregarHistoricoGeral();
+        carregarAlunos();
 
-  var getCheckedEdit = function(name) {
-    return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked')).map(function(c){ return c.value; });
-  };
+        // === HISTORICO DO ALUNO ===
+        async function popularSelectHistorico() {
+            const sel = document.getElementById('selectHistoricoAluno');
+            try {
+                const r = await fetch(API + '/api/triagens/alunos-select', { headers: authHeaders() });
+                const d = await r.json();
+                (d.alunos || []).forEach(function (a) {
+                    const opt = document.createElement('option');
+                    opt.value = a.id;
+                    opt.textContent = a.nome + (a.serie_turma ? ' -- ' + a.serie_turma : '');
+                    sel.appendChild(opt);
+                });
+            } catch (e) { }
+        }
 
-  var payload = {
-    data_registro: document.getElementById('editDataTriagem').value,
-    tipo_registro: document.getElementById('editTipoRegistro').value,
-    status: document.getElementById('editStatusTriagem').value,
-    queixa_principal: document.getElementById('editQueixaPrincipal').value.trim() || null,
-    descricao: document.getElementById('editDescricao').value.trim() || null,
-    evolucao: document.getElementById('editEvolucao').value.trim() || null,
-    observacoes: document.getElementById('editObservacoes').value.trim() || null,
-    avaliacoes_json: {
-      cognitiva: getCheckedEdit('e_cognitiva'),
-      pedagogica: getCheckedEdit('e_pedagogica'),
-      comportamental: getCheckedEdit('e_comportamental'),
-      socioemocional: getCheckedEdit('e_socioemocional'),
-    }
-  };
+        function dataFmt(d) {
+            if (!d) return '--';
+            return new Date(d + 'T00:00').toLocaleDateString('pt-BR');
+        }
 
-  btn.disabled = true; btn.textContent = 'Salvando...';
-  try {
-    var r = await fetch(API + '/api/triagens/' + id, {
-      method: 'PUT', headers: authHeaders(), body: JSON.stringify(payload)
-    });
-    var d = await r.json();
-    if (r.ok) {
-      bootstrap.Modal.getInstance(document.getElementById('modalEditTriagem')).hide();
-      // Recarregar historico do aluno atual
-      var aluno_id = document.getElementById('selectHistoricoAluno').value;
-      if (aluno_id) {
-        var r2 = await fetch(API + '/api/alunos/historico/' + aluno_id, { headers: authHeaders() });
-        var d2 = await r2.json();
-        renderHistorico(d2);
-      }
-      await carregarHistorico2();
-      await carregarDashboard();
-    } else {
-      document.getElementById('alertaEditModal').innerHTML = '<div class="alert alert-danger py-2">' + (d.message || 'Erro ao salvar.') + '</div>';
-    }
-  } catch(e) {
-    document.getElementById('alertaEditModal').innerHTML = '<div class="alert alert-danger py-2">Erro de conexao.</div>';
-  } finally {
-    btn.disabled = false; btn.textContent = 'Salvar Alteracoes';
-  }
-});
+        function vazio(msg) { return '<p class="text-muted py-3 text-center">' + msg + '</p>'; }
 
-async function carregarHistorico2() {
-  await carregarHistoricoGeral();
-}
-</script>
+        function statusBadge(s) {
+            var cor = { aguardando_entrevista: '#4c7adf', em_avaliacao: '#0f9d93', concluida: '#2e7d32', alta_prioridade: '#e14e5b', rascunho: '#888', publicado: '#2e7d32', arquivado: '#999' };
+            var names = { aguardando_entrevista: 'Aguardando', em_avaliacao: 'Em Avaliação', concluida: 'Concluída', alta_prioridade: 'Prioridade', rascunho: 'Rascunho', publicado: 'Publicado', arquivado: 'Arquivado' };
+            var c = cor[s] || '#888';
+            var n = names[s] || s;
+            return '<span style="background:' + c + '20;color:' + c + ';padding:2px 10px;border-radius:999px;font-size:.8rem;font-weight:600">' + n + '</span>';
+        }
+
+        async function carregarHistorico() {
+            var aluno_id = document.getElementById('selectHistoricoAluno').value;
+            if (!aluno_id) { alert('Selecione um aluno.'); return; }
+            var btn = document.getElementById('btnCarregarHistorico');
+            btn.disabled = true; btn.textContent = 'Carregando...';
+            try {
+                var r = await fetch(API + '/api/alunos/historico/' + aluno_id, { headers: authHeaders() });
+                if (!r.ok) { alert('Erro ao carregar historico.'); return; }
+                var d = await r.json();
+                renderHistorico(d);
+            } catch (e) { alert('Erro de conexao.'); }
+            finally { btn.disabled = false; btn.textContent = 'Carregar Historico'; }
+        }
+
+        function renderHistorico(d) {
+            var a = d.aluno || {};
+            var card = document.getElementById('aluno-card');
+            card.style.display = 'block';
+            card.className = 'card mb-4 shadow-sm border-0 bg-light';
+            card.innerHTML = '<div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">' +
+                '<div>' +
+                '<h5 class="card-title fw-bold text-primary mb-2">' + a.nome + '</h5>' +
+                '<div class="text-muted small d-flex flex-wrap gap-3">' +
+                '<span><strong>Série:</strong> ' + (a.serie_turma || 'Não informada') + '</span>' +
+                '<span><strong>Responsável:</strong> ' + (a.responsavel || '--') + '</span>' +
+                '<span><strong>Unidade:</strong> ' + (a.unidade || '--') + '</span>' +
+                '</div>' +
+                '</div>' +
+                '<div class="d-flex flex-wrap gap-1">' +
+                (a.categorias || []).map(function (c) { return '<span class="badge bg-secondary">' + c + '</span>'; }).join('') +
+                (!(a.categorias || []).length ? '<span class="text-muted small">Sem categorias</span>' : '') +
+                '</div>' +
+                '</div>';
+
+            document.getElementById('hist-tabs-wrapper').style.display = 'block';
+            document.getElementById('badge-triagens').textContent = d.triagens.length;
+            document.getElementById('badge-avaliacoes').textContent = d.avaliacoes.length;
+            document.getElementById('badge-evolucao').textContent = d.evolucoes.length;
+            document.getElementById('badge-obs').textContent = d.observacoes_comportamentais.length;
+            document.getElementById('badge-relatorios').textContent = d.relatorios.length;
+            document.getElementById('badge-auto').textContent = d.relatorios_automaticos.length;
+
+            document.getElementById('hist-triagens-body').innerHTML = d.triagens.length
+                ? '<div class="row g-3 mt-2">' + d.triagens.map(function (t) {
+                    var av = t.avaliacoes_json || {};
+                    var tagsList = [];
+                    var catMap = { cognitiva: 'Cog', pedagogica: 'Ped', comportamental: 'Comp', socioemocional: 'Soc' };
+                    var colorMap = { cognitiva: 'primary', pedagogica: 'success', comportamental: 'warning', socioemocional: 'danger' };
+                    Object.keys(catMap).forEach(function (k) {
+                        (av[k] || []).forEach(function (v) {
+                            tagsList.push('<span class="badge bg-' + colorMap[k] + ' bg-opacity-75">' + catMap[k] + ': ' + v.replace(/_/g, ' ') + '</span>');
+                        });
+                    });
+                    return '<div class="col-md-6 col-lg-4">'
+                        + '<div class="card h-100 shadow-sm border-0">'
+                        + '<div class="card-header bg-transparent d-flex justify-content-between align-items-center pb-2 pt-3">'
+                        + '<div>'
+                        + '<div class="fw-bold text-dark fs-6">' + dataFmt(t.data) + '</div>'
+                        + '<small class="text-muted">' + (t.tipo || 'Triagem') + '</small>'
+                        + '</div>'
+                        + '<div>' + statusBadge(t.status) + '</div>'
+                        + '</div>'
+                        + '<div class="card-body py-2">'
+                        + (t.queixa_principal ? '<p class="card-text mb-2"><strong>Queixa:</strong> ' + t.queixa_principal + '</p>' : '')
+                        + (t.descricao ? '<p class="card-text text-muted small mb-2">' + t.descricao + '</p>' : '')
+                        + (tagsList.length ? '<div class="d-flex flex-wrap gap-1 mt-3">' + tagsList.join('') + '</div>' : '')
+                        + '</div>'
+                        + '<div class="card-footer bg-transparent d-flex justify-content-between align-items-center pt-2 pb-3">'
+                        + '<small class="text-muted">Por: ' + (t.profissional || '--') + '</small>'
+                        + '<button class="btn btn-sm btn-outline-primary" '
+                        + 'onclick="abrirEditTriagem(' + JSON.stringify(t).replace(/"/g, '&quot;') + ')">'
+                        + '&#9998; Editar'
+                        + '</button>'
+                        + '</div>'
+                        + '</div>'
+                        + '</div>';
+                }).join('') + '</div>'
+                : vazio('Nenhuma triagem registrada para este aluno.');
+
+            document.getElementById('hist-avaliacoes-body').innerHTML = d.avaliacoes.length
+                ? '<div class="row g-3 mt-2">' + d.avaliacoes.map(function (av) {
+                    return '<div class="col-12"><div class="card shadow-sm border-0"><div class="card-header bg-transparent fw-bold text-primary">' + dataFmt(av.data) + ' <span class="text-muted fw-normal ms-2">Por: ' + (av.profissional || '--') + '</span></div><div class="card-body d-flex flex-wrap gap-2">' +
+                        av.itens.map(function (i) { return '<span class="badge border border-secondary text-secondary">[' + i.categoria + '] ' + i.item + '</span>'; }).join('') + '</div></div></div>';
+                }).join('') + '</div>'
+                : vazio('Nenhuma avaliação com itens marcados.');
+
+            document.getElementById('hist-evolucao-body').innerHTML = d.evolucoes.length
+                ? '<div class="list-group mt-3">' + d.evolucoes.map(function (e) {
+                    return '<div class="list-group-item list-group-item-action flex-column align-items-start border-0 shadow-sm mb-3 rounded"><div class="d-flex w-100 justify-content-between"><h6 class="mb-1 fw-bold text-primary">' + dataFmt(e.data) + '</h6><small class="text-muted">' + (e.profissional || '--') + '</small></div><p class="mb-1 mt-2">' +
+                        (e.texto || '').replace(/\n/g, '<br>') + '</p></div>';
+                }).join('') + '</div>'
+                : vazio('Nenhum registro de evolução encontrado.');
+
+            document.getElementById('hist-obs-body').innerHTML = d.observacoes_comportamentais.length
+                ? '<div class="list-group mt-3">' + d.observacoes_comportamentais.map(function (o) {
+                    return '<div class="list-group-item list-group-item-action flex-column align-items-start border-0 shadow-sm mb-3 rounded"><div class="d-flex w-100 justify-content-between"><h6 class="mb-1 fw-bold text-warning text-darken" style="color:#b57600">' + dataFmt(o.data) + '</h6><small class="text-muted">' + (o.profissional || '--') + '</small></div>' +
+                        (o.itens_comportamentais.length ? '<div class="mb-2 mt-2">' + o.itens_comportamentais.map(function (i) { return '<span class="badge bg-warning text-dark me-1">' + i + '</span>'; }).join('') + '</div>' : '') +
+                        (o.observacoes ? '<p class="mb-1 mt-2">' + o.observacoes.replace(/\n/g, '<br>') + '</p>' : '') +
+                        '</div>';
+                }).join('') + '</div>'
+                : vazio('Nenhuma observação comportamental registrada.');
+
+            function renderRels(lista, elId) {
+                document.getElementById(elId).innerHTML = lista.length
+                    ? '<div class="card shadow-sm border-0 mt-3"><div class="card-body p-0"><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th class="ps-3">Título</th><th>Tipo</th><th>Origem</th><th>Status</th><th>Data</th></tr></thead><tbody>' +
+                    lista.map(function (r) {
+                        return '<tr><td class="ps-3 fw-semibold">' + r.titulo + '</td><td>' + r.tipo + '</td><td>' + r.origem + '</td><td>' + statusBadge(r.status) + '</td><td>' +
+                            (r.created_at ? new Date(r.created_at).toLocaleDateString('pt-BR') : '--') + '</td></tr>';
+                    }).join('') + '</tbody></table></div></div></div>'
+                    : vazio('Nenhum relatório encontrado.');
+            }
+            renderRels(d.relatorios, 'hist-relatorios-body');
+            renderRels(d.relatorios_automaticos, 'hist-auto-body');
+        }
+
+        document.getElementById('btnCarregarHistorico').addEventListener('click', carregarHistorico);
+        popularSelectHistorico();
+
+        // === EDICAO DE TRIAGEM ===
+        function abrirEditTriagem(triagem) {
+            document.getElementById('editTriagemId').value = triagem.id;
+            document.getElementById('editDataTriagem').value = triagem.data || triagem.data_registro || '';
+            document.getElementById('editTipoRegistro').value = triagem.tipo_registro || 'triagem';
+            document.getElementById('editStatusTriagem').value = triagem.status_raw || triagem.status || 'aguardando_entrevista';
+            document.getElementById('editQueixaPrincipal').value = triagem.queixa_principal || '';
+            document.getElementById('editDescricao').value = triagem.descricao || '';
+            document.getElementById('editEvolucao').value = triagem.evolucao || '';
+            document.getElementById('editObservacoes').value = triagem.observacoes || '';
+
+            // Limpar e marcar checkboxes
+            document.querySelectorAll('.edit-check').forEach(function (c) { c.checked = false; });
+            var av = triagem.avaliacoes_json || {};
+            var mapa = { e_cognitiva: 'cognitiva', e_pedagogica: 'pedagogica', e_comportamental: 'comportamental', e_socioemocional: 'socioemocional' };
+            Object.keys(mapa).forEach(function (name) {
+                var items = av[mapa[name]] || [];
+                items.forEach(function (val) {
+                    var cb = document.querySelector('input[name="' + name + '"][value="' + val + '"]');
+                    if (cb) cb.checked = true;
+                });
+            });
+
+            document.getElementById('alertaEditModal').innerHTML = '';
+            var modal = new bootstrap.Modal(document.getElementById('modalEditTriagem'));
+            modal.show();
+        }
+
+        document.getElementById('btnSalvarEdit').addEventListener('click', async function () {
+            var btn = this;
+            var id = document.getElementById('editTriagemId').value;
+            if (!id) return;
+
+            var getCheckedEdit = function (name) {
+                return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked')).map(function (c) { return c.value; });
+            };
+
+            var payload = {
+                data_registro: document.getElementById('editDataTriagem').value,
+                tipo_registro: document.getElementById('editTipoRegistro').value,
+                status: document.getElementById('editStatusTriagem').value,
+                queixa_principal: document.getElementById('editQueixaPrincipal').value.trim() || null,
+                descricao: document.getElementById('editDescricao').value.trim() || null,
+                evolucao: document.getElementById('editEvolucao').value.trim() || null,
+                observacoes: document.getElementById('editObservacoes').value.trim() || null,
+                avaliacoes_json: {
+                    cognitiva: getCheckedEdit('e_cognitiva'),
+                    pedagogica: getCheckedEdit('e_pedagogica'),
+                    comportamental: getCheckedEdit('e_comportamental'),
+                    socioemocional: getCheckedEdit('e_socioemocional'),
+                }
+            };
+
+            btn.disabled = true; btn.textContent = 'Salvando...';
+            try {
+                var r = await fetch(API + '/api/triagens/' + id, {
+                    method: 'PUT', headers: authHeaders(), body: JSON.stringify(payload)
+                });
+                var d = await r.json();
+                if (r.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalEditTriagem')).hide();
+                    // Recarregar historico do aluno atual
+                    var aluno_id = document.getElementById('selectHistoricoAluno').value;
+                    if (aluno_id) {
+                        var r2 = await fetch(API + '/api/alunos/historico/' + aluno_id, { headers: authHeaders() });
+                        var d2 = await r2.json();
+                        renderHistorico(d2);
+                    }
+                    await carregarHistorico2();
+                    await carregarDashboard();
+                } else {
+                    document.getElementById('alertaEditModal').innerHTML = '<div class="alert alert-danger py-2">' + (d.message || 'Erro ao salvar.') + '</div>';
+                }
+            } catch (e) {
+                document.getElementById('alertaEditModal').innerHTML = '<div class="alert alert-danger py-2">Erro de conexao.</div>';
+            } finally {
+                btn.disabled = false; btn.textContent = 'Salvar Alteracoes';
+            }
+        });
+
+        async function carregarHistorico2() {
+            await carregarHistoricoGeral();
+        }
+    </script>
 </body>
+
 </html>
