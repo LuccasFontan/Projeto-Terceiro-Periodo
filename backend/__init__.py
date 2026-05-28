@@ -1,6 +1,34 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
+
+# Monkey-patch psycopg2 para evitar UnicodeDecodeError no Windows em pastas com caracteres especiais (como 'PROGRAMAÇÃO')
+try:
+    import psycopg2
+    original_connect = psycopg2.connect
+
+    def safe_connect(*args, **kwargs):
+        for k, v in list(os.environ.items()):
+            try:
+                k.encode('ascii')
+                v.encode('ascii')
+            except UnicodeEncodeError:
+                try:
+                    os.environ[k] = v.encode('ascii', errors='replace').decode('ascii')
+                except Exception:
+                    del os.environ[k]
+
+        original_cwd = os.getcwd()
+        try:
+            os.chdir("C:\\")
+            return original_connect(*args, **kwargs)
+        finally:
+            os.chdir(original_cwd)
+
+    psycopg2.connect = safe_connect
+except ImportError:
+    pass
 
 from flask import Flask, jsonify, send_from_directory
 from werkzeug.exceptions import HTTPException
@@ -18,6 +46,10 @@ from backend.config import Config
 from backend.routes.auth import auth_bp
 from backend.routes.alunos import alunos_bp
 from backend.routes.encaminhamentos import encaminhamentos_bp
+from backend.routes.triagens import triagens_bp
+from backend.routes.planos import planos_bp
+from backend.routes.relatorios import relatorios_bp
+from backend.routes.psicopedagogo_dashboard import psicopedagogo_dashboard_bp
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -40,6 +72,10 @@ def create_app(config_object: type[Config] = Config) -> Flask:
     app.register_blueprint(admin_extra_bp)
     app.register_blueprint(alunos_bp)
     app.register_blueprint(encaminhamentos_bp)
+    app.register_blueprint(triagens_bp)
+    app.register_blueprint(planos_bp)
+    app.register_blueprint(relatorios_bp)
+    app.register_blueprint(psicopedagogo_dashboard_bp)
 
     @app.after_request
     def set_security_headers(response):

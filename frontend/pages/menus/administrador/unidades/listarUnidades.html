@@ -186,7 +186,7 @@
           <td><span class="badge ${statusBadgeClass(u.status)}">${u.status || '-'}</span></td>
           <td>
             <div class="acoes">
-              <a href="atualizarUnidades.html?id=${u.id}" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
+              <a href="atualizarUnidades.html?id=${u.id}&mode=ver" class="btn btnVer" style="padding: 6px 12px; font-size: 12px;">Ver</a>
               <a href="atualizarUnidades.html?id=${u.id}" class="btn btnEditar" style="padding: 6px 12px; font-size: 12px;">Editar</a>
               <button onclick="confirmarDelecao(${u.id})" class="btn btnDeletar" style="padding: 6px 12px; font-size: 12px;">Deletar</button>
             </div>
