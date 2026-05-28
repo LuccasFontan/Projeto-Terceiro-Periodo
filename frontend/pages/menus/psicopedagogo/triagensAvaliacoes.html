@@ -160,11 +160,12 @@
                                 <th>Tipo</th>
                                 <th>Status</th>
                                 <th>Queixa Principal</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="triagens-tbody">
                             <tr>
-                                <td colspan="6" class="text-center text-muted py-4">Carregando...</td>
+                                <td colspan="7" class="text-center text-muted py-4">Carregando...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -661,7 +662,7 @@
                 const d = await r.json();
                 const items = d.items || [];
                 if (!items.length) {
-                    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">Nenhuma triagem registrada.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">Nenhuma triagem registrada.</td></tr>';
                     return;
                 }
                 tbody.innerHTML = items.map(t => `
@@ -672,9 +673,35 @@
         <td>${tipoLabel(t.tipo_registro)}</td>
         <td>${statusLabel(t.status)}</td>
         <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(t.queixa_principal || '').replace(/"/g, '&quot;')}">${t.queixa_principal || '<em class="text-muted">—</em>'}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary py-0 px-2" onclick="abrirEditTriagem(${JSON.stringify(t).replace(/"/g, '&quot;')})" title="Editar">&#9998;</button>
+          <button class="btn btn-sm btn-outline-danger py-0 px-2 ms-1" onclick="deletarTriagem(${t.id})" title="Deletar">&#128465;</button>
+        </td>
       </tr>`).join('');
             } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-4">Erro ao carregar triagens.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-4">Erro ao carregar triagens.</td></tr>';
+            }
+        }
+
+        async function deletarTriagem(id) {
+            if (!confirm('Tem certeza que deseja deletar este registro de triagem? Esta ação é irreversível.')) return;
+            try {
+                const r = await fetch(API + '/api/triagens/' + id, { method: 'DELETE', headers: authHeaders() });
+                if (r.ok) {
+                    await carregarDashboard();
+                    await carregarHistoricoGeral();
+                    var aluno_id = document.getElementById('selectHistoricoAluno').value;
+                    if (aluno_id) {
+                        var r2 = await fetch(API + '/api/alunos/historico/' + aluno_id, { headers: authHeaders() });
+                        var d2 = await r2.json();
+                        renderHistorico(d2);
+                    }
+                } else {
+                    const d = await r.json();
+                    alert(d.message || 'Erro ao deletar.');
+                }
+            } catch (e) {
+                alert('Erro de conexão ao deletar.');
             }
         }
 
@@ -934,7 +961,7 @@
         // === EDICAO DE TRIAGEM ===
         function abrirEditTriagem(triagem) {
             document.getElementById('editTriagemId').value = triagem.id;
-            document.getElementById('editDataTriagem').value = triagem.data || '';
+            document.getElementById('editDataTriagem').value = triagem.data || triagem.data_registro || '';
             document.getElementById('editTipoRegistro').value = triagem.tipo_registro || 'triagem';
             document.getElementById('editStatusTriagem').value = triagem.status_raw || triagem.status || 'aguardando_entrevista';
             document.getElementById('editQueixaPrincipal').value = triagem.queixa_principal || '';
