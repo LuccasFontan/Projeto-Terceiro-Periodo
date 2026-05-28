@@ -5,25 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAADI | Planos de Acompanhamento</title>
+    <meta name="description" content="Módulo de Planos de Acompanhamento do SAADI — metas, ações e evolução individual de cada aluno.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../../css/menuPsicopedagogo.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="../../../img/favicon-duas-mãos-32px-branco.png" type="image/x-icon">
 </head>
 
 <body>
-    <a class="pularConteudo" href="#conteudo-principal">Pular para o conteudo principal</a>
+    <a class="pularConteudo" href="#conteudo-principal">Pular para o conteúdo principal</a>
+
     <div class="app">
+        <!-- ==================== MENU LATERAL ==================== -->
         <nav class="menuLateral" aria-label="Menu principal do psicopedagogo">
             <a class="menuSecretaria" id="telaInicial" href="/pages/menus/psicopedagogo/menuPsicopedagogo.html">
                 <div class="logoContainer">
-                    <div class="logoMenu"><img src="/img/icons8-duas-mãos-windows-11-filled/Logo.png"
-                            alt="Logo: Duas Mãos abertas"></div>
+                    <div class="logoMenu">
+                        <img src="/img/icons8-duas-mãos-windows-11-filled/Logo.png" alt="Logo SAADI">
+                    </div>
                     <div>
                         <h3>SAADI</h3>
                         <p>Psicopedagogo</p>
@@ -34,16 +36,18 @@
             <hr>
 
             <div class="Perfil">
-                <div class="fotoPerfil"><img src="/img/perfil.png" alt="Foto de Perfil vazia"></div>
+                <div class="fotoPerfil"><img src="/img/perfil.png" alt="Foto de Perfil"></div>
                 <div>
-                    <p id="nomeUsuario">Bem-vindo(a)!</p>
+                    <p class="nomePerfil">Carregando...</p>
+                    <p class="emailPerfil"></p>
                 </div>
                 <div class="config">
-                    <button type="button" aria-label="Abrir configuracoes">
+                    <button type="button" aria-label="Abrir configurações">
                         <img src="/img/engrenagem.png" alt="Configurações">
                     </button>
                 </div>
             </div>
+
             <hr>
 
             <a class="botoesLaterais" href="/pages/menus/psicopedagogo/triagensAvaliacoes.html">
@@ -53,7 +57,8 @@
                 </div>
             </a>
 
-            <a class="botoesLaterais" href="/pages/menus/psicopedagogo/planosAcompanhamento.html" aria-current="page">
+            <a class="botoesLaterais" href="/pages/menus/psicopedagogo/planosAcompanhamento.html"
+                aria-current="page">
                 <div class="alinhamento">
                     <div class="fotos"><img src="/img/icon-lista.png" alt="Planos"></div>
                     <p>Planos de Acompanhamento</p>
@@ -74,28 +79,28 @@
                 </div>
             </a>
 
-            <div class="baixo">
-                <hr>
-            </div>
-            <a class="textoSair" id="btnSair" href="#">
+            <div class="baixo"><hr></div>
+
+            <a class="textoSair" href="/pages/auth/login.html">
                 <div class="sair">
                     <div class="fotoSair"><img src="/img/sair.png" alt="Sair"></div>
-                    <p> Sair da Conta </p>
+                    <p>Sair da Conta</p>
                 </div>
             </a>
         </nav>
 
+        <!-- ==================== CONTEÚDO PRINCIPAL ==================== -->
         <main id="conteudo-principal" class="conteudoPrincipal" tabindex="-1">
-            <section class="cabecalhoInstituicao" aria-label="Instituição vinculada ao usuário">
+            <section class="cabecalhoInstituicao" aria-label="Módulo">
                 <p class="cabecalhoLabel">Módulo</p>
-                <h2 class="nomeInstituicao">Planos de Acompanhamento</h2>
+                <h1 class="nomeInstituicao">Planos de Acompanhamento</h1>
             </section>
 
             <div class="inferior">
                 <div class="ladoEsquerdo">
                     <section class="painelIntro" aria-label="Descrição do módulo de planos">
                         <p class="painelIntroTag">Intervenções</p>
-                        <h1 class="painelIntroTitulo">Gerencie metas, ações e evolução dos planos individuais</h1>
+                        <h2 class="painelIntroTitulo">Gerencie metas, ações e evolução dos planos individuais</h2>
                         <p class="painelIntroTexto">
                             Estruture objetivos pedagógicos e socioemocionais por aluno, com registro de estratégias,
                             periodicidade de acompanhamento e responsáveis por cada ação.
@@ -110,346 +115,77 @@
                 <div class="ladoDireito">
                     <section class="dashboardPainel" aria-label="Resumo de planos">
                         <div class="dashboardCabecalho">
-                            <h3 class="dashboardTitulo">Resumo</h3>
+                            <h2 class="dashboardTitulo">Resumo</h2>
                             <p class="dashboardSubtitulo">Situação atual dos planos ativos</p>
                         </div>
 
-                        <div class="caixaTotal cardDestaque">
+                        <div class="caixaTotal cardDestaque cardDestaque-planos">
                             <div class="metricaInfo">
-                                <p class="metricaRotulo">Total de Planos</p>
+                                <p class="metricaRotulo">Planos Ativos</p>
                                 <p class="metricaComplemento">No período atual</p>
                             </div>
-                            <div class="contagem" id="totalPlanos">0</div>
+                            <div class="contagem" id="dashPlanosTotais">—</div>
                         </div>
 
                         <div class="fileira">
                             <div class="metricaCard autistas">
-                                <div class="metricaInfo">
-                                    <p class="metricaRotulo">Planos Ativos</p>
-                                </div>
-                                <div class="contagem" id="totalPlanosAtivos">0</div>
+                                <div class="metricaInfo"><p class="metricaRotulo">Metas em Dia</p></div>
+                                <div class="contagem" id="dashMetasEmDia">—</div>
                             </div>
 
                             <div class="metricaCard tdah">
-                                <div class="metricaInfo">
-                                    <p class="metricaRotulo">Planos Concluídos</p>
-                                </div>
-                                <div class="contagem" id="totalPlanosConcluidos">0</div>
+                                <div class="metricaInfo"><p class="metricaRotulo">Revisão Mensal</p></div>
+                                <div class="contagem" id="dashRevisao">—</div>
                             </div>
 
                             <div class="metricaCard dislexia">
-                                <div class="metricaInfo">
-                                    <p class="metricaRotulo">Planos Suspensos</p>
-                                </div>
-                                <div class="contagem" id="totalPlanosSuspensos">0</div>
+                                <div class="metricaInfo"><p class="metricaRotulo">Pendentes de Atualização</p></div>
+                                <div class="contagem" id="dashPendentes">—</div>
+                            </div>
+
+                            <div class="metricaCard outras">
+                                <div class="metricaInfo"><p class="metricaRotulo">Planos Vinculados</p></div>
+                                <div class="contagem" id="dashVinculados">—</div>
                             </div>
                         </div>
                     </section>
                 </div>
             </div>
-        <div class="planos-container">
+        <!-- ==================== BLOCO DE CONTEÚDO ==================== -->
+        <section class="psicoBloco" aria-label="Alunos por necessidade e responsável">
+            <h2>Base para Planos de Acompanhamento</h2>
+            <p class="psicoInfo">Regra aplicada: aluno pode ter uma ou mais necessidades, sem repetição por necessidade.</p>
 
-        <section class="psicoBloco" aria-label="Criação de plano de acompanhamento">
-            <h3>Criar Novo Plano de Acompanhamento</h3>
-            <p class="psicoInfo">Estabeleça metas e defina estratégias de intervenção específicas para o estudante.</p>
-            <form class="row g-3" id="formPlano">
-                <div class="col-md-6">
-                    <label class="form-label" for="planoAluno">Aluno</label>
-                    <select id="planoAluno" class="form-select" required>
-                        <option value="">Selecione um aluno...</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="planoTitulo">Título do Plano</label>
-                    <input id="planoTitulo" type="text" class="form-control" placeholder="Ex: Plano de intervenção em leitura e foco" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="planoDataInicio">Data de Início</label>
-                    <input id="planoDataInicio" type="date" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="planoDataFim">Previsão de Fim</label>
-                    <input id="planoDataFim" type="date" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="planoPeriodicidade">Periodicidade das Sessões</label>
-                    <select id="planoPeriodicidade" class="form-select" required>
-                        <option value="semanal">Semanal</option>
-                        <option value="quinzenal">Quinzenal</option>
-                        <option value="mensal">Mensal</option>
-                        <option value="outra">Outra</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="planoStatus">Situação Inicial</label>
-                    <select id="planoStatus" class="form-select" required>
-                        <option value="ativo">Ativo</option>
-                        <option value="concluido">Concluído</option>
-                        <option value="suspenso">Suspenso</option>
-                    </select>
-                </div>
-                <div class="col-md-12">
-                    <label class="form-label" for="planoObjetivo">Objetivo Geral</label>
-                    <textarea id="planoObjetivo" class="form-control" rows="2" placeholder="Descreva os objetivos a curto e médio prazo..." required></textarea>
-                </div>
-                <div class="col-md-12">
-                    <label class="form-label" for="planoEstrategias">Estratégias / Ações</label>
-                    <textarea id="planoEstrategias" class="form-control" rows="2" placeholder="Descreva as estratégias lúdicas, pedagógicas ou socioemocionais..."></textarea>
-                </div>
-                <div class="col-12">
-                    <button class="btn btn-primary" type="submit">Salvar plano</button>
-                </div>
-            </form>
-        </section>
-
-        <section class="psicoBloco filtros-planos" aria-label="Filtros de pesquisa">
-            <h3>Filtrar Planos</h3>
-            <p class="psicoInfo">Encontre os planos de acompanhamento utilizando os filtros abaixo.</p>
-            <form id="formFiltrosPlanos" class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold" for="filtroBuscaAluno">Buscar Aluno</label>
-                    <input type="text" id="filtroBuscaAluno" class="form-control" placeholder="Buscar aluno...">
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold" for="filtroStatus">Status</label>
-                    <select id="filtroStatus" class="form-select">
-                        <option value="">Todos</option>
-                        <option value="ativo">Em andamento</option>
-                        <option value="concluido">Concluído</option>
-                        <option value="suspenso">Suspenso</option>
-                        <option value="revisao">Necessita revisão</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold" for="filtroResponsavel">Responsável</label>
-                    <select id="filtroResponsavel" class="form-select">
-                        <option value="">Todos</option>
-                        <option value="ana souza">Ana Souza</option>
-                        <option value="carlos henrique">Carlos Henrique</option>
-                        <option value="juliana lima">Juliana Lima</option>
-                        <option value="fernanda alves">Fernanda Alves</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold" for="filtroFrequencia">Frequência</label>
-                    <select id="filtroFrequencia" class="form-select">
-                        <option value="">Todas</option>
-                        <option value="semanal">Semanal</option>
-                        <option value="quinzenal">Quinzenal</option>
-                        <option value="mensal">Mensal</option>
-                    </select>
-                </div>
-                <div class="col-md-2 d-flex align-items-end gap-2">
-                    <button type="submit" class="btn btn-primary flex-grow-1" id="btnFiltrarPlanos">Filtrar</button>
-                    <button type="button" class="btn btn-outline-secondary" id="btnLimparFiltros">Limpar</button>
-                </div>
-            </form>
-        </section>
-
-        <section class="psicoBloco" aria-label="Planos de acompanhamento registrados">
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
-                <h3 class="mb-0">Planos Cadastrados</h3>
-                <small class="text-muted" style="font-size:.8rem;">
-                    <span class="badge bg-secondary me-1">V</span> Visualizar &nbsp;
-                    <span class="badge" style="background:#e8a000;">E</span> Editar &nbsp;
-                    <span class="badge bg-danger">D</span> Excluir
-                </small>
-            </div>
             <div class="psicoTabelaWrap">
-                <table class="table table-striped align-middle" id="tabelaPlanos">
+                <table class="table table-striped align-middle" id="tabelaPlanos" aria-label="Tabela de planos de acompanhamento">
                     <thead>
                         <tr>
-                            <th>Data Início</th>
-                            <th>Aluno</th>
-                            <th>Título do Plano</th>
-                            <th>Objetivo</th>
-                            <th>Periodicidade</th>
-                            <th>Situação</th>
-                            <th class="text-center">Ações</th>
+                            <th scope="col">Aluno</th>
+                            <th scope="col">Necessidades</th>
+                            <th scope="col">Responsável</th>
+                            <th scope="col">Telefone</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">Carregando planos...</td>
+                            <td colspan="4" class="text-center text-muted py-4">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Carregando…
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div id="paginacaoPlanos" class="d-flex justify-content-end mt-3"></div>
         </section>
-        </div>
         </main>
     </div>
-
-    <div vw class="enabled">
-        <div vw-access-button class="active"></div>
-        <div vw-plugin-wrapper>
-            <div class="vw-plugin-top-wrapper"></div>
-        </div>
-    </div>
-
-    <!-- ══ MODAL: VISUALIZAR PLANO ══════════════════════════════════════ -->
-    <div class="modal fade" id="modalVerPlano" tabindex="-1" aria-labelledby="modalVerPlanoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content" style="border-radius:16px;border:1px solid #d4e3f5;">
-                <div class="modal-header" style="background:linear-gradient(135deg,#0f2744,#2e6fbf);border-radius:16px 16px 0 0;">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-eye text-white fs-5"></i>
-                        <h5 class="modal-title text-white mb-0" id="modalVerPlanoLabel">Visualizar Plano</h5>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body p-4" id="modalVerConteudo">
-                    <!-- preenchido via JS -->
-                </div>
-                <div class="modal-footer" style="border-top:1px solid #e8f0fa;">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ══ MODAL: EDITAR PLANO ════════════════════════════════════════════ -->
-    <div class="modal fade" id="modalEditarPlano" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content" style="border-radius:16px;border:1px solid #d4e3f5;">
-                <div class="modal-header" style="background:linear-gradient(135deg,#7a4e00,#e8a000);border-radius:16px 16px 0 0;">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-pencil-square text-white fs-5"></i>
-                        <h5 class="modal-title text-white mb-0" id="modalEditarLabel">Editar Plano</h5>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="formEditarPlano" class="row g-3" novalidate>
-                        <input type="hidden" id="editPlanoId">
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold" for="editTitulo">Título do Plano</label>
-                            <input type="text" id="editTitulo" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold" for="editDataInicio">Data de Início</label>
-                            <input type="date" id="editDataInicio" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold" for="editDataFim">Previsão de Fim</label>
-                            <input type="date" id="editDataFim" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold" for="editPeriodicidade">Periodicidade</label>
-                            <select id="editPeriodicidade" class="form-select">
-                                <option value="semanal">Semanal</option>
-                                <option value="quinzenal">Quinzenal</option>
-                                <option value="mensal">Mensal</option>
-                                <option value="outra">Outra</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold" for="editStatus">Situação</label>
-                            <select id="editStatus" class="form-select">
-                                <option value="ativo">Ativo</option>
-                                <option value="concluido">Concluído</option>
-                                <option value="suspenso">Suspenso</option>
-                            </select>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold" for="editObjetivo">Objetivo Geral</label>
-                            <textarea id="editObjetivo" class="form-control" rows="3"></textarea>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold" for="editEstrategias">Estratégias / Ações</label>
-                            <textarea id="editEstrategias" class="form-control" rows="3"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer" style="border-top:1px solid #e8f0fa;">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-warning fw-bold" id="btnSalvarEdicao" style="color:#fff;">
-                        <span class="spinner-border spinner-border-sm d-none me-1" id="spinnerEdicao"></span>
-                        Salvar Alterações
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ══ MODAL: CONFIRMAR EXCLUSÃO ══════════════════════════════════════ -->
-    <div class="modal fade" id="modalDeletarPlano" tabindex="-1" aria-labelledby="modalDeletarLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius:16px;border:1px solid #f5c6cb;">
-                <div class="modal-header" style="background:linear-gradient(135deg,#7b0000,#c0392b);border-radius:16px 16px 0 0;">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-trash3 text-white fs-5"></i>
-                        <h5 class="modal-title text-white mb-0" id="modalDeletarLabel">Confirmar Exclusão</h5>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body p-4 text-center">
-                    <div style="font-size:3rem;margin-bottom:.5rem;">⚠️</div>
-                    <p class="mb-1" style="font-size:1.05rem;font-weight:600;color:#7b0000;">Tem certeza que deseja excluir este plano?</p>
-                    <p class="text-muted mb-0" style="font-size:.88rem;">Esta ação <strong>não pode ser desfeita</strong>. O plano será removido permanentemente.</p>
-                    <div class="mt-3 p-2 rounded" style="background:#fff5f5;border:1px solid #f5c6cb;">
-                        <small class="text-danger fw-semibold" id="modalDeletarNomePlano"></small>
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-center gap-3" style="border-top:1px solid #f5c6cb;">
-                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger fw-bold px-4" id="btnConfirmarExclusao">
-                        <span class="spinner-border spinner-border-sm d-none me-1" id="spinnerDelecao"></span>
-                        Confirmar Exclusão
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ══ TOAST de sucesso/erro ══════════════════════════════════════════ -->
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index:9999">
-        <div id="toastAcao" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" style="border-radius:12px;min-width:280px;">
-            <div class="d-flex">
-                <div class="toast-body d-flex align-items-center gap-2" id="toastMensagem"></div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Estilos dos botões de ação -->
-    <style>
-        .btn-acao {
-            width: 32px;
-            height: 32px;
-            border: none;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform .15s ease, filter .2s ease, box-shadow .15s ease;
-            font-size: .85rem;
-            flex-shrink: 0;
-        }
-        .btn-acao:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,.18);
-            filter: brightness(1.1);
-        }
-        .btn-acao:active { transform: translateY(0); }
-        .btn-ver   { background: #e8f2ff; color: #1a4d82; }
-        .btn-editar{ background: #fff3cd; color: #7a4e00; }
-        .btn-deletar{ background: #ffe0e0; color: #b71c1c; }
-        .acoes-cell { white-space: nowrap; }
-    </style>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-
+    <script src="/js/apiClient.js"></script>
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-    <script>
-        new window.VLibras.Widget('https://vlibras.gov.br/app');
-    </script>
-    <script src="/scripts/apiClient.js"></script>
-    <script src="/scripts/planosPsicopedagogo.js"></script>
+    <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
 </body>
 
 </html>

@@ -160,17 +160,47 @@ class Triagem(BaseModel):
     psicopedagogo_id = db.Column(db.BigInteger, db.ForeignKey('usuarios.id'), nullable=False)
     data_registro = db.Column(db.Date, nullable=False)
     tipo_registro = db.Column(db.String(30), nullable=False)
+    tipo_triagem = db.Column(db.String(60))
     status = db.Column(db.String(30), nullable=False, default='aguardando_entrevista')
+    alta_prioridade = db.Column(db.Boolean, nullable=False, default=False)
+    escola = db.Column(db.String(180))
     queixa_principal = db.Column(db.Text)
     descricao = db.Column(db.Text)
     evolucao = db.Column(db.Text)
     observacoes = db.Column(db.Text)
+    dados_entrevista = db.Column(JSONB)
+    dados_avaliacoes = db.Column(JSONB)
     avaliacoes_json = db.Column(JSONB)
+    resumo_final = db.Column(db.Text)
+    data_conclusao = db.Column(db.Date)
 
     aluno = db.relationship('Aluno', backref=db.backref('triagens', lazy=True))
     psicopedagogo = db.relationship('Usuario', foreign_keys=[psicopedagogo_id], backref=db.backref('triagens', lazy=True))
+    obs_registros = db.relationship('TriagemObservacao', backref='triagem', lazy='dynamic', cascade='all, delete-orphan')
+    historico = db.relationship('TriagemHistorico', backref='triagem', lazy='dynamic', cascade='all, delete-orphan')
 
 
+class TriagemObservacao(BaseModel):
+    """Observações avulsas e contínuas registradas durante o acompanhamento de uma triagem."""
+    __tablename__ = 'triagem_observacoes'
+
+    triagem_id = db.Column(db.BigInteger, db.ForeignKey('triagens.id', ondelete='CASCADE'), nullable=False)
+    profissional_id = db.Column(db.BigInteger, db.ForeignKey('usuarios.id', ondelete='SET NULL'))
+    categoria = db.Column(db.String(80))
+    texto = db.Column(db.Text, nullable=False)
+    profissional = db.relationship('Usuario', foreign_keys=[profissional_id])
+
+
+class TriagemHistorico(BaseModel):
+    """Log automático de todas as ações realizadas em uma triagem (mudanças de status, edições, etc)."""
+    __tablename__ = 'triagem_historico'
+
+    triagem_id = db.Column(db.BigInteger, db.ForeignKey('triagens.id', ondelete='CASCADE'), nullable=False)
+    usuario_id = db.Column(db.BigInteger, db.ForeignKey('usuarios.id', ondelete='SET NULL'))
+    acao = db.Column(db.String(80), nullable=False)
+    descricao = db.Column(db.Text)
+    detalhes = db.Column(JSONB)
+    usuario = db.relationship('Usuario', foreign_keys=[usuario_id])
 
 class PlanoAcompanhamento(BaseModel):
     __tablename__ = 'planos_acompanhamento'
