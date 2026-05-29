@@ -5,14 +5,174 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAADI | Encaminhamentos Psicopedagógicos</title>
-    <meta name="description" content="Módulo de Encaminhamentos Psicopedagógicos do SAADI — controle de encaminhamentos internos e externos.">
+    <meta name="description" content="Módulo de Encaminhamentos Psicopedagógicos do SAADI — controle de encaminhamentos internos e externos para equipe pedagógica, saúde e assistência social.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- Choices.js CSS para o select pesquisável -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <link rel="stylesheet" href="../../../css/menuPsicopedagogo.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="../../../img/favicon-duas-mãos-32px-branco.png" type="image/x-icon">
+
+    <style>
+        /* ── Botão principal azul (padrão do sistema) ── */
+        .btn-novo-enc {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--psico-900) 0%, var(--psico-700) 100%);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+            box-shadow: 0 4px 12px rgba(22,58,99,.25);
+            margin-top: 18px;
+        }
+        .btn-novo-enc:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(22,58,99,.32);
+        }
+        .btn-novo-enc:active { transform: scale(.97); }
+
+        /* ── Barra de filtros ── */
+        .enc-filtros {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 12px;
+            padding: 16px 20px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+        }
+        .enc-filtros .filtro-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 160px;
+        }
+        .enc-filtros .filtro-item label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-700);
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .enc-filtros .filtro-item input,
+        .enc-filtros .filtro-item select {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            color: var(--text-900);
+            background: #fff;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+        .enc-filtros .filtro-item input:focus,
+        .enc-filtros .filtro-item select:focus {
+            border-color: var(--psico-600);
+            box-shadow: 0 0 0 3px rgba(76,122,223,.12);
+            outline: none;
+        }
+        .enc-filtros .filtro-acoes {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            padding-bottom: 1px;
+        }
+
+        /* ── Tabela ── */
+        #tabelaEncaminhamentos thead th {
+            background: var(--psico-100);
+            color: var(--psico-900);
+            font-weight: 700;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            border-bottom: 2px solid var(--psico-200);
+            white-space: nowrap;
+        }
+        #tabelaEncaminhamentos tbody tr {
+            transition: background var(--transition);
+        }
+        #tabelaEncaminhamentos tbody tr:hover {
+            background: #f0f5fb;
+        }
+        #tabelaEncaminhamentos td {
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+
+        /* ── Modal header customizado ── */
+        .modal-header-enc {
+            background: linear-gradient(135deg, var(--psico-900) 0%, var(--psico-700) 100%);
+            color: #fff;
+        }
+        .modal-header-retorno {
+            background: linear-gradient(135deg, #0e4d6e 0%, #0891b2 100%);
+            color: #fff;
+        }
+        .modal-header-detalhes {
+            background: linear-gradient(135deg, #064e3b 0%, #059669 100%);
+            color: #fff;
+        }
+
+        /* ── Labels de campo dentro dos modais ── */
+        .campo-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-700);
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            margin-bottom: 4px;
+        }
+        .campo-valor {
+            font-weight: 600;
+            color: var(--text-900);
+        }
+
+        /* ── Info-box do modal de retorno ── */
+        .enc-info-box {
+            background: var(--psico-100);
+            border: 1px solid var(--psico-200);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            margin-bottom: 18px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 20px;
+        }
+        .enc-info-box p { margin: 0; }
+
+        /* ── Seção de bloco ── */
+        .bloco-enc-titulo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--psico-900);
+            margin-bottom: 4px;
+        }
+        .bloco-enc-sub {
+            font-size: 0.88rem;
+            color: var(--text-700);
+            margin-bottom: 14px;
+        }
+
+        /* ── Paginação ── */
+        #paginacaoEncaminhamentos .pagination { margin-bottom: 0; }
+
+        @media (max-width: 768px) {
+            .enc-filtros { gap: 8px; }
+            .enc-filtros .filtro-item { min-width: 100%; }
+        }
+    </style>
 </head>
 
 <body>
@@ -38,7 +198,7 @@
             <div class="Perfil">
                 <div class="fotoPerfil"><img src="/img/perfil.png" alt="Foto de Perfil"></div>
                 <div>
-                    <p class="nomePerfil">Carregando...</p>
+                    <p class="nomePerfil" id="nomeUsuario">Carregando...</p>
                     <p class="emailPerfil"></p>
                 </div>
                 <div class="config">
@@ -81,7 +241,7 @@
 
             <div class="baixo"><hr></div>
 
-            <a class="textoSair" href="/pages/auth/login.html">
+            <a class="textoSair" id="btnSair" href="/pages/auth/login.html">
                 <div class="sair">
                     <div class="fotoSair"><img src="/img/sair.png" alt="Sair"></div>
                     <p>Sair da Conta</p>
@@ -91,11 +251,14 @@
 
         <!-- ==================== CONTEÚDO PRINCIPAL ==================== -->
         <main id="conteudo-principal" class="conteudoPrincipal" tabindex="-1">
+
+            <!-- Cabeçalho do módulo -->
             <section class="cabecalhoInstituicao" aria-label="Módulo">
                 <p class="cabecalhoLabel">Módulo</p>
                 <h1 class="nomeInstituicao">Encaminhamentos Psicopedagógicos</h1>
             </section>
 
+            <!-- ── Painéis: Intro + Dashboard ── -->
             <div class="inferior">
                 <div class="ladoEsquerdo">
                     <section class="painelIntro" aria-label="Descrição do módulo de encaminhamentos">
@@ -109,6 +272,8 @@
                             Acompanhe cada etapa para garantir continuidade do cuidado e integração entre escola,
                             família e rede de atendimento.
                         </p>
+                    </section>
+
                     </section>
                 </div>
 
@@ -151,66 +316,335 @@
                     </section>
                 </div>
             </div>
-        <!-- ==================== BLOCO DE CONTEÚDO ==================== -->
-        <section class="psicoBloco" aria-label="Lista de encaminhamentos">
-            <h2>Encaminhamentos Realizados</h2>
-            <p class="psicoInfo">Visão consolidada para acompanhamento da rede interna e externa.</p>
 
-            <!-- Filtros -->
-            <div class="d-flex flex-wrap gap-2 mb-3" role="search" aria-label="Filtros de encaminhamentos">
-                <input type="search" id="filtroBusca" class="form-control form-control-sm" style="max-width: 220px;"
-                    placeholder="Buscar aluno ou destino…" aria-label="Buscar aluno ou destino">
-                <select id="filtroTipo" class="form-select form-select-sm" style="max-width: 140px;"
-                    aria-label="Filtrar por tipo">
-                    <option value="">Todos os tipos</option>
-                    <option value="interno">Interno</option>
-                    <option value="externo">Externo</option>
-                </select>
-                <select id="filtroStatus" class="form-select form-select-sm" style="max-width: 160px;"
-                    aria-label="Filtrar por status">
-                    <option value="">Todos os status</option>
-                    <option value="aberto">Aberto</option>
-                    <option value="em_andamento">Em andamento</option>
-                    <option value="concluido">Concluído</option>
-                    <option value="cancelado">Cancelado</option>
-                </select>
-                <button id="btnFiltrar" class="btn btn-sm btn-outline-primary" type="button">Filtrar</button>
+            <!-- ==================== BLOCO DE CONTEÚDO ==================== -->
+            <div class="d-flex justify-content-start" style="width: min(92%, 1100px); margin: 0 auto 16px;">
+                <button
+                    id="btnAbrirModalNovoEnc"
+                    type="button"
+                    class="btn btn-primary d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-3 shadow-sm"
+                    style="background: linear-gradient(135deg, var(--psico-900) 0%, var(--psico-700) 100%); border: none;"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalNovoEncaminhamento"
+                    aria-label="Registrar novo encaminhamento">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                    </svg>
+                    Novo Encaminhamento
+                </button>
             </div>
 
-            <div class="psicoTabelaWrap">
-                <table class="table table-striped align-middle" id="tabelaEncaminhamentos"
-                    aria-label="Tabela de encaminhamentos">
-                    <thead>
-                        <tr>
-                            <th scope="col">Data</th>
-                            <th scope="col">Aluno</th>
-                            <th scope="col">Destino</th>
-                            <th scope="col">Tipo</th>
-                            <th scope="col">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="5" class="text-center text-muted py-4">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Carregando…
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <section class="psicoBloco" aria-label="Lista de encaminhamentos">
 
-            <!-- Paginação -->
-            <div id="paginacaoEncaminhamentos" class="d-flex justify-content-end mt-2" aria-label="Paginação"></div>
-        </section>
+                <p class="bloco-enc-titulo">Encaminhamentos Realizados</p>
+                <p class="bloco-enc-sub">Visão consolidada para acompanhamento da rede interna e externa.</p>
+
+                <!-- Filtros -->
+                <form id="formFiltrosEnc" novalidate>
+                    <div class="enc-filtros" role="search" aria-label="Filtros de encaminhamentos">
+                        <div class="filtro-item" style="min-width:220px;">
+                            <label for="filtroBuscaEnc">Buscar aluno ou destino</label>
+                            <input
+                                type="search"
+                                id="filtroBuscaEnc"
+                                name="q"
+                                placeholder="Digite para buscar…"
+                                aria-label="Buscar aluno ou destino">
+                        </div>
+
+                        <div class="filtro-item">
+                            <label for="filtroTipoEnc">Tipo</label>
+                            <select id="filtroTipoEnc" name="tipo" aria-label="Filtrar por tipo">
+                                <option value="">Todos</option>
+                                <option value="interno">Interno</option>
+                                <option value="externo">Externo</option>
+                            </select>
+                        </div>
+
+                        <div class="filtro-item">
+                            <label for="filtroStatusEnc">Status</label>
+                            <select id="filtroStatusEnc" name="status" aria-label="Filtrar por status">
+                                <option value="">Todos</option>
+                                <option value="aberto">Aguardando</option>
+                                <option value="em_andamento">Em andamento</option>
+                                <option value="concluido">Retorno Recebido</option>
+                                <option value="sem_retorno">Sem Retorno</option>
+                                <option value="cancelado">Cancelado</option>
+                            </select>
+                        </div>
+
+                        <div class="filtro-acoes">
+                            <button type="submit" class="btn-filtrar" id="btnFiltrarEnc">Filtrar</button>
+                            <button type="button" class="btn-limpar" id="btnLimparFiltrosEnc">Limpar</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Tabela -->
+                <div class="psicoTabelaWrap">
+                    <table class="table table-hover align-middle" id="tabelaEncaminhamentos"
+                        aria-label="Tabela de encaminhamentos">
+                        <thead>
+                            <tr>
+                                <th scope="col">Aluno</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Destino / Serviço</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Prazo de Retorno</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Carregando…
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginação -->
+                <div id="paginacaoEncaminhamentos" class="d-flex justify-content-end mt-2"
+                    aria-label="Paginação"></div>
+
+            </section>
         </main>
     </div>
 
+    <!-- ===================================================================
+         MODAL: Novo / Editar Encaminhamento
+    ==================================================================== -->
+    <div class="modal fade" id="modalNovoEncaminhamento" tabindex="-1"
+        aria-labelledby="modalNovoEncTitulo" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header modal-header-enc">
+                    <h5 class="modal-title" id="modalNovoEncTitulo">&#128196; Novo Encaminhamento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formNovoEnc" novalidate>
+                        <div class="row g-3">
+
+                            <!-- Aluno -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="encAluno">
+                                    Aluno <span class="text-danger">*</span>
+                                </label>
+                                <select id="encAluno" class="form-select" required aria-required="true">
+                                    <option value="">Selecione um aluno…</option>
+                                </select>
+                                
+                                <!-- Resumo do Aluno Selecionado -->
+                                <div id="resumoAlunoContainer" class="d-none mt-3 p-3 bg-light border rounded" style="font-size: 0.85rem;">
+                                    <h6 class="mb-2 text-primary fw-bold">Resumo do Aluno</h6>
+                                    <div class="row g-2">
+                                        <div class="col-sm-6"><span class="fw-semibold">Idade:</span> <span id="resumoIdade">—</span></div>
+                                        <div class="col-sm-6"><span class="fw-semibold">Nascimento:</span> <span id="resumoNascimento">—</span></div>
+                                        <div class="col-sm-6"><span class="fw-semibold">Série/Turma:</span> <span id="resumoSerie">—</span></div>
+                                        <div class="col-sm-6"><span class="fw-semibold">Responsável:</span> <span id="resumoResponsavel">—</span></div>
+                                        <div class="col-sm-6"><span class="fw-semibold">Contato:</span> <span id="resumoTelefone">—</span></div>
+                                        <div class="col-sm-6"><span class="fw-semibold">Diagnóstico/Laudo:</span> <span id="resumoLaudo">—</span></div>
+                                        <div class="col-12"><span class="fw-semibold">Observações / Histórico:</span> <span id="resumoObs">—</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tipo + Prioridade -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold" for="encTipo">
+                                    Tipo <span class="text-danger">*</span>
+                                </label>
+                                <select id="encTipo" class="form-select" required aria-required="true">
+                                    <option value="">Selecione…</option>
+                                    <option value="interno">Interno (dentro da escola)</option>
+                                    <option value="externo">Externo (rede de saúde/social)</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold" for="encPrioridade">Prioridade</label>
+                                <select id="encPrioridade" class="form-select">
+                                    <option value="baixa">Baixa</option>
+                                    <option value="media" selected>Média</option>
+                                    <option value="alta">Alta</option>
+                                </select>
+                            </div>
+
+                            <!-- Destino -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="encDestino">
+                                    Destino / Serviço <span class="text-danger">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="encDestino"
+                                    class="form-control"
+                                    placeholder="Ex: Fonoaudiologia, CRAS, Psicólogo escolar, UBS…"
+                                    required
+                                    aria-required="true"
+                                    maxlength="140">
+                            </div>
+
+                            <!-- Motivo -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="encMotivo">
+                                    Motivo do Encaminhamento <span class="text-danger">*</span>
+                                </label>
+                                <textarea
+                                    id="encMotivo"
+                                    class="form-control"
+                                    rows="3"
+                                    required
+                                    aria-required="true"
+                                    placeholder="Descreva o motivo clínico-pedagógico do encaminhamento…"></textarea>
+                            </div>
+
+                            <!-- Data + Prazo -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold" for="encData">Data do Encaminhamento</label>
+                                <input type="date" id="encData" class="form-control">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold" for="encPrazoRetorno">Prazo Esperado de Retorno</label>
+                                <input type="date" id="encPrazoRetorno" class="form-control">
+                            </div>
+
+                            <!-- Observações -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="encObservacoes">Observações Complementares</label>
+                                <textarea
+                                    id="encObservacoes"
+                                    class="form-control"
+                                    rows="2"
+                                    placeholder="Informações adicionais, documentos enviados, contatos realizados…"></textarea>
+                            </div>
+
+                        </div><!-- /row -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="formNovoEnc" class="btn btn-primary px-4" id="btnSalvarNovoEnc">
+                        Salvar Encaminhamento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================
+         MODAL: Registrar / Visualizar Retorno
+    ==================================================================== -->
+    <div class="modal fade" id="modalDarRetorno" tabindex="-1"
+        aria-labelledby="modalDarRetornoTitulo" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header modal-header-retorno">
+                    <h5 class="modal-title" id="modalDarRetornoTitulo">&#9745; Registrar Retorno</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Info do encaminhamento -->
+                    <div class="enc-info-box" aria-label="Informações do encaminhamento">
+                        <p>
+                            <span class="campo-label d-block">Aluno</span>
+                            <span class="campo-valor" id="retornoAluno">—</span>
+                        </p>
+                        <p>
+                            <span class="campo-label d-block">Destino</span>
+                            <span class="campo-valor" id="retornoDestino">—</span>
+                        </p>
+                        <p>
+                            <span class="campo-label d-block">Tipo</span>
+                            <span class="campo-valor" id="retornoTipo">—</span>
+                        </p>
+                    </div>
+
+                    <form id="formDarRetorno" novalidate>
+                        <input type="hidden" id="retornoEncId">
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold" for="campoDataRetorno">
+                                    Data do Retorno <span class="text-danger">*</span>
+                                </label>
+                                <input type="date" id="campoDataRetorno" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold" for="campoStatusRetorno">
+                                    Resultado <span class="text-danger">*</span>
+                                </label>
+                                <select id="campoStatusRetorno" class="form-select" required>
+                                    <option value="concluido">Retorno Recebido</option>
+                                    <option value="sem_retorno">Sem Retorno</option>
+                                    <option value="em_andamento">Em Andamento</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="campoObservacaoRetorno">
+                                    Parecer / Observações de Retorno <span class="text-danger">*</span>
+                                </label>
+                                <textarea
+                                    id="campoObservacaoRetorno"
+                                    class="form-control"
+                                    rows="4"
+                                    required
+                                    placeholder="Descreva o retorno recebido, encaminhamentos futuros ou justificativa para ausência de retorno…"></textarea>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="submit" form="formDarRetorno" class="btn btn-success px-4" id="btnSubmitRetorno">
+                        Registrar Retorno
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================
+         MODAL: Ver Detalhes (somente leitura)
+    ==================================================================== -->
+    <div class="modal fade" id="modalVerDetalhes" tabindex="-1"
+        aria-labelledby="modalVerDetalhesTitulo" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header modal-header-detalhes">
+                    <h5 class="modal-title" id="modalVerDetalhesTitulo">&#128203; Detalhes do Encaminhamento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body" id="corpoModalDetalhes">
+                    <p class="text-center text-muted py-3">Carregando…</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SCRIPTS ==================== -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    <script src="/js/apiClient.js"></script>
-    <script src="/js/encaminhamentosPsicopedagogo.js"></script>
+    <!-- Choices.js para busca no select -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="/scripts/apiClient.js"></script>
+    <script src="/scripts/encaminhamentosPsicopedagogo.js"></script>
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
 </body>

@@ -79,19 +79,7 @@
                 <h2 class="nomeInstituicao">Triagens e Avaliações Psicopedagógicas</h2>
             </section>
 
-            <!-- Barra de ação: botão Nova Triagem abaixo do cabeçalho -->
-            <div class="d-flex justify-content-start mt-3 mb-4" style="margin: 0 auto; width: min(92%, 1100px);">
-                <button id="btnNovaTriagem"
-                    class="btn btn-primary d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-3 shadow-sm"
-                    data-bs-toggle="modal" data-bs-target="#modalNovaTriagem" aria-label="Registrar nova triagem">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        viewBox="0 0 16 16" aria-hidden="true">
-                        <path
-                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                    </svg>
-                    Nova Triagem
-                </button>
-            </div>
+
 
             <div class="inferior">
                 <div class="ladoEsquerdo">
@@ -147,6 +135,21 @@
                     </section>
                 </div>
             </div>
+
+            <div class="novo-plano-wrap d-flex justify-content-start" style="width: min(92%, 1100px); margin: 0 auto 16px;">
+                <button id="btnNovaTriagem"
+                    class="btn btn-primary d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-3 shadow-sm"
+                    style="background-color: #163a63; border: none;"
+                    data-bs-toggle="modal" data-bs-target="#modalNovaTriagem" aria-label="Registrar nova triagem">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        viewBox="0 0 16 16" aria-hidden="true">
+                        <path
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                    </svg>
+                    Nova Triagem
+                </button>
+            </div>
+
             <section class="psicoBloco" aria-label="Histórico de triagens">
                 <h3>Histórico de Triagens</h3>
                 <div id="alertaHistorico"></div>
