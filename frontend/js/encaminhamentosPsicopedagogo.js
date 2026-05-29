@@ -456,11 +456,9 @@
   // ───────────────────────────────────────────────────────────────────────────
 
   function getModalNovoEnc() {
-    if (!_modalNovoEnc) {
-      const el = document.getElementById('modalNovoEncaminhamento');
-      if (el) _modalNovoEnc = new bootstrap.Modal(el);
-    }
-    return _modalNovoEnc;
+    const el = document.getElementById('modalNovoEncaminhamento');
+    if (!el) return null;
+    return bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
   }
 
   function inicializarFormNovoEnc() {
@@ -489,16 +487,15 @@
       if (!destino) { toast('Por favor, informe o destino / serviço.', 'warning'); return; }
       if (!motivo)  { toast('Por favor, descreva o motivo do encaminhamento.', 'warning'); return; }
 
+      const descricaoCompleta = obs ? `${motivo}\n\nObservações Complementares:\n${obs}` : motivo;
+
       const payload = {
         aluno_id:           parseInt(alunoId, 10),
         tipo,
         destino,
         prioridade,
-        data_encaminhamento: data || null,
         prazo_retorno:       prazo,
-        motivo,
-        observacoes:         obs,
-        status:              'aberto',
+        descricao:           descricaoCompleta,
       };
 
       const btnSalvar = document.getElementById('btnSalvarNovoEnc');
@@ -511,8 +508,12 @@
             '<span class="spinner-border spinner-border-sm" role="status"></span> Salvando…';
         }
 
-        const resp = await fetch('/api/encaminhamentos', {
-          method: 'POST',
+        const isEditId = form.dataset.editId;
+        const url = isEditId ? `/api/encaminhamentos/${isEditId}` : '/api/encaminhamentos';
+        const method = isEditId ? 'PUT' : 'POST';
+
+        const resp = await fetch(url, {
+          method: method,
           credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(payload),
@@ -552,11 +553,9 @@
   // ───────────────────────────────────────────────────────────────────────────
 
   function getModalDetalhes() {
-    if (!_modalDetalhes) {
-      const el = document.getElementById('modalVerDetalhes');
-      if (el) _modalDetalhes = new bootstrap.Modal(el);
-    }
-    return _modalDetalhes;
+    const el = document.getElementById('modalVerDetalhes');
+    if (!el) return null;
+    return bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
   }
 
   async function abrirModalDetalhes(id) {
@@ -656,8 +655,8 @@
       setVal('encPrioridade',   enc.prioridade ?? 'media');
       setVal('encData',         (enc.data_encaminhamento ?? enc.created_at ?? '').substring(0, 10));
       setVal('encPrazoRetorno', (enc.prazo_retorno ?? '').substring(0, 10));
-      setVal('encMotivo',       enc.motivo);
-      setVal('encObservacoes',  enc.observacoes);
+      setVal('encMotivo',       enc.descricao);
+      setVal('encObservacoes',  '');
 
       // Guarda o id para o submit saber que é edição
       const form = document.getElementById('formNovoEnc');
@@ -679,11 +678,9 @@
   // ───────────────────────────────────────────────────────────────────────────
 
   function getModalRetorno() {
-    if (!_modalRetorno) {
-      const el = document.getElementById('modalDarRetorno');
-      if (el) _modalRetorno = new bootstrap.Modal(el);
-    }
-    return _modalRetorno;
+    const el = document.getElementById('modalDarRetorno');
+    if (!el) return null;
+    return bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
   }
 
   async function abrirModalRetorno(id) {

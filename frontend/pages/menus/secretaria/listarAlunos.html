@@ -180,12 +180,16 @@
 
                         <div class="mb-3">
                             <label for="cpfUsuario" class="form-label">CPF</label>
-                            <input type="text" class="form-control" id="cpfUsuario" name="cpf" placeholder="000.000.000-00" readonly>
+                            <input type="text" class="form-control" id="cpfUsuario" name="cpf" placeholder="000.000.000-00" readonly disabled style="background-color: #e9ecef; cursor: not-allowed;">
                         </div>
 
                         <div class="mb-3">
                             <label for="novaSenha" class="form-label">Nova Senha (deixe em branco para não alterar)</label>
                             <input type="password" class="form-control" id="novaSenha" name="senha" placeholder="********">
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmarNovaSenha" class="form-label">Confirmar Nova Senha</label>
+                            <input type="password" class="form-control" id="confirmarNovaSenha" placeholder="********">
                         </div>
                     </div>
 
@@ -396,52 +400,7 @@
 
     </div>
 
-    <!-- Modal de Configurações do Usuário -->
-    <div class="modal fade" id="modalConfiguracoesUsuario" tabindex="-1"
-        aria-labelledby="modalConfiguracoesUsuarioTitulo" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modalConfigSecretaria">
-                <div class="modal-header modalConfigCabecalho">
-                    <h2 class="modal-title fs-5" id="modalConfiguracoesUsuarioTitulo">Configurações do Usuário</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
 
-                <form class="modalConfigCorpo" id="formConfiguracoesUsuario">
-                    <div class="modal-body">
-                        <p class="modalConfigDescricao">Atualize suas preferências e dados de contato para manter o
-                            perfil da secretaria sempre em dia.</p>
-
-                        <div class="mb-3">
-                            <label for="nomeExibicao" class="form-label">Nome completo</label>
-                            <input type="text" class="form-control" id="nomeExibicao" name="nome_completo" placeholder="Seu nome" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="emailInstitucional" class="form-label">E-mail institucional</label>
-                            <input type="email" class="form-control" id="emailInstitucional" name="email"
-                                placeholder="nome@instituicao.edu.br" readonly>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="cpfUsuario" class="form-label">CPF</label>
-                            <input type="text" class="form-control" id="cpfUsuario" name="cpf" placeholder="000.000.000-00" readonly>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="novaSenha" class="form-label">Nova Senha (deixe em branco para não alterar)</label>
-                            <input type="password" class="form-control" id="novaSenha" name="senha" placeholder="********">
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary"
-                            data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Salvar alterações</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <div vw class="enabled">
         <div vw-access-button class="active"></div>

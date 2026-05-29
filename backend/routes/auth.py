@@ -151,7 +151,15 @@ def update_me():
         usuario.senha_hash = senha_segura(payload['senha'])
 
     db.session.commit()
-    registrar_atividade(usuario, 'Atualização de Perfil', 'Usuário', f'ID: {usuario.id}', 'Sucesso')
+    registrar_atividade(
+        usuario_id=usuario.id,
+        acao='Atualização de Perfil',
+        entidade='Usuário',
+        entidade_id=usuario.id,
+        detalhes={'status': 'Sucesso'},
+        ip_origem=request.remote_addr,
+        user_agent=request.user_agent.string
+    )
 
     return success('Perfil atualizado com sucesso.', data={'user': serializar_usuario(usuario)})
 

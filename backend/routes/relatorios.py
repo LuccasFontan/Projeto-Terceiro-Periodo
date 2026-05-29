@@ -16,6 +16,8 @@ from backend.services.relatorios_service import (
     obter_dashboard_relatorios_service,
     registrar_atividade_relatorio,
     serializar_relatorio,
+    deletar_relatorio_service,
+    atualizar_relatorio_service,
 )
 
 
@@ -95,3 +97,45 @@ def criar_relatorio():
 
     registrar_atividade_relatorio(autor_id, 'create', relatorio)
     return created('Relatório técnico emitido com sucesso.', data={'item': serializar_relatorio(relatorio)})
+
+@relatorios_bp.put('/<int:relatorio_id>')
+@jwt_required_any
+def atualizar_relatorio(relatorio_id: int):
+    """Atualiza um relatório que está em rascunho."""
+    payload = request.get_json(silent=True) or {}
+    
+    claims = get_jwt()
+    perfil = claims.get('perfil')
+    unidade_id = claims.get('unidade_id') if perfil != 'administrador' else None
+    autor_id = int(get_jwt_identity())
+
+    try:
+        relatorio = buscar_relatorio_service(relatorio_id, unidade_id)
+        relatorio = atualizar_relatorio_service(relatorio, payload)
+    except ValueError as exc:
+        return error(str(exc), 400, 'VALIDATION_ERROR')
+    except IntegrityError:
+        return error('Erro de integridade ao salvar relatório.', 409, 'CONFLICT')
+
+    registrar_atividade_relatorio(autor_id, 'update', relatorio)
+    return success('Relatório técnico atualizado com sucesso.', data={'item': serializar_relatorio(relatorio)})
+
+@relatorios_bp.delete('/<int:relatorio_id>')
+@jwt_required_any
+def deletar_relatorio(relatorio_id: int):
+    """Exclui um relatório."""
+    claims = get_jwt()
+    perfil = claims.get('perfil')
+    unidade_id = claims.get('unidade_id') if perfil != 'administrador' else None
+    autor_id = int(get_jwt_identity())
+
+    try:
+        relatorio = buscar_relatorio_service(relatorio_id, unidade_id)
+    except ValueError as exc:
+        return error(str(exc), 403, 'FORBIDDEN')
+
+    deletar_relatorio_service(relatorio)
+    registrar_atividade_relatorio(autor_id, 'delete', relatorio)
+    
+    return success('Relatório técnico excluído com sucesso.')
+

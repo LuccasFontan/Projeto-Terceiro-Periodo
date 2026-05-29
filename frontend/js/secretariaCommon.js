@@ -97,6 +97,11 @@
         if (nomeInput) nomeInput.value = perfil.nome || '';
         if (emailInput) emailInput.value = perfil.email || '';
         if (cpfInput) cpfInput.value = perfil.cpf || '';
+        
+        const senhaInput = modal.querySelector('#novaSenha');
+        const confirmarSenhaInput = modal.querySelector('#confirmarNovaSenha');
+        if (senhaInput) senhaInput.value = '';
+        if (confirmarSenhaInput) confirmarSenhaInput.value = '';
 
         const form = modal.querySelector('#formConfiguracoesUsuario');
         if (form && !form.dataset.ready) {
@@ -113,6 +118,15 @@
                 };
 
                 const novaSenha = form.querySelector('#novaSenha')?.value;
+                const confirmarSenha = form.querySelector('#confirmarNovaSenha')?.value;
+                
+                if (novaSenha && novaSenha !== confirmarSenha) {
+                    alert('As senhas não coincidem. Por favor, verifique.');
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    return;
+                }
+
                 if (novaSenha) payload.senha = novaSenha;
 
                 try {
