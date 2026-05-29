@@ -144,16 +144,20 @@
 
   async function carregarDashboard() {
     try {
+      const token = localStorage.getItem('saadi_access_token');
+      const headers = { Accept: 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
       const resp = await fetch('/api/relatorios/dashboard', {
         credentials: 'same-origin',
-        headers: { Accept: 'application/json' },
+        headers: headers,
       });
       if (!resp.ok) return;
       const json = await resp.json();
       const d = json.data ?? json;
-      setTexto('totalRelatorios', d.total    ?? '—');
-      setTexto('totalEmitidos',   d.emitidos ?? '—');
-      setTexto('totalRascunhos',  d.rascunhos ?? '—');
+      setTexto('dashRelatoriosTotais', d.total    ?? '—');
+      setTexto('dashRelEmitidos',   d.emitidos ?? '—');
+      setTexto('dashRelRascunhos',  d.rascunhos ?? '—');
     } catch (err) {
       console.error('[SAADI] Dashboard relatórios:', err);
     }

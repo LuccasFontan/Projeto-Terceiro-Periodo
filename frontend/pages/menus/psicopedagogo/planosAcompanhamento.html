@@ -5,13 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAADI | Planos de Acompanhamento</title>
-    <meta name="description" content="Módulo de Planos de Acompanhamento do SAADI — metas, ações e evolução individual de cada aluno.">
+    <meta name="description"
+        content="Módulo de Planos de Acompanhamento do SAADI — metas, ações e evolução individual de cada aluno.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="../../../css/menuPsicopedagogo.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="shortcut icon" href="../../../img/favicon-duas-mãos-32px-branco.png" type="image/x-icon">
 </head>
 
@@ -57,8 +59,7 @@
                 </div>
             </a>
 
-            <a class="botoesLaterais" href="/pages/menus/psicopedagogo/planosAcompanhamento.html"
-                aria-current="page">
+            <a class="botoesLaterais" href="/pages/menus/psicopedagogo/planosAcompanhamento.html" aria-current="page">
                 <div class="alinhamento">
                     <div class="fotos"><img src="/img/icon-lista.png" alt="Planos"></div>
                     <p>Planos de Acompanhamento</p>
@@ -79,7 +80,9 @@
                 </div>
             </a>
 
-            <div class="baixo"><hr></div>
+            <div class="baixo">
+                <hr>
+            </div>
 
             <a class="textoSair" href="/pages/auth/login.html">
                 <div class="sair">
@@ -129,382 +132,351 @@
 
                         <div class="fileira">
                             <div class="metricaCard autistas">
-                                <div class="metricaInfo"><p class="metricaRotulo">Em andamento</p></div>
+                                <div class="metricaInfo">
+                                    <p class="metricaRotulo">Em andamento</p>
+                                </div>
                                 <div class="contagem" id="dashAndamento">—</div>
                             </div>
 
                             <div class="metricaCard tdah">
-                                <div class="metricaInfo"><p class="metricaRotulo">Concluídos</p></div>
+                                <div class="metricaInfo">
+                                    <p class="metricaRotulo">Concluídos</p>
+                                </div>
                                 <div class="contagem" id="dashConcluidos">—</div>
                             </div>
 
                             <div class="metricaCard dislexia">
-                                <div class="metricaInfo"><p class="metricaRotulo">Suspensos</p></div>
+                                <div class="metricaInfo">
+                                    <p class="metricaRotulo">Suspensos</p>
+                                </div>
                                 <div class="contagem" id="dashSuspensos">—</div>
                             </div>
 
                             <div class="metricaCard outras">
-                                <div class="metricaInfo"><p class="metricaRotulo">Necessita revisão</p></div>
+                                <div class="metricaInfo">
+                                    <p class="metricaRotulo">Necessita revisão</p>
+                                </div>
                                 <div class="contagem" id="dashRevisao">—</div>
                             </div>
                         </div>
                     </section>
                 </div>
             </div>
-        <!-- ==================== BLOCO DE CONTEÚDO ==================== -->
-        <div class="novo-plano-wrap d-flex justify-content-start" style="width: min(92%, 1100px); margin: 0 auto 16px;">
-            <button class="btn btn-primary d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-3 shadow-sm" style="background-color: #163a63; border: none;">
-                &#10133; Novo Plano
-            </button>
-        </div>
-
-        <section class="psicoBloco" aria-label="Filtros de Planos" style="background: transparent; box-shadow: none; padding: 0;">
-            <div class="filtros-planos">
-                <div class="filtro-item">
-                    <label for="filtroBusca">Buscar</label>
-                    <input type="text" id="filtroBusca" class="filtro-input" placeholder="Buscar aluno...">
-                </div>
-                <div class="filtro-item">
-                    <label for="filtroStatus">Status</label>
-                    <select id="filtroStatus" class="filtro-select">
-                        <option value="">Todos</option>
-                        <option value="Em andamento">Em andamento</option>
-                        <option value="Concluído">Concluído</option>
-                        <option value="Suspenso">Suspenso</option>
-                        <option value="Necessita revisão">Necessita revisão</option>
-                    </select>
-                </div>
-                <div class="filtro-item">
-                    <label for="filtroResponsavel">Responsável</label>
-                    <select id="filtroResponsavel" class="filtro-select">
-                        <option value="">Todos</option>
-                        <option value="Ana Souza">Ana Souza</option>
-                        <option value="Carlos Henrique">Carlos Henrique</option>
-                        <option value="Juliana Lima">Juliana Lima</option>
-                        <option value="Fernanda Alves">Fernanda Alves</option>
-                    </select>
-                </div>
-                <div class="filtro-item">
-                    <label for="filtroFrequencia">Frequência</label>
-                    <select id="filtroFrequencia" class="filtro-select">
-                        <option value="">Todos</option>
-                        <option value="Semanal">Semanal</option>
-                        <option value="Quinzenal">Quinzenal</option>
-                        <option value="Mensal">Mensal</option>
-                    </select>
-                </div>
-                <div class="filtro-item justify-content-end">
-                    <button id="btnFiltrarPlanos" class="btn-filtrar">Filtrar</button>
-                </div>
-                <div class="filtro-item justify-content-end">
-                    <button id="btnLimparFiltros" class="btn-limpar">Limpar</button>
-                </div>
+            <!-- ==================== BLOCO DE CONTEÚDO ==================== -->
+            <div class="novo-plano-wrap d-flex justify-content-start"
+                style="width: min(92%, 1100px); margin: 0 auto 16px;">
+                <button
+                    class="btn btn-primary d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-3 shadow-sm"
+                    style="background-color: #163a63; border: none;" data-bs-toggle="modal"
+                    data-bs-target="#modalNovoPlano">
+                    &#10133; Novo Plano
+                </button>
             </div>
-        </section>
 
-        <section class="psicoBloco" aria-label="Histórico de Planos">
-            <h2>Histórico de Planos</h2>
-            <p class="psicoInfo">Gerencie e acompanhe os planos ativos e concluídos.</p>
+            <section class="psicoBloco" aria-label="Filtros de Planos"
+                style="background: transparent; box-shadow: none; padding: 0;">
+                <div class="filtros-planos">
+                    <div class="filtro-item">
+                        <label for="filtroBusca">Buscar</label>
+                        <input type="text" id="filtroBusca" class="filtro-input" placeholder="Buscar aluno...">
+                    </div>
+                    <div class="filtro-item">
+                        <label for="filtroStatus">Status</label>
+                        <select id="filtroStatus" class="filtro-select">
+                            <option value="">Todos</option>
+                            <option value="Em andamento">Em andamento</option>
+                            <option value="Concluído">Concluído</option>
+                            <option value="Suspenso">Suspenso</option>
+                            <option value="Necessita revisão">Necessita revisão</option>
+                        </select>
+                    </div>
+                    <div class="filtro-item">
+                        <label for="filtroResponsavel">Responsável</label>
+                        <select id="filtroResponsavel" class="filtro-select">
+                            <option value="">Todos</option>
+                            <option value="Ana Souza">Ana Souza</option>
+                            <option value="Carlos Henrique">Carlos Henrique</option>
+                            <option value="Juliana Lima">Juliana Lima</option>
+                            <option value="Fernanda Alves">Fernanda Alves</option>
+                        </select>
+                    </div>
+                    <div class="filtro-item">
+                        <label for="filtroFrequencia">Frequência</label>
+                        <select id="filtroFrequencia" class="filtro-select">
+                            <option value="">Todos</option>
+                            <option value="Semanal">Semanal</option>
+                            <option value="Quinzenal">Quinzenal</option>
+                            <option value="Mensal">Mensal</option>
+                        </select>
+                    </div>
+                    <div class="filtro-item justify-content-end">
+                        <button id="btnFiltrarPlanos" class="btn-filtrar">Filtrar</button>
+                    </div>
+                    <div class="filtro-item justify-content-end">
+                        <button id="btnLimparFiltros" class="btn-limpar">Limpar</button>
+                    </div>
+                </div>
+            </section>
 
-            <div class="psicoTabelaWrap">
-                <table class="table table-hover align-middle" id="tabelaPlanos">
-                    <thead class="table-light">
-                        <tr>
-                            <th scope="col">Aluno</th>
-                            <th scope="col">Necessidades</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Frequência</th>
-                            <th scope="col">Responsável</th>
-                            <th scope="col">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="listaPlanosMock">
-                        <!-- Itens mockados inseridos via JS -->
-                    </tbody>
-                </table>
-            </div>
-            <div id="noResultsPlanos" style="display:none;" class="text-center text-muted py-4">
-                Nenhum plano encontrado para os filtros selecionados.
-            </div>
-        </section>
+            <section class="psicoBloco" aria-label="Histórico de Planos">
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+                    <div>
+                        <h2 class="mb-1">Histórico de Planos</h2>
+                        <p class="psicoInfo mb-0">Gerencie e acompanhe os planos ativos e concluídos.</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 px-2" style="font-size: 0.85rem;">
+                        <span class="text-muted fw-semibold">Ações:</span>
+                        <span class="d-flex align-items-center gap-1"><span class="badge bg-primary text-white" style="font-size: 0.75rem; padding: 0.25rem 0.4rem;">V</span> Visualizar</span>
+                        <span class="d-flex align-items-center gap-1"><span class="badge bg-success text-white" style="font-size: 0.75rem; padding: 0.25rem 0.4rem;">E</span> Editar</span>
+                        <span class="d-flex align-items-center gap-1"><span class="badge bg-danger text-white" style="font-size: 0.75rem; padding: 0.25rem 0.4rem;">D</span> Deletar</span>
+                    </div>
+                </div>
+
+                <div class="psicoTabelaWrap">
+                    <table class="table table-hover align-middle" id="tabelaPlanos">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Data Início</th>
+                                <th scope="col">Aluno</th>
+                                <th scope="col">Título</th>
+                                <th scope="col">Objetivo Geral</th>
+                                <th scope="col">Frequência</th>
+                                <th scope="col">Status</th>
+                                <th scope="col" class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaPlanosMock">
+                            <!-- Itens mockados inseridos via JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="noResultsPlanos" style="display:none;" class="text-center text-muted py-4">
+                    Nenhum plano encontrado para os filtros selecionados.
+                </div>
+            </section>
         </main>
     </div>
 
-    <!-- Modal Edicao de Plano -->
-    <div class="modal fade" id="modalEditPlano" tabindex="-1" aria-labelledby="modalEditPlanoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+    <!-- ===================================================================
+         MODAL: Novo Plano
+    ==================================================================== -->
+    <div class="modal fade" id="modalNovoPlano" tabindex="-1" aria-labelledby="modalNovoPlanoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #163a63; color: white;">
-                    <h5 class="modal-title" id="modalEditPlanoLabel">&#9998; Editar Plano de Acompanhamento</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    <h5 class="modal-title" id="modalNovoPlanoLabel">&#10133; Novo Plano de Acompanhamento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPlano" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold" for="planoAluno">Aluno <span
+                                        class="text-danger">*</span></label>
+                                <select id="planoAluno" class="form-select" required>
+                                    <option value="">Carregando...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="planoTitulo" class="form-label fw-semibold">Título do Plano <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="planoTitulo" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="planoStatus" class="form-label fw-semibold">Status <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" id="planoStatus" required>
+                                    <option value="ativo">Em andamento</option>
+                                    <option value="concluido">Concluído</option>
+                                    <option value="suspenso">Suspenso</option>
+                                    <option value="necessita revisao">Necessita revisão</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="planoPeriodicidade" class="form-label fw-semibold">Frequência <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" id="planoPeriodicidade" required>
+                                    <option value="semanal">Semanal</option>
+                                    <option value="quinzenal">Quinzenal</option>
+                                    <option value="mensal">Mensal</option>
+                                    <option value="outra">Outra</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="planoDataInicio" class="form-label fw-semibold">Data Início</label>
+                                <input type="date" class="form-control" id="planoDataInicio">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="planoDataFim" class="form-label fw-semibold">Data Fim Prevista</label>
+                                <input type="date" class="form-control" id="planoDataFim">
+                            </div>
+                            <div class="col-md-12">
+                                <label for="planoObjetivo" class="form-label fw-semibold">Objetivo Geral</label>
+                                <textarea class="form-control" id="planoObjetivo" rows="2"></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="planoEstrategias" class="form-label fw-semibold">Estratégias / Ações</label>
+                                <textarea class="form-control" id="planoEstrategias" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="formPlano" class="btn btn-success px-4">Salvar plano</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================
+         MODAL: Editar Plano
+    ==================================================================== -->
+    <div class="modal fade" id="modalEditarPlano" tabindex="-1" aria-labelledby="modalEditarPlanoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #163a63; color: white;">
+                    <h5 class="modal-title" id="modalEditarPlanoLabel">&#9998; Editar Plano de Acompanhamento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="editPlanoId">
                     <div class="row g-3">
                         <div class="col-md-12">
-                            <label for="editPlanoTitulo" class="form-label fw-semibold">Título do Plano</label>
-                            <input type="text" class="form-control" id="editPlanoTitulo" required>
+                            <label for="editTitulo" class="form-label fw-semibold">Título do Plano <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editTitulo" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="editPlanoStatus" class="form-label fw-semibold">Status</label>
-                            <select class="form-select" id="editPlanoStatus">
-                                <option value="Em andamento">Em andamento</option>
-                                <option value="Concluído">Concluído</option>
-                                <option value="Suspenso">Suspenso</option>
-                                <option value="Necessita revisão">Necessita revisão</option>
+                            <label for="editStatus" class="form-label fw-semibold">Status <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select" id="editStatus" required>
+                                <option value="ativo">Em andamento</option>
+                                <option value="concluido">Concluído</option>
+                                <option value="suspenso">Suspenso</option>
+                                <option value="necessita revisao">Necessita revisão</option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="editPlanoPeriodicidade" class="form-label fw-semibold">Frequência</label>
-                            <select class="form-select" id="editPlanoPeriodicidade">
-                                <option value="Semanal">Semanal</option>
-                                <option value="Quinzenal">Quinzenal</option>
-                                <option value="Mensal">Mensal</option>
+                            <label for="editPeriodicidade" class="form-label fw-semibold">Frequência <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select" id="editPeriodicidade" required>
+                                <option value="semanal">Semanal</option>
+                                <option value="quinzenal">Quinzenal</option>
+                                <option value="mensal">Mensal</option>
+                                <option value="outra">Outra</option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="editPlanoDataInicio" class="form-label fw-semibold">Data Início</label>
-                            <input type="date" class="form-control" id="editPlanoDataInicio">
+                            <label for="editDataInicio" class="form-label fw-semibold">Data Início</label>
+                            <input type="date" class="form-control" id="editDataInicio">
                         </div>
                         <div class="col-md-6">
-                            <label for="editPlanoDataFim" class="form-label fw-semibold">Data Fim Prevista</label>
-                            <input type="date" class="form-control" id="editPlanoDataFim">
+                            <label for="editDataFim" class="form-label fw-semibold">Data Fim Prevista</label>
+                            <input type="date" class="form-control" id="editDataFim">
                         </div>
                         <div class="col-md-12">
-                            <label for="editPlanoObjetivo" class="form-label fw-semibold">Objetivo Geral</label>
-                            <textarea class="form-control" id="editPlanoObjetivo" rows="2"></textarea>
+                            <label for="editObjetivo" class="form-label fw-semibold">Objetivo Geral</label>
+                            <textarea class="form-control" id="editObjetivo" rows="2"></textarea>
                         </div>
                         <div class="col-md-12">
-                            <label for="editPlanoEstrategias" class="form-label fw-semibold">Estratégias / Ações</label>
-                            <textarea class="form-control" id="editPlanoEstrategias" rows="3"></textarea>
+                            <label for="editEstrategias" class="form-label fw-semibold">Estratégias / Ações</label>
+                            <textarea class="form-control" id="editEstrategias" rows="3"></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" id="btnSalvarEditPlano" class="btn btn-success px-4">Salvar Alterações</button>
+                    <button type="button" id="btnSalvarEdicao"
+                        class="btn btn-success px-4 d-flex align-items-center gap-2">
+                        <span class="spinner-border spinner-border-sm d-none" id="spinnerEdicao" role="status"
+                            aria-hidden="true"></span>
+                        Salvar Alterações
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- ===================================================================
+         MODAL: Visualizar Plano
+    ==================================================================== -->
+    <div class="modal fade" id="modalVerPlano" tabindex="-1" aria-labelledby="modalVerPlanoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #f7faff; border-bottom: 1px solid #d4e3f5;">
+                    <h5 class="modal-title fw-bold" id="modalVerPlanoLabel" style="color:#0f2744;">
+                        &#128203; Detalhes do Plano
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body" id="modalVerConteudo">
+                    <!-- Preenchido via JS -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================
+         MODAL: Deletar Plano
+    ==================================================================== -->
+    <div class="modal fade" id="modalDeletarPlano" tabindex="-1" aria-labelledby="modalDeletarPlanoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalDeletarPlanoLabel">&#9888; Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                    <p class="mt-3 mb-1 fs-5">Tem certeza que deseja excluir este plano?</p>
+                    <p class="text-muted mb-0 fw-bold" id="modalDeletarNomePlano"></p>
+                    <p class="text-danger mt-2"><small>Esta ação não poderá ser desfeita.</small></p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnConfirmarExclusao"
+                        class="btn btn-danger px-4 d-flex align-items-center gap-2">
+                        <span class="spinner-border spinner-border-sm d-none" id="spinnerDelecao" role="status"
+                            aria-hidden="true"></span>
+                        Sim, excluir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================
+         TOAST PARA FEEDBACK
+    ==================================================================== -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+        <div id="toastAcao" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMensagem"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Fechar"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SCRIPTS ==================== -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    <script src="/js/apiClient.js"></script>
+    <script src="/scripts/apiClient.js"></script>
+    <script src="/scripts/planosPsicopedagogo.js"></script>
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            let planosData = [];
-            const tbody = document.getElementById('listaPlanosMock');
-            const noResults = document.getElementById('noResultsPlanos');
-            const table = document.getElementById('tabelaPlanos');
-
-            function getStatusBadge(s) {
-                const cores = {
-                    'ativo': 'primary',
-                    'Em andamento': 'primary',
-                    'concluido': 'success',
-                    'Concluído': 'success',
-                    'suspenso': 'secondary',
-                    'Suspenso': 'secondary',
-                    'Necessita revisão': 'warning'
-                };
-                const statusNormal = s || 'ativo';
-                const textClass = (statusNormal.toLowerCase().includes('revisão')) ? 'text-dark' : '';
-                return `<span class="badge bg-${cores[statusNormal] || 'info'} bg-opacity-75 ${textClass}">${s}</span>`;
-            }
-
-            function renderPlanos(lista) {
-                tbody.innerHTML = '';
-                if(lista.length === 0) {
-                    noResults.style.display = 'block';
-                    table.style.display = 'none';
-                } else {
-                    noResults.style.display = 'none';
-                    table.style.display = 'table';
-                    lista.forEach(p => {
-                        const tr = document.createElement('tr');
-                        tr.style.animation = 'fadeIn 0.3s ease-in-out';
-                        tr.innerHTML = `
-                            <td class="fw-semibold text-dark">${p.aluno_nome || '--'}</td>
-                            <td>${p.titulo || p.objetivo_geral || '--'}</td>
-                            <td>${getStatusBadge(p.status)}</td>
-                            <td>${p.periodicidade || '--'}</td>
-                            <td>${p.psicopedagogo_nome || '--'}</td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-primary py-0 px-2 me-1" title="Editar" onclick="editarPlano(${p.id})">&#9998;</button>
-                                <button class="btn btn-sm btn-outline-danger py-0 px-2" title="Deletar" onclick="deletarPlano(${p.id})">&#128465;</button>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                }
-            }
-
-            function atualizarDashboard() {
-                document.getElementById('dashPlanosTotais').textContent = planosData.length;
-                document.getElementById('dashAndamento').textContent = planosData.filter(p => p.status && p.status.toLowerCase() === 'em andamento').length;
-                document.getElementById('dashConcluidos').textContent = planosData.filter(p => p.status && (p.status.toLowerCase() === 'concluído' || p.status.toLowerCase() === 'concluido')).length;
-                document.getElementById('dashSuspensos').textContent = planosData.filter(p => p.status && p.status.toLowerCase() === 'suspenso').length;
-                document.getElementById('dashRevisao').textContent = planosData.filter(p => p.status && (p.status.toLowerCase() === 'necessita revisão' || p.status.toLowerCase() === 'necessita revisao')).length;
-            }
-
-            async function carregarPlanos() {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Carregando...</td></tr>';
-                noResults.style.display = 'none';
-                table.style.display = 'table';
-                try {
-                    const response = await fetch('/api/planos?limit=50');
-                    if (response.ok) {
-                        const json = await response.json();
-                        planosData = json.data?.items || [];
-                        aplicarFiltros();
-                        atualizarDashboard();
-                    } else {
-                        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-4">Erro ao carregar planos</td></tr>';
-                    }
-                } catch (error) {
-                    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-4">Erro de conexão</td></tr>';
-                }
-            }
-
-            // Elementos dos Filtros
-            const fBusca = document.getElementById('filtroBusca');
-            const fStatus = document.getElementById('filtroStatus');
-            const fResp = document.getElementById('filtroResponsavel');
-            const fFreq = document.getElementById('filtroFrequencia');
-            const btnFiltrar = document.getElementById('btnFiltrarPlanos');
-            const btnLimpar = document.getElementById('btnLimparFiltros');
-
-            function aplicarFiltros() {
-                const busca = fBusca.value.toLowerCase();
-                const status = fStatus.value;
-                const resp = fResp.value;
-                const freq = fFreq.value;
-
-                const filtrados = planosData.filter(p => {
-                    const aluno = (p.aluno_nome || '').toLowerCase();
-                    const st = p.status || '';
-                    const responsavel = p.psicopedagogo_nome || '';
-                    const periodicidade = p.periodicidade || '';
-
-                    const matchBusca = aluno.includes(busca);
-                    const matchStatus = status ? st.toLowerCase() === status.toLowerCase() : true;
-                    const matchResp = resp ? responsavel.toLowerCase() === resp.toLowerCase() : true;
-                    const matchFreq = freq ? periodicidade.toLowerCase() === freq.toLowerCase() : true;
-
-                    return matchBusca && matchStatus && matchResp && matchFreq;
-                });
-
-                renderPlanos(filtrados);
-            }
-
-            // Buscando em tempo real no nome
-            fBusca.addEventListener('input', aplicarFiltros);
-            
-            // Botões
-            btnFiltrar.addEventListener('click', aplicarFiltros);
-            
-            btnLimpar.addEventListener('click', () => {
-                fBusca.value = '';
-                fStatus.value = '';
-                fResp.value = '';
-                fFreq.value = '';
-                aplicarFiltros();
-            });
-
-            // Funções globais para ações da tabela
-            let modalEditPlano = null;
-
-            window.editarPlano = function(id) {
-                if (!modalEditPlano) {
-                    modalEditPlano = new bootstrap.Modal(document.getElementById('modalEditPlano'));
-                }
-                const plano = planosData.find(p => p.id === id);
-                if (!plano) {
-                    alert('Plano não encontrado.');
-                    return;
-                }
-                
-                document.getElementById('editPlanoId').value = plano.id;
-                document.getElementById('editPlanoTitulo').value = plano.titulo || '';
-                
-                // Normaliza o status para bater com os options (primeira letra maiúscula)
-                let statusVal = plano.status ? plano.status.charAt(0).toUpperCase() + plano.status.slice(1) : 'Em andamento';
-                if (statusVal === 'Necessita revisao' || statusVal === 'Necessita Revisão') statusVal = 'Necessita revisão';
-                document.getElementById('editPlanoStatus').value = statusVal;
-                
-                let freqVal = plano.periodicidade ? plano.periodicidade.charAt(0).toUpperCase() + plano.periodicidade.slice(1) : 'Semanal';
-                document.getElementById('editPlanoPeriodicidade').value = freqVal;
-                
-                document.getElementById('editPlanoDataInicio').value = plano.data_inicio || '';
-                document.getElementById('editPlanoDataFim').value = plano.data_fim_prevista || '';
-                document.getElementById('editPlanoObjetivo').value = plano.objetivo_geral || '';
-                document.getElementById('editPlanoEstrategias').value = plano.estrategias || '';
-                
-                modalEditPlano.show();
-            };
-
-            document.getElementById('btnSalvarEditPlano').addEventListener('click', async () => {
-                const id = document.getElementById('editPlanoId').value;
-                const payload = {
-                    titulo: document.getElementById('editPlanoTitulo').value,
-                    status: document.getElementById('editPlanoStatus').value,
-                    periodicidade: document.getElementById('editPlanoPeriodicidade').value,
-                    data_inicio: document.getElementById('editPlanoDataInicio').value || null,
-                    data_fim_prevista: document.getElementById('editPlanoDataFim').value || null,
-                    objetivo_geral: document.getElementById('editPlanoObjetivo').value,
-                    estrategias: document.getElementById('editPlanoEstrategias').value
-                };
-
-                const btn = document.getElementById('btnSalvarEditPlano');
-                btn.disabled = true;
-                btn.textContent = 'Salvando...';
-
-                try {
-                    const response = await fetch(`/api/planos/${id}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if (response.ok) {
-                        alert('Plano atualizado com sucesso!');
-                        modalEditPlano.hide();
-                        carregarPlanos(); // Recarrega a tabela para mostrar as alterações
-                    } else {
-                        const err = await response.json().catch(()=>({}));
-                        alert(err.message || 'Erro ao atualizar plano.');
-                    }
-                } catch (error) {
-                    alert('Erro de conexão ao salvar plano.');
-                } finally {
-                    btn.disabled = false;
-                    btn.textContent = 'Salvar Alterações';
-                }
-            });
-
-            window.deletarPlano = async function(id) {
-                if (confirm('Tem certeza que deseja excluir este plano? Esta ação não pode ser desfeita.')) {
-                    try {
-                        const response = await fetch(`/api/planos/${id}`, { method: 'DELETE' });
-                        if (response.ok) {
-                            alert('Plano excluído com sucesso.');
-                            carregarPlanos();
-                        } else {
-                            const errorData = await response.json().catch(() => ({}));
-                            alert(errorData.message || 'Erro ao excluir o plano.');
-                        }
-                    } catch (error) {
-                        alert('Erro de conexão ao excluir.');
-                    }
-                }
-            };
-
-            // Carrega inicial
-            carregarPlanos();
-        });
-    </script>
+    <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
+    <script src="/scripts/psicopedagogoCommon.js"></script>
 </body>
+
 </html>

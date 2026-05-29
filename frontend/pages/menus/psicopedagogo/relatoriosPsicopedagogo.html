@@ -38,7 +38,7 @@
             <div class="Perfil">
                 <div class="fotoPerfil"><img src="/img/perfil.png" alt="Foto de Perfil"></div>
                 <div>
-                    <p class="nomePerfil">Carregando...</p>
+                    <p class="nomePerfil" id="nomeUsuario">Carregando...</p>
                     <p class="emailPerfil"></p>
                 </div>
                 <div class="config">
@@ -121,61 +121,31 @@
 
                         <div class="caixaTotal cardDestaque cardDestaque-relatorios">
                             <div class="metricaInfo">
-                                <p class="metricaRotulo">Relatórios Emitidos</p>
-                                <p class="metricaComplemento">No período atual</p>
+                                <p class="metricaRotulo">Total de Relatórios</p>
+                                <p class="metricaComplemento">Registrados no sistema</p>
                             </div>
                             <div class="contagem" id="dashRelatoriosTotais">—</div>
                         </div>
 
                         <div class="fileira">
                             <div class="metricaCard autistas">
-                                <div class="metricaInfo"><p class="metricaRotulo">Por Estudante</p></div>
-                                <div class="contagem" id="dashRelEstudante">—</div>
+                                <div class="metricaInfo"><p class="metricaRotulo">Emitidos</p></div>
+                                <div class="contagem" id="dashRelEmitidos">—</div>
                             </div>
 
                             <div class="metricaCard tdah">
-                                <div class="metricaInfo"><p class="metricaRotulo">Por Turma</p></div>
-                                <div class="contagem" id="dashRelTurma">—</div>
-                            </div>
-
-                            <div class="metricaCard dislexia">
-                                <div class="metricaInfo"><p class="metricaRotulo">Mensais</p></div>
-                                <div class="contagem" id="dashRelMensais">—</div>
-                            </div>
-
-                            <div class="metricaCard outras">
-                                <div class="metricaInfo"><p class="metricaRotulo">Compartilhados</p></div>
-                                <div class="contagem" id="dashRelCompartilhados">—</div>
+                                <div class="metricaInfo"><p class="metricaRotulo">Rascunhos</p></div>
+                                <div class="contagem" id="dashRelRascunhos">—</div>
                             </div>
                         </div>
                     </section>
                 </div>
             </div>
-        <!-- ==================== BLOCO: GERAR AUTOMÁTICO ==================== -->
-        <section class="psicoBloco" aria-label="Geração automática de relatórios">
-            <h2>Gerar Relatório Automático</h2>
-            <p class="psicoInfo">Relatório automático gerado com base nos atendimentos registrados no sistema.</p>
 
-            <div class="row g-3 align-items-end">
-                <div class="col-md-5">
-                    <label class="form-label" for="relatorioAlunoAuto">Aluno</label>
-                    <select id="relatorioAlunoAuto" class="form-select">
-                        <option value="">Selecione o aluno…</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label" for="relatorioAnoAuto">Ano</label>
-                    <input id="relatorioAnoAuto" class="form-control" type="number" min="2020" max="2099" value="2026">
-                </div>
-                <div class="col-md-4">
-                    <button class="btn btn-primary" type="button" id="btnGerarAuto">Gerar Automático</button>
-                </div>
-            </div>
-        </section>
 
         <!-- ==================== BLOCO: CRIAR MANUAL ==================== -->
         <section class="psicoBloco" aria-label="Criação manual de relatórios">
-            <h2>Criar Relatório Manual</h2>
+            <h2>Criar Relatório</h2>
 
             <form class="row g-3" id="formRelatorioManual">
                 <div class="col-md-5">
@@ -193,9 +163,12 @@
                     <textarea id="relatorioConteudoManual" class="form-control" rows="4"
                         placeholder="Descreva o relatório descritivo de evolução…"></textarea>
                 </div>
-                <div class="col-12">
-                    <button class="btn btn-outline-primary" type="button" id="btnSalvarRelatorio">
-                        Salvar Relatório Manual
+                <div class="col-12 d-flex gap-2">
+                    <button class="btn btn-outline-secondary" type="button" id="btnSalvarRelatorioRascunho">
+                        Salvar como Rascunho
+                    </button>
+                    <button class="btn btn-primary" type="button" id="btnSalvarRelatorioEmitir">
+                        Emitir Relatório
                     </button>
                 </div>
             </form>
@@ -242,6 +215,261 @@
     <script src="/js/apiClient.js"></script>
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
+    <script src="/scripts/psicopedagogoCommon.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Tenta puxar a unidade do usuário, se houver
+            let unidadeId = '';
+            const user = JSON.parse(localStorage.getItem('saadi_user_info') || '{}');
+            if (user && user.unidade_id) {
+                unidadeId = `&unidade_id=${user.unidade_id}`;
+            }
+
+            try {
+                const response = await fetch(`/api/alunos?limit=200&status=ativo${unidadeId}`, {
+                    credentials: 'same-origin',
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const json = await response.json();
+                    const alunos = json.data?.items || json.items || [];
+                    
+                    let optionsHtml = '<option value="">Selecione o aluno…</option>';
+                    alunos.forEach(aluno => {
+                        optionsHtml += `<option value="${aluno.id}">${aluno.nome_completo} (RA: ${aluno.ra || '-'})</option>`;
+                    });
+
+                    const selManual = document.getElementById('relatorioAlunoManual');
+                    if (selManual) selManual.innerHTML = optionsHtml;
+                }
+            } catch (error) {
+                console.error('Erro ao carregar alunos:', error);
+            }
+
+            // Lógica de salvar o Relatório Manual
+            async function salvarRelatorioManual(status) {
+                const form = document.getElementById('formRelatorioManual');
+                const editId = form.dataset.editId;
+                
+                const alunoId = document.getElementById('relatorioAlunoManual').value;
+                const ano = document.getElementById('relatorioAnoManual').value;
+                const conteudo = document.getElementById('relatorioConteudoManual').value.trim();
+
+                if (!alunoId) {
+                    alert('Por favor, selecione um aluno.');
+                    return;
+                }
+                if (!conteudo) {
+                    alert('O conteúdo do relatório não pode estar vazio.');
+                    return;
+                }
+
+                const payload = {
+                    aluno_id: parseInt(alunoId, 10),
+                    titulo: `Relatório Manual - ${ano}`,
+                    ano_referencia: parseInt(ano, 10),
+                    tipo: 'evolucao', // Padrão
+                    status: status,
+                    conteudo: conteudo,
+                    secao_evolucao: conteudo,
+                    periodo_inicio: `${ano}-01-01`,
+                    periodo_fim: `${ano}-12-31`
+                };
+
+                const btn = status === 'rascunho' 
+                    ? document.getElementById('btnSalvarRelatorioRascunho') 
+                    : document.getElementById('btnSalvarRelatorioEmitir');
+                
+                const textoOriginal = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = 'Salvando...';
+
+                try {
+                    const token = localStorage.getItem('saadi_access_token');
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    };
+                    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                    const endpoint = editId ? `/api/relatorios/${editId}` : '/api/relatorios';
+                    const method = editId ? 'PUT' : 'POST';
+
+                    const response = await fetch(endpoint, {
+                        method: method,
+                        credentials: 'same-origin',
+                        headers: headers,
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json().catch(() => ({}));
+
+                    if (response.ok && (data.success || data.id || data.item)) {
+                        alert('Relatório salvo com sucesso!');
+                        document.getElementById('relatorioAlunoManual').value = '';
+                        document.getElementById('relatorioConteudoManual').value = '';
+                        delete form.dataset.editId;
+                        // Recarregar a página para atualizar a tabela
+                        window.location.reload();
+                    } else {
+                        alert(data.message || 'Erro ao salvar o relatório.');
+                    }
+                } catch (err) {
+                    console.error('Erro ao salvar:', err);
+                    alert('Erro de conexão. Tente novamente.');
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = textoOriginal;
+                }
+            }
+
+            document.getElementById('btnSalvarRelatorioRascunho')?.addEventListener('click', () => salvarRelatorioManual('rascunho'));
+            document.getElementById('btnSalvarRelatorioEmitir')?.addEventListener('click', () => salvarRelatorioManual('emitido'));
+
+            // Carregar Relatórios na Tabela
+            try {
+                let urlRel = '/api/relatorios?limit=50';
+                if (unidadeId) urlRel += unidadeId;
+                
+                const token = localStorage.getItem('saadi_access_token');
+                const headers = { 'Accept': 'application/json' };
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                const respRel = await fetch(urlRel, { credentials: 'same-origin', headers });
+                const tbody = document.querySelector('#tabelaRelatorios tbody');
+                
+                if (respRel.ok && tbody) {
+                    const jsonRel = await respRel.json();
+                    const items = jsonRel.items || jsonRel.data?.items || [];
+                    
+                    if (items.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4">Nenhum relatório encontrado.</td></tr>`;
+                    } else {
+                        tbody.innerHTML = items.map(r => {
+                            const dataCriac = r.created_at ? new Date(r.created_at).toLocaleDateString('pt-BR') : '—';
+                            return `
+                            <tr>
+                                <td><strong>${r.aluno_nome || '—'}</strong></td>
+                                <td>${r.ano_referencia || '—'}</td>
+                                <td><span class="badge ${r.status === 'rascunho' ? 'bg-warning text-dark' : 'bg-success'}">${r.status === 'rascunho' ? 'Rascunho' : 'Emitido'}</span> <span class="badge bg-secondary">${r.tipo === 'evolucao' ? 'Evolução' : (r.tipo || '—')}</span></td>
+                                <td>${dataCriac}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="verConteudoRelatorio(this)" data-conteudo="${encodeURIComponent(r.conteudo || '')}">Ver Conteúdo</button>
+                                    ${r.status === 'rascunho' ? `<button class="btn btn-sm btn-outline-success ms-1" onclick="editarRelatorio(this, ${r.id}, ${r.aluno_id}, ${r.ano_referencia})" data-conteudo="${encodeURIComponent(r.conteudo || '')}">Editar</button>` : ''}
+                                    <button class="btn btn-sm btn-outline-danger ms-1" onclick="deletarRelatorio(${r.id})">Excluir</button>
+                                </td>
+                            </tr>`;
+                        }).join('');
+                    }
+                } else if (tbody) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4">Erro ao carregar relatórios.</td></tr>`;
+                }
+            } catch (err) {
+                console.error('Erro ao carregar relatórios:', err);
+                const tbody = document.querySelector('#tabelaRelatorios tbody');
+                if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4">Erro de conexão ao carregar relatórios.</td></tr>`;
+            }
+
+            // Carregar Resumo (Dashboard)
+            try {
+                const token = localStorage.getItem('saadi_access_token');
+                const headers = { 'Accept': 'application/json' };
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                const respDash = await fetch('/api/relatorios/dashboard', {
+                    credentials: 'same-origin',
+                    headers: headers
+                });
+                
+                if (respDash.ok) {
+                    const jsonDash = await respDash.json();
+                    const d = jsonDash.data ?? jsonDash;
+                    
+                    const elTotais = document.getElementById('dashRelatoriosTotais');
+                    if (elTotais) elTotais.textContent = d.total ?? '—';
+                    
+                    const elEmitidos = document.getElementById('dashRelEmitidos');
+                    if (elEmitidos) elEmitidos.textContent = d.emitidos ?? '—';
+                    
+                    const elRascunhos = document.getElementById('dashRelRascunhos');
+                    if (elRascunhos) elRascunhos.textContent = d.rascunhos ?? '—';
+                }
+            } catch (err) {
+                console.error('Erro ao carregar dashboard de relatórios:', err);
+            }
+
+        });
+
+        // Função global para excluir relatório
+        window.deletarRelatorio = async function(id) {
+            if (!confirm('Tem certeza que deseja excluir este relatório? Esta ação não pode ser desfeita.')) return;
+            
+            try {
+                const token = localStorage.getItem('saadi_access_token');
+                const headers = { 'Accept': 'application/json' };
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                const response = await fetch(`/api/relatorios/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'same-origin',
+                    headers: headers
+                });
+
+                if (response.ok) {
+                    alert('Relatório excluído com sucesso!');
+                    window.location.reload();
+                } else {
+                    const data = await response.json().catch(() => ({}));
+                    alert(data.message || 'Erro ao excluir o relatório.');
+                }
+            } catch (err) {
+                console.error('Erro ao deletar:', err);
+                alert('Erro de conexão ao excluir o relatório.');
+            }
+        };
+
+        // Função global para exibir conteúdo do relatório
+        window.verConteudoRelatorio = function(btn) {
+            var conteudo = decodeURIComponent(btn.getAttribute('data-conteudo') || '');
+            document.getElementById('conteudoRelatorioCompleto').textContent = conteudo ? conteudo : "Relatório sem conteúdo registrado.";
+            var modalEl = document.getElementById('modalVerConteudoRelatorio');
+            var modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modal.show();
+        };
+
+        // Função global para editar relatório
+        window.editarRelatorio = function(btn, id, alunoId, ano) {
+            var conteudo = decodeURIComponent(btn.getAttribute('data-conteudo') || '');
+            
+            document.getElementById('relatorioAlunoManual').value = alunoId;
+            document.getElementById('relatorioAnoManual').value = ano || new Date().getFullYear();
+            document.getElementById('relatorioConteudoManual').value = conteudo;
+            
+            const form = document.getElementById('formRelatorioManual');
+            form.dataset.editId = id;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    </script>
+
+    <!-- Modal Visualizar Conteúdo do Relatório -->
+    <div class="modal fade" id="modalVerConteudoRelatorio" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header" style="background:linear-gradient(135deg,#0f2744,#1b457a);color:#fff">
+                    <h5 class="modal-title">Visualizar Relatório</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="conteudoRelatorioCompleto" style="white-space: pre-wrap; font-family: 'Roboto', sans-serif; font-size: 0.95rem; line-height: 1.6; color: #333;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

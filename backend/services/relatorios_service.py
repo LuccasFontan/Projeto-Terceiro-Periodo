@@ -91,6 +91,30 @@ def criar_relatorio_service(payload: dict, autor_id: int) -> Relatorio:
     return relatorio
 
 
+def atualizar_relatorio_service(relatorio: Relatorio, payload: dict) -> Relatorio:
+    if relatorio.status != 'rascunho':
+        raise ValueError('Apenas relatórios em rascunho podem ser editados.')
+
+    if 'conteudo' in payload:
+        relatorio.conteudo = payload['conteudo'].strip() or None
+    
+    status_db = payload.get('status', relatorio.status).strip()
+    if status_db == 'emitido':
+        status_db = 'publicado'
+    relatorio.status = status_db
+    
+    if 'aluno_id' in payload:
+        relatorio.aluno_id = payload['aluno_id']
+    if 'ano_referencia' in payload:
+        relatorio.ano_referencia = payload['ano_referencia']
+        relatorio.periodo_inicio = datetime.strptime(f"{payload['ano_referencia']}-01-01", "%Y-%m-%d").date()
+        relatorio.periodo_fim = datetime.strptime(f"{payload['ano_referencia']}-12-31", "%Y-%m-%d").date()
+        relatorio.titulo = f"Relatório Manual - {payload['ano_referencia']}"
+
+    db.session.commit()
+    return relatorio
+
+
 def buscar_relatorio_service(relatorio_id: int, unidade_id: int | None = None) -> Relatorio:
     """Busca um relatório por ID e valida multi-tenant se unidade_id for fornecido."""
     relatorio = Relatorio.query.get_or_404(relatorio_id)
@@ -186,4 +210,9 @@ def registrar_atividade_relatorio(usuario_id: int, acao: str, relatorio: Relator
         ip_origem=request.headers.get('X-Forwarded-For', request.remote_addr),
         user_agent=request.headers.get('User-Agent'),
     )
+    db.session.commit()
+
+def deletar_relatorio_service(relatorio: Relatorio) -> None:
+    """Remove um relatório técnico do banco de dados."""
+    db.session.delete(relatorio)
     db.session.commit()

@@ -18,6 +18,10 @@
   let _modalRetorno    = null;
   let _modalDetalhes   = null;
 
+  // Dados armazenados
+  let _alunosData = [];
+  let _choicesInstancia = null;
+
   // ───────────────────────────────────────────────────────────────────────────
   // Utilitários
   // ───────────────────────────────────────────────────────────────────────────
@@ -184,18 +188,91 @@
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 
       const json  = await resp.json();
-      const alunos = json.data?.items ?? json.items ?? [];
+      let alunos = json.data?.items ?? json.items ?? [];
+      
+      // Ordenação alfabética
+      alunos.sort((a, b) => a.nome_completo.localeCompare(b.nome_completo));
+      _alunosData = alunos;
+
+      if (alunos.length === 0) {
+        selects.forEach(sel => {
+          sel.innerHTML = '<option value="">Nenhum aluno cadastrado</option>';
+          sel.disabled = true;
+        });
+        const btnSalvar = document.getElementById('btnSalvarNovoEnc');
+        if (btnSalvar) btnSalvar.disabled = true;
+        return;
+      }
 
       const placeholder = '<option value="">Selecione um aluno…</option>';
       const options = alunos.map(a =>
         `<option value="${esc(a.id)}">${esc(a.nome_completo)} (RA: ${esc(a.ra ?? '-')})</option>`
       ).join('');
 
-      selects.forEach(sel => { sel.innerHTML = placeholder + options; });
+      selects.forEach(sel => { 
+        sel.innerHTML = placeholder + options; 
+        sel.disabled = false;
+        
+        // Inicializar Choices.js se disponível
+        if (window.Choices) {
+          if (_choicesInstancia) {
+            _choicesInstancia.destroy();
+          }
+          _choicesInstancia = new Choices(sel, {
+            searchEnabled: true,
+            itemSelectText: '',
+            noResultsText: 'Nenhum aluno encontrado',
+            placeholder: true,
+            placeholderValue: 'Selecione um aluno...',
+            searchPlaceholderValue: 'Buscar aluno por nome...',
+          });
+        }
+      });
+      
+      const btnSalvar = document.getElementById('btnSalvarNovoEnc');
+      if (btnSalvar) btnSalvar.disabled = false;
+
+      // Adicionar listener para preencher os dados do aluno ao selecionar
+      const selAluno = document.getElementById('encAluno');
+      if (selAluno) {
+        selAluno.addEventListener('change', (e) => {
+          const alunoId = parseInt(e.target.value, 10);
+          const containerResumo = document.getElementById('resumoAlunoContainer');
+          if (!alunoId) {
+            if (containerResumo) containerResumo.classList.add('d-none');
+            return;
+          }
+          
+          const aluno = _alunosData.find(a => a.id === alunoId);
+          if (aluno && containerResumo) {
+            // Calcular idade
+            let idade = '—';
+            if (aluno.data_nascimento) {
+              const diffMs = Date.now() - new Date(aluno.data_nascimento).getTime();
+              const dt = new Date(diffMs);
+              idade = Math.abs(dt.getUTCFullYear() - 1970) + ' anos';
+            }
+            
+            setTexto('#resumoIdade', idade);
+            setTexto('#resumoNascimento', fmtData(aluno.data_nascimento));
+            setTexto('#resumoSerie', aluno.serie_turma);
+            setTexto('#resumoResponsavel', aluno.responsavel_nome);
+            setTexto('#resumoTelefone', aluno.responsavel_telefone);
+            setTexto('#resumoLaudo', aluno.laudo_descricao);
+            
+            // Se houver observações, exibe
+            setTexto('#resumoObs', aluno.observacoes || 'Sem observações adicionais.');
+            
+            containerResumo.classList.remove('d-none');
+          }
+        });
+      }
+      
     } catch (err) {
       console.error('[SAADI] Erro ao carregar alunos:', err);
       selects.forEach(sel => {
         sel.innerHTML = '<option value="">Erro ao carregar alunos</option>';
+        sel.disabled = true;
       });
     }
   }
@@ -379,11 +456,9 @@
   // ───────────────────────────────────────────────────────────────────────────
 
   function getModalNovoEnc() {
-    if (!_modalNovoEnc) {
-      const el = document.getElementById('modalNovoEncaminhamento');
-      if (el) _modalNovoEnc = new bootstrap.Modal(el);
-    }
-    return _modalNovoEnc;
+    const el = document.getElementById('modalNovoEncaminhamento');
+    if (!el) return null;
+    return bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
   }
 
   function inicializarFormNovoEnc() {
@@ -412,16 +487,15 @@
       if (!destino) { toast('Por favor, informe o destino / serviço.', 'warning'); return; }
       if (!motivo)  { toast('Por favor, descreva o motivo do encaminhamento.', 'warning'); return; }
 
+      const descricaoCompleta = obs ? `${motivo}\n\nObservações Complementares:\n${obs}` : motivo;
+
       const payload = {
         aluno_id:           parseInt(alunoId, 10),
         tipo,
         destino,
         prioridade,
-        data_encaminhamento: data || null,
         prazo_retorno:       prazo,
-        motivo,
-        observacoes:         obs,
-        status:              'aberto',
+        descricao:           descricaoCompleta,
       };
 
       const btnSalvar = document.getElementById('btnSalvarNovoEnc');
@@ -434,8 +508,12 @@
             '<span class="spinner-border spinner-border-sm" role="status"></span> Salvando…';
         }
 
-        const resp = await fetch('/api/encaminhamentos', {
-          method: 'POST',
+        const isEditId = form.dataset.editId;
+        const url = isEditId ? `/api/encaminhamentos/${isEditId}` : '/api/encaminhamentos';
+        const method = isEditId ? 'PUT' : 'POST';
+
+        const resp = await fetch(url, {
+          method: method,
           credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(payload),
@@ -475,11 +553,9 @@
   // ───────────────────────────────────────────────────────────────────────────
 
   function getModalDetalhes() {
-    if (!_modalDetalhes) {
-      const el = document.getElementById('modalVerDetalhes');
-      if (el) _modalDetalhes = new bootstrap.Modal(el);
-    }
-    return _modalDetalhes;
+    const el = document.getElementById('modalVerDetalhes');
+    if (!el) return null;
+    return bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
   }
 
   async function abrirModalDetalhes(id) {
@@ -579,8 +655,8 @@
       setVal('encPrioridade',   enc.prioridade ?? 'media');
       setVal('encData',         (enc.data_encaminhamento ?? enc.created_at ?? '').substring(0, 10));
       setVal('encPrazoRetorno', (enc.prazo_retorno ?? '').substring(0, 10));
-      setVal('encMotivo',       enc.motivo);
-      setVal('encObservacoes',  enc.observacoes);
+      setVal('encMotivo',       enc.descricao);
+      setVal('encObservacoes',  '');
 
       // Guarda o id para o submit saber que é edição
       const form = document.getElementById('formNovoEnc');
@@ -602,11 +678,9 @@
   // ───────────────────────────────────────────────────────────────────────────
 
   function getModalRetorno() {
-    if (!_modalRetorno) {
-      const el = document.getElementById('modalDarRetorno');
-      if (el) _modalRetorno = new bootstrap.Modal(el);
-    }
-    return _modalRetorno;
+    const el = document.getElementById('modalDarRetorno');
+    if (!el) return null;
+    return bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
   }
 
   async function abrirModalRetorno(id) {

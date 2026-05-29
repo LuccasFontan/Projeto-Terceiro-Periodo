@@ -15,10 +15,11 @@
   const btnSair           = document.getElementById('btnSair');
 
   // Métricas
-  const totalPlanosEl          = document.getElementById('totalPlanos');
-  const totalPlanosAtivosEl    = document.getElementById('totalPlanosAtivos');
-  const totalPlanosConcluidosEl= document.getElementById('totalPlanosConcluidos');
-  const totalPlanosSuspensosEl = document.getElementById('totalPlanosSuspensos');
+  const totalPlanosEl          = document.getElementById('dashPlanosTotais');
+  const totalPlanosAtivosEl    = document.getElementById('dashAndamento');
+  const totalPlanosConcluidosEl= document.getElementById('dashConcluidos');
+  const totalPlanosSuspensosEl = document.getElementById('dashSuspensos');
+  const totalPlanosRevisaoEl   = document.getElementById('dashRevisao');
 
   // Formulário de criação
   const formPlano          = document.getElementById('formPlano');
@@ -198,7 +199,11 @@
   // -------------------------------------------------------------------------
   async function carregarMétricas() {
     try {
-      const resp = await fetch('/api/planos/dashboard', { credentials: 'same-origin', headers: { Accept: 'application/json' } });
+      const token = localStorage.getItem('saadi_access_token');
+      const headers = { Accept: 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const resp = await fetch('/api/planos/dashboard', { credentials: 'same-origin', headers: headers });
       if (!resp.ok) return;
       const json = await resp.json();
       const d    = json.data ?? json;
@@ -206,6 +211,7 @@
       if (totalPlanosAtivosEl)     totalPlanosAtivosEl.textContent     = d.ativos   ?? '0';
       if (totalPlanosConcluidosEl) totalPlanosConcluidosEl.textContent = d.concluidos?? '0';
       if (totalPlanosSuspensosEl)  totalPlanosSuspensosEl.textContent  = d.suspensos?? '0';
+      if (totalPlanosRevisaoEl)    totalPlanosRevisaoEl.textContent    = '0';
     } catch (err) {
       console.error('[SAADI] Erro ao carregar métricas:', err);
     }
@@ -255,7 +261,7 @@
           <td class="acoes-cell text-center">
             <div class="d-flex gap-2 justify-content-center">
               <button
-                class="btn-acao btn-ver"
+                class="btn btn-sm btn-primary text-white"
                 data-id="${p.id}"
                 data-acao="ver"
                 title="Visualizar"
@@ -263,7 +269,7 @@
                 <span aria-hidden="true" style="font-weight:700;font-size:.82rem;letter-spacing:.02em;">V</span>
               </button>
               <button
-                class="btn-acao btn-editar"
+                class="btn btn-sm btn-success text-white"
                 data-id="${p.id}"
                 data-acao="editar"
                 title="Editar"
@@ -271,7 +277,7 @@
                 <span aria-hidden="true" style="font-weight:700;font-size:.82rem;letter-spacing:.02em;">E</span>
               </button>
               <button
-                class="btn-acao btn-deletar"
+                class="btn btn-sm btn-danger text-white"
                 data-id="${p.id}"
                 data-acao="deletar"
                 data-titulo="${escapeHTML(p.titulo)}"

@@ -9,56 +9,11 @@
   // -------------------------------------------------------------------------
   // Elementos DOM
   // -------------------------------------------------------------------------
-  const nomeUsuarioEl = document.getElementById('nomeUsuario');
-  const nomeInstituicaoEl = document.getElementById('nomeInstituicao');
-  const btnSair = document.getElementById('btnSair');
-
   const totalCasosEl = document.getElementById('totalCasos');
   const totalTriagensEl = document.getElementById('totalTriagens');
   const totalPlanosEl = document.getElementById('totalPlanos');
   const totalAtendimentosEl = document.getElementById('totalAtendimentos');
   const totalEncaminhamentosEl = document.getElementById('totalEncaminhamentos');
-
-  // -------------------------------------------------------------------------
-  // Perfil e Autenticação
-  // -------------------------------------------------------------------------
-  function preencherPerfil() {
-    try {
-      const user = JSON.parse(localStorage.getItem('saadi_user_info') || '{}');
-      if (user && user.nome) {
-        if (nomeUsuarioEl) {
-          nomeUsuarioEl.textContent = `Bem-vindo(a), ${user.nome.split(' ')[0]}!`;
-        }
-        if (nomeInstituicaoEl && user.unidade_nome) {
-          nomeInstituicaoEl.textContent = user.unidade_nome;
-        } else if (nomeInstituicaoEl) {
-          nomeInstituicaoEl.textContent = 'Unidade Escolar Geral';
-        }
-      }
-    } catch (err) {
-      console.error('[SAADI] Erro ao carregar informações de perfil:', err);
-    }
-  }
-
-  function inicializarSair() {
-    if (!btnSair) return;
-    btnSair.addEventListener('click', async function (e) {
-      e.preventDefault();
-      try {
-        await fetch('/api/auth/logout', {
-          method: 'POST',
-          credentials: 'same-origin',
-        });
-      } catch (err) {
-        console.warn('[SAADI] Erro ao chamar endpoint de logout:', err);
-      } finally {
-        if (window.saadiAuth && typeof window.saadiAuth.clearTokens === 'function') {
-          window.saadiAuth.clearTokens();
-        }
-        window.location.href = '/index.html';
-      }
-    });
-  }
 
   // -------------------------------------------------------------------------
   // Métricas do Dashboard
@@ -94,8 +49,6 @@
   // Inicialização
   // -------------------------------------------------------------------------
   function init() {
-    preencherPerfil();
-    inicializarSair();
     carregarDashboard();
   }
 
